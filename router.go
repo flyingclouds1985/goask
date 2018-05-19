@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/Alireza-Ta/GOASK/api"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,4 +25,9 @@ func routeList(router *gin.Engine) {
 
 	auth := router.Group("/auth")
 	auth.GET("/refresh_token", AuthMiddleware().RefreshHandler)
+
+	q := router.Group("questions")
+	{
+		q.GET("/ask", api.GetAskQuestion)
+	}
 }
