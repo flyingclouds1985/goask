@@ -1,40 +1,34 @@
-package store
+package postgres
 
 import (
 	"log"
 
-	"github.com/Alireza-Ta/GOASK/postgres"
+	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/go-pg/pg"
 	"github.com/go-pg/pg/orm"
 )
 
-type Store struct {
-	*pg.DB
+var db *pg.DB
+var models = []interface{}{
+	&model.User{},
+	&model.Comment{},
+	&model.Question{},
+	&model.Reply{},
+	&model.CommentsQuestion{},
+	&model.CommentsReply{},
 }
 
-func New() *pg.DB {
+func init() {
 	// Don't forget to fill password field.
-	db := pg.Connect(&pg.Options{
+	db = pg.Connect(&pg.Options{
 		User:     "postgres",
 		Password: "",
 		Database: "g",
 	})
-
-	return db
 }
 
 // CreateSchema create tables.
 func CreateSchema() error {
-	models := []interface{}{
-		&postgres.User{},
-		&postgres.Comment{},
-		&postgres.Question{},
-		&postgres.Reply{},
-		&postgres.CommentsQuestion{},
-		&postgres.CommentsReply{},
-	}
-
-	db := New()
 	for _, model := range models {
 		err := db.CreateTable(model, &orm.CreateTableOptions{
 			FKConstraints: true,

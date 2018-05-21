@@ -1,4 +1,4 @@
-package postgres
+package model
 
 import (
 	"time"
@@ -7,8 +7,8 @@ import (
 )
 
 type BaseModel struct {
-	CreatedAt time.Time `sql:"default:now()"`
-	UpdatedAt time.Time
+	CreatedAt time.Time `json:"created_at" sql:"default:now()"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func (bm *BaseModel) BeforeInsert(db orm.DB) error {

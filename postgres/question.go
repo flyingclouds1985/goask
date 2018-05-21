@@ -1,11 +1,9 @@
 package postgres
 
-type QuestionStore interface {
-	QuestionCreate(*Question) error
-}
+import (
+	"github.com/Alireza-Ta/GOASK/model"
+)
 
-type Question struct {
-	Post     `pg:"override"`
-	Title    string
-	Comments []Comment `pg:"many2many:comments_questions"`
+func CreateQuestion(q *model.Question) error {
+	return db.Insert(q)
 }

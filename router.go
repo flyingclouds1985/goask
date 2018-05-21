@@ -29,5 +29,6 @@ func routeList(router *gin.Engine) {
 	q := router.Group("questions")
 	{
 		q.GET("/ask", api.GetAskQuestion)
+		q.POST("/ask", api.PostAskQuestion)
 	}
 }

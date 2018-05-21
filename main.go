@@ -4,13 +4,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Alireza-Ta/GOASK/store"
+	"github.com/Alireza-Ta/GOASK/postgres"
 )
 
 func main() {
 	router := InitRouter()
 
-	err := store.CreateSchema()
+	err := postgres.CreateSchema()
 
 	if err != nil {
 		log.Fatal(err)
