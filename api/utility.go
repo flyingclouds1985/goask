@@ -11,4 +11,5 @@ func JSONBadRequestError(message string, err error, c *gin.Context) {
 		"error":  message + err.Error(),
 		"status": http.StatusBadRequest,
 	})
+	return
 }

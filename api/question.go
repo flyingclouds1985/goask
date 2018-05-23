@@ -1,16 +1,24 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/gin-gonic/gin"
 )
 
-func GetAskQuestion(c *gin.Context) {
-	fmt.Print("asd")
+func GetQuestion(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	q, err := postgres.QuestionFind(id)
+
+	if err != nil {
+		JSONBadRequestError("Error in finding question. ", err, c)
+	}
+
+	// check question param if does not equal to title redirect and edit it.
+	c.JSON(http.StatusOK, q)
 }
 
 func PostAskQuestion(c *gin.Context) {
@@ -18,8 +26,7 @@ func PostAskQuestion(c *gin.Context) {
 	err := c.ShouldBind(in)
 
 	if err != nil {
-		JSONBadRequestError("Binding...", err, c)
-		return
+		JSONBadRequestError("Error in binding question. ", err, c)
 	}
 
 	q := &model.Question{
@@ -31,9 +38,18 @@ func PostAskQuestion(c *gin.Context) {
 	}
 
 	if err = postgres.CreateQuestion(q); err != nil {
-		JSONBadRequestError("Inserting...", err, c)
-		return
+		JSONBadRequestError("Error in inserting question. ", err, c)
 	}
 
 	c.JSON(http.StatusOK, q)
+}
+
+func GetQuestionList(c *gin.Context) {
+	list, err := postgres.QuestionList(c.Request.URL.Query())
+
+	if err != nil {
+		JSONBadRequestError("Error in getting the questions list. ", err, c)
+	}
+
+	c.JSON(http.StatusOK, list)
 }

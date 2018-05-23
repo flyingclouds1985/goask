@@ -1,22 +1,17 @@
-package main
+package router
 
 import (
 	"time"
 
+	"github.com/Alireza-Ta/GOASK/config"
 	jwt "github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	PORT       = "localhost:9090"
-	DOMAIN     = "Question.com"
-	SECRET_KEY = "asd!#@@#$nd189ehas-sS@mda"
-)
-
 func AuthMiddleware() *jwt.GinJWTMiddleware {
 	return &jwt.GinJWTMiddleware{
-		Realm:      DOMAIN,
-		Key:        []byte(SECRET_KEY),
+		Realm:      config.DOMAIN,
+		Key:        []byte(config.SECRET_KEY),
 		Timeout:    time.Hour,
 		MaxRefresh: time.Hour,
 

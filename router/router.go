@@ -1,4 +1,4 @@
-package main
+package router
 
 import (
 	"net/http"
@@ -7,11 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() http.Handler {
+func Initialize() http.Handler {
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.New()
-
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
@@ -28,7 +27,8 @@ func routeList(router *gin.Engine) {
 
 	q := router.Group("questions")
 	{
-		q.GET("/ask", api.GetAskQuestion)
+		q.GET("/", api.GetQuestionList)
+		q.GET("/:id/:question", api.GetQuestion)
 		q.POST("/ask", api.PostAskQuestion)
 	}
 }
