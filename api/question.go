@@ -1,7 +1,6 @@
 package api
 
 import (
-	"net/http"
 	"strconv"
 
 	"github.com/Alireza-Ta/GOASK/model"
@@ -18,7 +17,7 @@ func GetQuestion(c *gin.Context) {
 	}
 
 	// check question param if does not equal to title redirect and edit it.
-	c.JSON(http.StatusOK, q)
+	c.JSON(200, q)
 }
 
 func PostAskQuestion(c *gin.Context) {
@@ -41,7 +40,24 @@ func PostAskQuestion(c *gin.Context) {
 		JSONBadRequestError("Error in inserting question. ", err, c)
 	}
 
-	c.JSON(http.StatusOK, q)
+	c.JSON(200, q)
+}
+
+func PatchQuestion(c *gin.Context) {
+	in := new(model.Question)
+	err := c.ShouldBind(in)
+
+	if err != nil {
+		JSONBadRequestError("Error in binding question. ", err, c)
+		return
+	}
+	// update
+	if err = postgres.QuestionUpdate(in); err != nil {
+		JSONBadRequestError("Error in updating question. ", err, c)
+		return
+	}
+
+	c.JSON(200, in)
 }
 
 func GetQuestionList(c *gin.Context) {
@@ -51,5 +67,5 @@ func GetQuestionList(c *gin.Context) {
 		JSONBadRequestError("Error in getting the questions list. ", err, c)
 	}
 
-	c.JSON(http.StatusOK, list)
+	c.JSON(200, list)
 }

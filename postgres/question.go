@@ -27,8 +27,18 @@ func QuestionList(query url.Values) (Questions, error) {
 }
 
 func QuestionFind(id int) (*model.Question, error) {
-	q := &model.Question{Post: model.Post{Id: id}}
+	q := &model.Question{
+		Post: model.Post{
+			BaseModel: model.BaseModel{
+				Id: id,
+			},
+		},
+	}
 	err := db.Select(q)
 
 	return q, err
+}
+
+func QuestionUpdate(q *model.Question) error {
+	return db.Update(q)
 }

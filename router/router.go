@@ -22,6 +22,11 @@ func Initialize() http.Handler {
 func routeList(router *gin.Engine) {
 	router.POST("/login", AuthMiddleware().LoginHandler)
 
+	// for testing purposes
+	router.GET("/test", func(c *gin.Context) {
+
+	})
+
 	auth := router.Group("/auth")
 	auth.GET("/refresh_token", AuthMiddleware().RefreshHandler)
 
@@ -29,6 +34,8 @@ func routeList(router *gin.Engine) {
 	{
 		q.GET("/", api.GetQuestionList)
 		q.GET("/:id/:question", api.GetQuestion)
+		q.PATCH("/:id", api.PatchQuestion)
 		q.POST("/ask", api.PostAskQuestion)
 	}
+
 }
