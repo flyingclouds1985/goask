@@ -1,8 +1,12 @@
 package api
 
 import (
+	"net/http"
 	"strconv"
 
+	"github.com/gosimple/slug"
+
+	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/gin-gonic/gin"
@@ -10,10 +14,17 @@ import (
 
 func GetQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
+	title := c.Param("question")
 	q, err := postgres.QuestionFind(id)
 
 	if err != nil {
 		JSONBadRequestError("Error in finding question. ", err, c)
+		return
+	}
+	// rewrite url if question title isn't correct.
+	s := slug.Make(q.Title)
+	if title != s {
+		c.Redirect(http.StatusTemporaryRedirect, config.DOMAIN+"/questions/"+c.Param("id")+"/"+s)
 	}
 
 	// check question param if does not equal to title redirect and edit it.
