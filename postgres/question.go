@@ -27,14 +27,8 @@ func QuestionList(query url.Values) (Questions, error) {
 }
 
 func QuestionFind(id int) (*model.Question, error) {
-	q := &model.Question{
-		Post: model.Post{
-			BaseModel: model.BaseModel{
-				Id: id,
-			},
-		},
-	}
-	err := db.Select(q)
+	q := new(model.Question)
+	err := db.Model(q).Where("id = ?", id).Select()
 
 	return q, err
 }

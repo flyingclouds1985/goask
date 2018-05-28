@@ -21,13 +21,12 @@ func GetQuestion(c *gin.Context) {
 		JSONBadRequestError("Error in finding question. ", err, c)
 		return
 	}
-	// rewrite url if question title isn't correct.
+	// rewrite url if the question title isn't correct.
 	s := slug.Make(q.Title)
 	if title != s {
 		c.Redirect(http.StatusTemporaryRedirect, config.DOMAIN+"/questions/"+c.Param("id")+"/"+s)
 	}
 
-	// check question param if does not equal to title redirect and edit it.
 	c.JSON(200, q)
 }
 
@@ -39,13 +38,10 @@ func PostAskQuestion(c *gin.Context) {
 		JSONBadRequestError("Error in binding question. ", err, c)
 	}
 
-	q := &model.Question{
-		Title: in.Title,
-		Post: model.Post{
-			Body:     in.Body,
-			AuthorID: in.AuthorID,
-		},
-	}
+	q := new(model.Question)
+	q.Title = in.Title
+	q.Body = in.Body
+	q.AuthorID = in.AuthorID
 
 	if err = postgres.CreateQuestion(q); err != nil {
 		JSONBadRequestError("Error in inserting question. ", err, c)
