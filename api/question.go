@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetQuestion based on id and title.
 func GetQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	title := c.Param("question")
@@ -30,6 +31,7 @@ func GetQuestion(c *gin.Context) {
 	c.JSON(200, q)
 }
 
+// PostAskQuestion creates a question.
 func PostAskQuestion(c *gin.Context) {
 	in := new(model.Question)
 	err := c.ShouldBind(in)
@@ -50,9 +52,16 @@ func PostAskQuestion(c *gin.Context) {
 	c.JSON(200, q)
 }
 
+// PatchQuestion upadte a question.
 func PatchQuestion(c *gin.Context) {
 	in := new(model.Question)
 	err := c.ShouldBind(in)
+
+	// If client didn't specified the id in the request.
+	if in.Id == 0 {
+		id, _ := strconv.Atoi(c.Param("id"))
+		in.Id = id
+	}
 
 	if err != nil {
 		JSONBadRequestError("Error in binding question. ", err, c)

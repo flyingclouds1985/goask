@@ -12,9 +12,17 @@ type QuestionStore interface {
 }
 
 type Question struct {
-	Post     `pg:"override"`
-	Title    string    `json:"title"`
-	Comments []Comment `json:"comments" pg:"many2many:comments_questions"`
+	Id        int `json: "id"`
+	Post      `pg:"override"`
+	Title     string    `json:"title"`
+	Comments  []Comment `json:"comments" pg:"many2many:comments_questions"`
+	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
+	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
+}
+
+func (q *Question) BeforeInsert(db orm.DB) error {
+	q.UpdatedAt = time.Now()
+	return nil
 }
 
 func (q *Question) BeforeUpdate(db orm.DB) error {
