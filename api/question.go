@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetQuestion based on id and title.
+// GetQuestion returns a question based on id and title.
 func GetQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	title := c.Param("question")
@@ -67,7 +67,7 @@ func PatchQuestion(c *gin.Context) {
 		JSONBadRequestError("Error in binding question. ", err, c)
 		return
 	}
-	// update
+
 	if err = postgres.QuestionUpdate(in); err != nil {
 		JSONBadRequestError("Error in updating question. ", err, c)
 		return
@@ -76,8 +76,38 @@ func PatchQuestion(c *gin.Context) {
 	c.JSON(200, in)
 }
 
+// PatchVoteQuestion gives a vote to a question.
+func PatchVoteQuestion(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	v := c.Param("vote")
+	q, err := postgres.QuestionFind(id)
+
+	// Check if there's such a question.
+	if err != nil {
+		JSONBadRequestError("Error in finding question. ", err, c)
+		return
+	}
+
+	var vote int
+	if v == "upvote" {
+		vote = 1
+	} else if v == "downvote" {
+		vote = -1
+	}
+
+	err = postgres.QuestionVoteUpdate(vote, id)
+	if err != nil {
+		JSONBadRequestError("Error in voting question. ", err, c)
+		return
+	}
+
+	s := slug.Make(q.Title)
+	c.Redirect(http.StatusTemporaryRedirect, config.DOMAIN+"/questions/"+c.Param("id")+"/"+s)
+}
+
+// GetQuestionList returns a list of questions.
 func GetQuestionList(c *gin.Context) {
-	list, err := postgres.QuestionList(c.Request.URL.Query())
+	list, err := postgres.QuestionsList(c.Request.URL.Query())
 
 	if err != nil {
 		JSONBadRequestError("Error in getting the questions list. ", err, c)

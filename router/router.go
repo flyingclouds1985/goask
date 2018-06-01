@@ -36,6 +36,7 @@ func routeList(router *gin.Engine) {
 		q.GET("/:id", api.GetQuestion)
 		q.GET("/:id/:question", api.GetQuestion)
 		q.PATCH("/:id", api.PatchQuestion)
+		q.PATCH("/:id/:vote", api.PatchVoteQuestion)
 		q.POST("/ask", api.PostAskQuestion)
 	}
 

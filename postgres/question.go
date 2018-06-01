@@ -15,8 +15,8 @@ func CreateQuestion(q *model.Question) error {
 	return db.Insert(q)
 }
 
-// QuestionList returns a list of questions.
-func QuestionList(query url.Values) (Questions, error) {
+// QuestionsList returns a list of questions.
+func QuestionsList(query url.Values) (Questions, error) {
 	var questions Questions
 
 	err := db.Model(&questions).
@@ -35,4 +35,9 @@ func QuestionFind(id int) (*model.Question, error) {
 
 func QuestionUpdate(q *model.Question) error {
 	return db.Update(q)
+}
+
+func QuestionVoteUpdate(vote int, id int) error {
+	_, err := db.Model(&model.Question{}).Set("vote = ?vote").Where("id = ?id").Update()
+	return err
 }

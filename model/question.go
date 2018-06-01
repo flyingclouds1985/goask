@@ -2,6 +2,7 @@ package model
 
 import (
 	"log"
+	"net/url"
 	"time"
 
 	"github.com/go-pg/pg/orm"
@@ -9,8 +10,12 @@ import (
 
 type QuestionStore interface {
 	CreateQuestion(*Question) error
+	QuestionsList(url.Values) (*[]Question, error)
+	QuestionFind(int) (*Question, error)
+	QuestionUpdate(*Question) error
 }
 
+// Question model
 type Question struct {
 	Id        int `json: "id"`
 	Post      `pg:"override"`
