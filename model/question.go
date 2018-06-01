@@ -32,10 +32,9 @@ func (q *Question) BeforeInsert(db orm.DB) error {
 
 func (q *Question) BeforeUpdate(db orm.DB) error {
 	q.UpdatedAt = time.Now()
-
 	if q.CreatedAt.IsZero() {
 		data := new(Question)
-		err := db.Model(data).Column("created_at").Where("id = ?", q.Id).Select()
+		err := db.Model(data).Column("created_at").WherePK().Select()
 		if err != nil {
 			log.Fatal("Error in finding question created_at column.", err.Error())
 		}

@@ -37,7 +37,7 @@ func QuestionUpdate(q *model.Question) error {
 	return db.Update(q)
 }
 
-func QuestionVoteUpdate(vote int, id int) error {
-	_, err := db.Model(&model.Question{}).Set("vote = ?vote").Where("id = ?id").Update()
+func QuestionVoteUpdate(q *model.Question) error {
+	_, err := db.Model(q).Column("vote", "updated_at").WherePK().Update()
 	return err
 }

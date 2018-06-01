@@ -88,21 +88,20 @@ func PatchVoteQuestion(c *gin.Context) {
 		return
 	}
 
-	var vote int
 	if v == "upvote" {
-		vote = 1
+		q.Vote++
 	} else if v == "downvote" {
-		vote = -1
+		q.Vote--
 	}
 
-	err = postgres.QuestionVoteUpdate(vote, id)
+	err = postgres.QuestionVoteUpdate(q)
 	if err != nil {
 		JSONBadRequestError("Error in voting question. ", err, c)
 		return
 	}
 
 	s := slug.Make(q.Title)
-	c.Redirect(http.StatusTemporaryRedirect, config.DOMAIN+"/questions/"+c.Param("id")+"/"+s)
+	c.Redirect(http.StatusSeeOther, config.DOMAIN+"/questions/"+c.Param("id")+"/"+s)
 }
 
 // GetQuestionList returns a list of questions.
