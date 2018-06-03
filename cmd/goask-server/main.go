@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -10,12 +11,15 @@ import (
 )
 
 func main() {
-	router := router.Initialize()
-	err := postgres.CreateSchema()
+	store := postgres.New()
+	err := store.CreateSchema()
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	router := router.Initialize(store)
+
+	fmt.Println("App is running...")
 	http.ListenAndServe(config.PORT, router)
 }

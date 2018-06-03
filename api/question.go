@@ -8,19 +8,17 @@ import (
 
 	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/model"
-	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/gin-gonic/gin"
 )
 
 // GetQuestion returns a question based on id and title.
-func GetQuestion(c *gin.Context) {
+func (a *Api) GetQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	title := c.Param("question")
-	q, err := postgres.QuestionFind(id)
+	q, err := a.Store.QuestionFind(id)
 
 	if err != nil {
 		JSONBadRequestError("Error in finding question. ", err, c)
-		return
 	}
 	// rewrite url if the question title isn't correct.
 	s := slug.Make(q.Title)
@@ -32,7 +30,7 @@ func GetQuestion(c *gin.Context) {
 }
 
 // PostAskQuestion creates a question.
-func PostAskQuestion(c *gin.Context) {
+func (a *Api) PostQuestion(c *gin.Context) {
 	in := new(model.Question)
 	err := c.ShouldBind(in)
 
@@ -45,7 +43,7 @@ func PostAskQuestion(c *gin.Context) {
 	q.Body = in.Body
 	q.AuthorID = in.AuthorID
 
-	if err = postgres.CreateQuestion(q); err != nil {
+	if err = a.Store.CreateQuestion(q); err != nil {
 		JSONBadRequestError("Error in inserting question. ", err, c)
 	}
 
@@ -53,7 +51,7 @@ func PostAskQuestion(c *gin.Context) {
 }
 
 // PatchQuestion upadte a question.
-func PatchQuestion(c *gin.Context) {
+func (a *Api) PatchQuestion(c *gin.Context) {
 	in := new(model.Question)
 	err := c.ShouldBind(in)
 
@@ -65,27 +63,24 @@ func PatchQuestion(c *gin.Context) {
 
 	if err != nil {
 		JSONBadRequestError("Error in binding question. ", err, c)
-		return
 	}
 
-	if err = postgres.QuestionUpdate(in); err != nil {
+	if err = a.Store.QuestionUpdate(in); err != nil {
 		JSONBadRequestError("Error in updating question. ", err, c)
-		return
 	}
 
 	c.JSON(200, in)
 }
 
 // PatchVoteQuestion gives a vote to a question.
-func PatchVoteQuestion(c *gin.Context) {
+func (a *Api) PatchVoteQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	v := c.Param("vote")
-	q, err := postgres.QuestionFind(id)
+	q, err := a.Store.QuestionFind(id)
 
 	// Check if there's such a question.
 	if err != nil {
 		JSONBadRequestError("Error in finding question. ", err, c)
-		return
 	}
 
 	if v == "upvote" {
@@ -94,10 +89,9 @@ func PatchVoteQuestion(c *gin.Context) {
 		q.Vote--
 	}
 
-	err = postgres.QuestionVoteUpdate(q)
+	err = a.Store.QuestionVoteUpdate(q)
 	if err != nil {
 		JSONBadRequestError("Error in voting question. ", err, c)
-		return
 	}
 
 	s := slug.Make(q.Title)
@@ -105,8 +99,8 @@ func PatchVoteQuestion(c *gin.Context) {
 }
 
 // GetQuestionList returns a list of questions.
-func GetQuestionList(c *gin.Context) {
-	list, err := postgres.QuestionsList(c.Request.URL.Query())
+func (a *Api) GetQuestionList(c *gin.Context) {
+	list, err := a.Store.QuestionsList(c.Request.URL.Query())
 
 	if err != nil {
 		JSONBadRequestError("Error in getting the questions list. ", err, c)

@@ -4,22 +4,23 @@ import (
 	"net/http"
 
 	"github.com/Alireza-Ta/GOASK/api"
+	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/gin-gonic/gin"
 )
 
-func Initialize() http.Handler {
+func Initialize(store *postgres.Store) http.Handler {
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	routeList(r)
+	routeList(r, store)
 
 	return r
 }
 
-func routeList(router *gin.Engine) {
+func routeList(router *gin.Engine, store *postgres.Store) {
 	router.POST("/login", AuthMiddleware().LoginHandler)
 
 	// for testing purposes
@@ -30,14 +31,26 @@ func routeList(router *gin.Engine) {
 	auth := router.Group("/auth")
 	auth.GET("/refresh_token", AuthMiddleware().RefreshHandler)
 
+	api := &api.Api{
+		Store: store,
+	}
+
 	q := router.Group("questions")
 	{
 		q.GET("/", api.GetQuestionList)
+		q.POST("/", api.PostQuestion)
 		q.GET("/:id", api.GetQuestion)
-		q.GET("/:id/:question", api.GetQuestion)
 		q.PATCH("/:id", api.PatchQuestion)
+		q.GET("/:id/:question", api.GetQuestion)
 		q.PATCH("/:id/:vote", api.PatchVoteQuestion)
-		q.POST("/ask", api.PostAskQuestion)
+	}
+
+	c := router.Group("comments")
+	{
+		c.GET("/questions/:question_id", api.GetQuestionCommentList)
+		c.POST("/questions/:question_id", api.PostQuestionComment)
+		c.GET("/replies/:reply_id", api.GetReplyCommentList)
+		c.POST("/replies/:reply_id", api.PostReplyComment)
 	}
 
 }

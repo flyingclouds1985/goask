@@ -13,6 +13,7 @@ type QuestionStore interface {
 	QuestionsList(url.Values) (*[]Question, error)
 	QuestionFind(int) (*Question, error)
 	QuestionUpdate(*Question) error
+	QuestionVoteUpdaete(*Question) error
 }
 
 // Question model

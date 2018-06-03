@@ -11,33 +11,33 @@ import (
 type Questions []model.Question
 
 // CreateQuestion persist a question in db.
-func CreateQuestion(q *model.Question) error {
-	return db.Insert(q)
+func (s *Store) CreateQuestion(q *model.Question) error {
+	return s.db.Insert(q)
 }
 
 // QuestionsList returns a list of questions.
-func QuestionsList(query url.Values) (Questions, error) {
+func (s *Store) QuestionsList(query url.Values) (Questions, error) {
 	var questions Questions
 
-	err := db.Model(&questions).
+	err := s.db.Model(&questions).
 		Apply(orm.Pagination(query)).
 		Select()
 
 	return questions, err
 }
 
-func QuestionFind(id int) (*model.Question, error) {
+func (s *Store) QuestionFind(id int) (*model.Question, error) {
 	q := new(model.Question)
-	err := db.Model(q).Where("id = ?", id).Select()
+	err := s.db.Model(q).Where("id = ?", id).Select()
 
 	return q, err
 }
 
-func QuestionUpdate(q *model.Question) error {
-	return db.Update(q)
+func (s *Store) QuestionUpdate(q *model.Question) error {
+	return s.db.Update(q)
 }
 
-func QuestionVoteUpdate(q *model.Question) error {
-	_, err := db.Model(q).Column("vote", "updated_at").WherePK().Update()
+func (s *Store) QuestionVoteUpdate(q *model.Question) error {
+	_, err := s.db.Model(q).Column("vote", "updated_at").WherePK().Update()
 	return err
 }

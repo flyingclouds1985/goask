@@ -1,14 +1,11 @@
 package postgres
 
 import (
-	"log"
-
 	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/go-pg/pg"
 	"github.com/go-pg/pg/orm"
 )
 
-var db *pg.DB
 var models = []interface{}{
 	&model.User{},
 	&model.Comment{},
@@ -18,19 +15,29 @@ var models = []interface{}{
 	&model.CommentsReply{},
 }
 
-func init() {
+type Store struct {
+	db *pg.DB
+}
+
+func New() *Store {
 	// Don't forget to fill password field.
-	db = pg.Connect(&pg.Options{
-		User:     "postgres",
-		Password: "",
-		Database: "g",
+	return &Store{
+		db: openDB("postgres", "13466281", "g"),
+	}
+}
+
+func openDB(username, password, dbname string) *pg.DB {
+	return pg.Connect(&pg.Options{
+		User:     username,
+		Password: password,
+		Database: dbname,
 	})
 }
 
 // CreateSchema create tables.
-func CreateSchema() error {
+func (s *Store) CreateSchema() error {
 	for _, model := range models {
-		err := db.CreateTable(model, &orm.CreateTableOptions{
+		err := s.db.CreateTable(model, &orm.CreateTableOptions{
 			FKConstraints: true,
 			IfNotExists:   true,
 		})
@@ -39,8 +46,6 @@ func CreateSchema() error {
 			return err
 		}
 	}
-
-	log.Print("tables created !")
 
 	return nil
 }
