@@ -9,8 +9,7 @@ import (
 )
 
 func Initialize(store *postgres.Store) http.Handler {
-	gin.SetMode(gin.ReleaseMode)
-
+	// gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
@@ -22,18 +21,17 @@ func Initialize(store *postgres.Store) http.Handler {
 
 func routeList(router *gin.Engine, store *postgres.Store) {
 	router.POST("/login", AuthMiddleware().LoginHandler)
-
-	// for testing purposes
-	router.GET("/test", func(c *gin.Context) {
-
-	})
-
 	auth := router.Group("/auth")
 	auth.GET("/refresh_token", AuthMiddleware().RefreshHandler)
 
 	api := &api.Api{
 		Store: store,
 	}
+
+	// for testing purposes
+	router.GET("/test", func(c *gin.Context) {
+
+	})
 
 	q := router.Group("questions")
 	{
@@ -53,4 +51,9 @@ func routeList(router *gin.Engine, store *postgres.Store) {
 		c.POST("/replies/:reply_id", api.PostReplyComment)
 	}
 
+	r := router.Group("replies")
+	{
+		r.GET("/questions/:question_id", api.GetReplyList)
+		r.POST("/questions/:question_id", api.PostReply)
+	}
 }

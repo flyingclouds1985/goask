@@ -7,7 +7,7 @@ import (
 	"github.com/go-pg/pg/orm"
 )
 
-// Questions is an array of questions.
+// Questions is an array of question.
 type Questions []model.Question
 
 // CreateQuestion persist a question in db.

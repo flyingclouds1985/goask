@@ -31,6 +31,7 @@ func (a *Api) GetQuestion(c *gin.Context) {
 
 // PostAskQuestion creates a question.
 func (a *Api) PostQuestion(c *gin.Context) {
+	// claims := jwt.ExtractClaims(c)
 	in := new(model.Question)
 	err := c.ShouldBind(in)
 
@@ -41,7 +42,7 @@ func (a *Api) PostQuestion(c *gin.Context) {
 	q := new(model.Question)
 	q.Title = in.Title
 	q.Body = in.Body
-	q.AuthorID = in.AuthorID
+	// q.AuthorID = claims["id"]
 
 	if err = a.Store.CreateQuestion(q); err != nil {
 		JSONBadRequestError("Error in inserting question. ", err, c)
