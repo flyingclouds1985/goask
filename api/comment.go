@@ -8,7 +8,7 @@ import (
 )
 
 func (a *Api) GetQuestionCommentList(c *gin.Context) {
-	list, err := a.Store.CommentsList(c.Request.URL.Query())
+	list, err := a.Store.CommentList(c.Request.URL.Query())
 
 	if err != nil {
 		JSONBadRequestError("Error in getting comments list. ", err, c)
@@ -30,7 +30,7 @@ func (a *Api) PostQuestionComment(c *gin.Context) {
 	comment.Body = in.Body
 	// comment.AuthorID = claims["id"]
 
-	if err = a.Store.CreateComment(comment); err != nil {
+	if err = a.Store.CommentCreate(comment); err != nil {
 		JSONBadRequestError("Error in inserting comment. ", err, c)
 	}
 
@@ -39,7 +39,7 @@ func (a *Api) PostQuestionComment(c *gin.Context) {
 	cq.CommentId = comment.Id
 	cq.QuestionId = qid
 
-	if err = a.Store.CreateCommentQuestion(cq); err != nil {
+	if err = a.Store.CommentQuestionCreate(cq); err != nil {
 		JSONBadRequestError("Error in inserting comment_question relation. ", err, c)
 	}
 

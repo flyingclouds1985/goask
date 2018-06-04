@@ -44,7 +44,7 @@ func (a *Api) PostQuestion(c *gin.Context) {
 	q.Body = in.Body
 	// q.AuthorID = claims["id"]
 
-	if err = a.Store.CreateQuestion(q); err != nil {
+	if err = a.Store.QuestionCreate(q); err != nil {
 		JSONBadRequestError("Error in inserting question. ", err, c)
 	}
 

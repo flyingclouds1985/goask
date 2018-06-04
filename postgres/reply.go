@@ -19,6 +19,10 @@ func (s *Store) ReplyList(query url.Values) (Replies, error) {
 	return replies, err
 }
 
-func (s *Store) CreateReply(r *model.Reply) error {
+func (s *Store) ReplyCreate(r *model.Reply) error {
 	return s.db.Insert(r)
+}
+
+func (s *Store) ReplyUpdate(r *model.Reply) error {
+	return s.db.Update(r)
 }

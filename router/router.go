@@ -55,5 +55,6 @@ func routeList(router *gin.Engine, store *postgres.Store) {
 	{
 		r.GET("/questions/:question_id", api.GetReplyList)
 		r.POST("/questions/:question_id", api.PostReply)
+		r.PATCH("/:reply_id/questions/:question_id/", api.PatchReply)
 	}
 }

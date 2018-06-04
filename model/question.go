@@ -9,7 +9,7 @@ import (
 )
 
 type QuestionStore interface {
-	CreateQuestion(*Question) error
+	QuestionCreate(*Question) error
 	QuestionsList(url.Values) (*[]Question, error)
 	QuestionFind(int) (*Question, error)
 	QuestionUpdate(*Question) error
@@ -35,6 +35,7 @@ func (q *Question) BeforeUpdate(db orm.DB) error {
 	q.UpdatedAt = time.Now()
 	if q.CreatedAt.IsZero() {
 		data := new(Question)
+		data.Id = q.Id
 		err := db.Model(data).Column("created_at").WherePK().Select()
 		if err != nil {
 			log.Fatal("Error in finding question created_at column.", err.Error())

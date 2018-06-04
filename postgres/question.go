@@ -11,7 +11,7 @@ import (
 type Questions []model.Question
 
 // CreateQuestion persist a question in db.
-func (s *Store) CreateQuestion(q *model.Question) error {
+func (s *Store) QuestionCreate(q *model.Question) error {
 	return s.db.Insert(q)
 }
 

@@ -22,7 +22,7 @@ type Store struct {
 func New() *Store {
 	// Don't forget to fill password field.
 	return &Store{
-		db: openDB("postgres", "", "g"),
+		db: openDB("postgres", "13466281", "g"),
 	}
 }
 

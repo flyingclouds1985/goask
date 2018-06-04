@@ -9,7 +9,7 @@ import (
 
 type Comments []model.Comment
 
-func (s *Store) CommentsList(query url.Values) (Comments, error) {
+func (s *Store) CommentList(query url.Values) (Comments, error) {
 	var comments Comments
 
 	err := s.db.Model(&comments).
@@ -19,10 +19,10 @@ func (s *Store) CommentsList(query url.Values) (Comments, error) {
 	return comments, err
 }
 
-func (s *Store) CreateComment(c *model.Comment) error {
+func (s *Store) CommentCreate(c *model.Comment) error {
 	return s.db.Insert(c)
 }
 
-func (s *Store) CreateCommentQuestion(cq *model.CommentsQuestion) error {
+func (s *Store) CommentQuestionCreate(cq *model.CommentsQuestion) error {
 	return s.db.Insert(cq)
 }
