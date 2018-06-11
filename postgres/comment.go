@@ -3,6 +3,8 @@ package postgres
 import (
 	"net/url"
 
+	"github.com/go-pg/pg"
+
 	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/go-pg/pg/orm"
 )
@@ -19,10 +21,19 @@ func (s *Store) CommentList(query url.Values) (Comments, error) {
 	return comments, err
 }
 
-func (s *Store) CommentCreate(c *model.Comment) error {
-	return s.db.Insert(c)
-}
+func (s *Store) CommentCreate(c *model.Comment, question_id int) error {
+	return s.db.RunInTransaction(func(tx *pg.Tx) error {
+		err := tx.Insert(c)
+		if err != nil {
+			return err
+		}
 
-func (s *Store) CommentQuestionCreate(cq *model.CommentsQuestion) error {
-	return s.db.Insert(cq)
+		cq := new(model.CommentsQuestion)
+		cq.CommentId = c.Id
+		cq.QuestionId = question_id
+
+		err = tx.Insert(cq)
+
+		return err
+	})
 }

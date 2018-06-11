@@ -29,18 +29,10 @@ func (a *Api) PostQuestionComment(c *gin.Context) {
 	comment := new(model.Comment)
 	comment.Body = in.Body
 	// comment.AuthorID = claims["id"]
-
-	if err = a.Store.CommentCreate(comment); err != nil {
-		JSONBadRequestError("Error in inserting comment. ", err, c)
-	}
-
 	qid, _ := strconv.Atoi(c.Param("question_id"))
-	cq := new(model.CommentsQuestion)
-	cq.CommentId = comment.Id
-	cq.QuestionId = qid
 
-	if err = a.Store.CommentQuestionCreate(cq); err != nil {
-		JSONBadRequestError("Error in inserting comment_question relation. ", err, c)
+	if err = a.Store.CommentCreate(comment, qid); err != nil {
+		JSONBadRequestError("Error in inserting comment. ", err, c)
 	}
 
 	c.JSON(200, comment)
