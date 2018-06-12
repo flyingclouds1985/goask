@@ -33,7 +33,10 @@ func (s *Store) CommentCreate(c *model.Comment, question_id int) error {
 		cq.QuestionId = question_id
 
 		err = tx.Insert(cq)
+		if err != nil {
+			return err
+		}
 
-		return err
+		return nil
 	})
 }
