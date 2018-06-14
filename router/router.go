@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Alireza-Ta/GOASK/api"
@@ -30,7 +31,9 @@ func routeList(router *gin.Engine, store *postgres.Store) {
 
 	// for testing purposes
 	router.GET("/test", func(c *gin.Context) {
-
+		fmt.Println("------------")
+		q, _ := api.Store.QuestionSingleWithRelations(1)
+		c.JSON(200, q)
 	})
 
 	q := router.Group("questions")

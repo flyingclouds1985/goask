@@ -25,9 +25,10 @@ func (a *Api) PostReply(c *gin.Context) {
 	if err != nil {
 		JSONBadRequestError("Error in binding reply. ", err, c)
 	}
-
+	qid, _ := strconv.Atoi(c.Param("question_id"))
 	r := new(model.Reply)
 	r.Body = in.Body
+	r.QuestionId = qid
 	// r.AuthorID = claims["id"]
 
 	if err = a.Store.ReplyCreate(r); err != nil {

@@ -14,6 +14,7 @@ func (s *Store) ReplyList(query url.Values) (Replies, error) {
 
 	err := s.db.Model(&replies).
 		Apply(orm.Pagination(query)).
+		Relation("Comments").
 		Select()
 
 	return replies, err

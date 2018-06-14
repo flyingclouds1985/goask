@@ -8,12 +8,13 @@ import (
 )
 
 type Reply struct {
-	Id        int `json: "id"`
-	Post      `pg:"override"`
-	Approved  int       `json:"approved"`
-	Comments  []Comment `json:"comments" pg:"many2many:comments_replies"`
-	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
-	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
+	Id         int `json: "id"`
+	Post       `pg:"override"`
+	Approved   int       `json:"approved"`
+	QuestionId int       `json:"question_id"`
+	Comments   []Comment `json:"comments" pg:"polymorphic:trackable_"`
+	CreatedAt  time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
+	UpdatedAt  time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
 func (r *Reply) BeforeInsert(db orm.DB) error {

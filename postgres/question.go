@@ -21,9 +21,19 @@ func (s *Store) QuestionsList(query url.Values) (Questions, error) {
 
 	err := s.db.Model(&questions).
 		Apply(orm.Pagination(query)).
+		Relation("Replies").
+		Relation("Comments").
 		Select()
 
 	return questions, err
+}
+
+func (s *Store) QuestionSingleWithRelations(id int) (*model.Question, error) {
+	q := new(model.Question)
+
+	err := s.db.Model(q).Where("id = ?", id).Relation("Replies").Relation("Comments").Select()
+
+	return q, err
 }
 
 func (s *Store) QuestionFind(id int) (*model.Question, error) {

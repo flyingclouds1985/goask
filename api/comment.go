@@ -34,8 +34,10 @@ func (a *Api) PostQuestionComment(c *gin.Context) {
 	comment.Body = in.Body
 	// comment.AuthorID = claims["id"]
 	qid, _ := strconv.Atoi(c.Param("question_id"))
+	comment.TrackableId = qid
+	comment.TrackableType = "Question"
 
-	if err = a.Store.QuestionCommentCreate(comment, qid); err != nil {
+	if err = a.Store.CommentCreate(comment); err != nil {
 		JSONBadRequestError("Error in inserting comment. ", err, c)
 	}
 
@@ -69,8 +71,10 @@ func (a *Api) PostReplyComment(c *gin.Context) {
 	comment.Body = in.Body
 	// comment.AuthorID = claims["id"]
 	rid, _ := strconv.Atoi(c.Param("reply_id"))
+	comment.TrackableId = rid
+	comment.TrackableType = "Reply"
 
-	if err = a.Store.ReplyCommentCreate(comment, rid); err != nil {
+	if err = a.Store.CommentCreate(comment); err != nil {
 		JSONBadRequestError("Error in inserting comment. ", err, c)
 	}
 

@@ -12,20 +12,12 @@ type CommentStore interface {
 }
 
 type Comment struct {
-	Id        int `json: "id"`
-	Post      `pg:"override"`
-	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
-	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
-}
-
-type CommentsQuestion struct {
-	CommentId  int `json:"comment_id"`
-	QuestionId int `json:"question_id"`
-}
-
-type CommentsReply struct {
-	CommentId int `json:"comment_id"`
-	ReplyId   int `json:"reply_id"`
+	Id            int    `json: "id"`
+	TrackableId   int    `json:"trackable_id"`
+	TrackableType string `json:"trackable_type"`
+	Post          `pg:"override"`
+	CreatedAt     time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
+	UpdatedAt     time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
 func (c *Comment) BeforeInsert(db orm.DB) error {

@@ -21,7 +21,8 @@ type Question struct {
 	Id        int `json: "id"`
 	Post      `pg:"override"`
 	Title     string    `json:"title"`
-	Comments  []Comment `json:"comments" pg:"many2many:comments_questions"`
+	Replies   []Reply   `json:"replies"`
+	Comments  []Comment `json:"comments" pg:"polymorphic:trackable_"`
 	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
 	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
