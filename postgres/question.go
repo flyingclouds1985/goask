@@ -8,7 +8,7 @@ import (
 )
 
 // Questions is an array of question.
-type Questions []model.Question
+type Questions []*model.Question
 
 // CreateQuestion persist a question in db.
 func (s *Store) QuestionCreate(q *model.Question) error {
@@ -16,16 +16,15 @@ func (s *Store) QuestionCreate(q *model.Question) error {
 }
 
 // QuestionsList returns a list of questions.
-func (s *Store) QuestionsList(query url.Values) (Questions, error) {
-	var questions Questions
-
-	err := s.db.Model(&questions).
+func (s *Store) QuestionsList(query url.Values) (*Questions, error) {
+	q := new(Questions)
+	err := s.db.Model(q).
 		Apply(orm.Pagination(query)).
 		Relation("Replies").
 		Relation("Comments").
 		Select()
 
-	return questions, err
+	return q, err
 }
 
 func (s *Store) QuestionSingleWithRelations(id int) (*model.Question, error) {
@@ -38,6 +37,7 @@ func (s *Store) QuestionSingleWithRelations(id int) (*model.Question, error) {
 
 func (s *Store) QuestionFind(id int) (*model.Question, error) {
 	q := new(model.Question)
+
 	err := s.db.Model(q).Where("id = ?", id).Select()
 
 	return q, err

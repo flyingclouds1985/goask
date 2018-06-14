@@ -12,6 +12,7 @@ type Comments []model.Comment
 
 func (s *Store) QuestionCommentList(query url.Values) (Comments, error) {
 	var question model.Question
+
 	qid, _ := strconv.Atoi(query.Get("question_id"))
 	p, err := s.pagination(&question, query, qid, "Comments")
 
@@ -20,6 +21,7 @@ func (s *Store) QuestionCommentList(query url.Values) (Comments, error) {
 
 func (s *Store) ReplyCommentList(query url.Values) (Comments, error) {
 	var reply model.Reply
+
 	rid, _ := strconv.Atoi(query.Get("reply_id"))
 	p, err := s.pagination(&reply, query, rid, "Comments")
 
