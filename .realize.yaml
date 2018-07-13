@@ -2,10 +2,23 @@ settings:
   legacy:
     force: false
     interval: 0s
+server:
+  status: true
+  open: true
+  port: 5002
+  host: localhost
 schema:
-- name: GOASK
-  path: .
-  commands: {}
+- name: goask-server
+  path: cmd/goask-server
+  commands:
+    server:
+      status: true
+    open:
+      status: true
+    install:
+      status: true
+    run:
+      status: true
   watcher:
     extensions:
     - go
