@@ -1,0 +1,30 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+server:
+  status: true
+  open: true
+  port: 5002
+  host: localhost
+schema:
+- name: goask-server
+  path: cmd/goask-server
+  commands:
+    server:
+      status: true
+    open:
+      status: true
+    install:
+      status: true
+    run:
+      status: true
+  watcher:
+    extensions:
+    - go
+    paths:
+    - /
+    ignored_paths:
+    - .git
+    - .realize
+    - vendor
