@@ -21,7 +21,7 @@ func Initialize(store *postgres.Store) http.Handler {
 }
 
 func routeList(router *gin.Engine, store *postgres.Store) {
-	router.LoadHTMLGlob("../web/templates/*")
+	router.LoadHTMLGlob("web/templates/*")
 
 	router.POST("/login", AuthMiddleware().LoginHandler)
 	auth := router.Group("/auth")
