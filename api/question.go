@@ -26,7 +26,7 @@ func (a *Api) GetQuestion(c *gin.Context) {
 		c.Redirect(http.StatusTemporaryRedirect, config.DOMAIN+"/questions/"+c.Param("id")+"/"+s)
 	}
 
-	c.JSON(200, q)
+	c.HTML(http.StatusOK, "index.tmpl", q)
 }
 
 // PostAskQuestion creates a question.
