@@ -1,0 +1,57 @@
+{{ template "header" . }}
+            <div class="col-lg-8">
+                <div class="content-wrapper">
+                    <header>
+                        <h5>
+                            {{ .Title }}
+                        </h5>
+                    </header>
+                    <div class="card">
+                            <div class="card-body">
+                                <div class="vote">
+                                        <a href="#" style="color: #586268;"><span class="oi oi-caret-top"></span></a>
+                                        <p>10</p>
+                                        <a href="#" style="color: #586268;"><span class="oi oi-caret-bottom"></span></a>
+                                </div>
+                                <p class="card-text" style="margin-left: 30px;">
+                                    {{ .Body }}
+                                </p>
+                                <ul class="tags-list" style="margin-left: 30px;margin-top: 20px;">
+                                    <li>
+                                            <button type="button" class="btn btn-outline-success btn-sm">javscript</button>
+                                    </li>
+                                    <li>
+                                            <button type="button" class="btn btn-outline-success btn-sm">google-cloud-firestor</button>
+                                    </li>
+                                    <li class="float-right">
+                                            <button type="button" class="btn btn-primary btn-sm">edit</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <ul class="comments">
+                                    {{ range .Comments }}
+                                        <li>
+                                            <small class="comment-text">{{ .Body }}<span class="oi oi-person"></span> <a href="#">apokryfos</a> <span class="text-muted">Jul 3 at 16:03</span><a href="#" style="margin-left: 5px;">edit</a></small>
+                                        </li>
+                                    {{ end }}
+                                </ul>
+                                <a href="#">add comment</a>
+                            </div>
+                        </div>
+                    </div> 
+            </div>
+            <div class="col-lg-4">
+                <div class="sidebar-wrapper">
+                    <div class="card">
+                        <div class="card-header">Question details</div>
+                        <div class="card-body">
+                            <p class="card-text"><span class="text-secondary" style="width: 65px; display: inline-block;">asked</span>  9 days ago by <a href="#">Striker</a></span></p>
+                            <p class="card-text"><span class="text-secondary" style="width: 65px; display: inline-block;">viewed</span>  2422</span></p>
+                            <p class="card-text"><span class="text-secondary" style="width: 65px; display: inline-block;">active</span>  yesterday</span></p>
+                            <p class="card-text"><span class="text-secondary" style="width: 65px; display: inline-block;">answers</span>  51</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{{ template "footer" . }}

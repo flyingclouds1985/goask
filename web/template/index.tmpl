@@ -1,0 +1,75 @@
+{{ template "header" . }}
+            <div class="col-lg-8">
+                <div class="content-wrapper">
+                    <header class="clearfix">
+                        <p>
+                        Top Questions
+                        </p>
+                        <div class="btn-group float-right" role="group" aria-label="toolbar">
+                            <button type="button" class="btn btn-light active">Latest</button>
+                            <button type="button" class="btn btn-light">Hot</button>
+                            <button type="button" class="btn btn-light">Week</button>
+                            <button type="button" class="btn btn-light">Month</button>
+                        </div>
+                    </header>
+                    {{ range . }}
+                    <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><a href="/questions/{{ .Id }}">{{ .Title }}</a></h5>
+                                <ul class="tags-list">
+                                    <li>
+                                            <button type="button" class="btn btn-outline-success btn-sm">success</button>
+                                    </li>
+                                    <li>
+                                            <button type="button" class="btn btn-outline-success btn-sm">success</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <ul class="meta-list">
+                                    <li>
+                                        <small class="text-muted">votes: {{ .Vote }}</small>
+                                    </li>
+                                    <li>
+                                        <small class="text-muted">view: 1423</small>
+                                    </li>
+                                    <li>
+                                        <small class="text-muted"><span class="custom-badge badge-success">answers: {{ len .Replies }}</span></small>
+                                    </li>
+                                    <li>
+                                        <small class="text-muted">asked 52 secs ago <a href="#">Striker</a></small>
+                                    </li>
+                                </ul>
+                            </div>
+                    </div>
+                    {{ end }}
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div> 
+            </div>
+            <div class="col-lg-4">
+                <div class="sidebar-wrapper">
+                    <div class="card">
+                        <div class="card-header">Top Tags</div>
+                        <div class="card-body">
+                            <p class="card-text"><a href="#">Javascript</a> <span class="badge badge-light">12312229</span></p>
+                            <p class="card-text"><a href="#">Golang</a> <span class="badge badge-light">12229</span></p>
+                            <p class="card-text"><a href="#">Java</a> <span class="badge badge-light">32143</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{{ template "footer" . }}

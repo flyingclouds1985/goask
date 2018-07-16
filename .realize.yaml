@@ -23,6 +23,7 @@ schema:
     extensions:
     - go
     - html
+    - tmpl
     paths:
     - ../..
     ignored_paths:

@@ -15,7 +15,7 @@ import (
 func (a *Api) GetQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	title := c.Param("question")
-	q, err := a.Store.QuestionFind(id)
+	q, err := a.Store.QuestionSingleWithRelations(id)
 
 	if err != nil {
 		JSONBadRequestError("Error in finding question. ", err, c)
@@ -26,7 +26,7 @@ func (a *Api) GetQuestion(c *gin.Context) {
 		c.Redirect(http.StatusTemporaryRedirect, config.DOMAIN+"/questions/"+c.Param("id")+"/"+s)
 	}
 
-	c.HTML(http.StatusOK, "index.tmpl", q)
+	RenderByContentType(200, c, q, "single.tmpl")
 }
 
 // PostAskQuestion creates a question.
@@ -107,5 +107,5 @@ func (a *Api) GetQuestionList(c *gin.Context) {
 		JSONBadRequestError("Error in getting the questions list. ", err, c)
 	}
 
-	c.JSON(200, list)
+	RenderByContentType(200, c, list, "index.tmpl")
 }

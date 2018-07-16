@@ -14,6 +14,8 @@ func Initialize(store *postgres.Store) http.Handler {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	r.LoadHTMLGlob("web/template/*")
+	r.Static("/assets", "web/static")
 
 	routeList(r, store)
 
@@ -21,8 +23,6 @@ func Initialize(store *postgres.Store) http.Handler {
 }
 
 func routeList(router *gin.Engine, store *postgres.Store) {
-	router.LoadHTMLGlob("web/templates/*")
-
 	router.POST("/login", AuthMiddleware().LoginHandler)
 	auth := router.Group("/auth")
 	auth.GET("/refresh_token", AuthMiddleware().RefreshHandler)
