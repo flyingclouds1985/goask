@@ -8,8 +8,8 @@ import (
 )
 
 type Tag struct {
-	Id        int       `json: "id"`
-	Name      string    `json: "name"`
+	Id        int       `json:"id"`
+	Name      string    `json:"name" sql:",unique"`
 	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
 	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
 }

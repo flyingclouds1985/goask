@@ -11,6 +11,7 @@ var models = []interface{}{
 	&model.Comment{},
 	&model.Question{},
 	&model.Reply{},
+	&model.Tag{},
 }
 
 type Store struct {

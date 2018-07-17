@@ -8,17 +8,18 @@ import (
 )
 
 // Questions is an array of question.
-type Questions []*model.Question
+type Questions []model.Question
 
-// CreateQuestion persist a question in db.
+// CreateQuestion persists a question in db.
 func (s *Store) QuestionCreate(q *model.Question) error {
 	return s.db.Insert(q)
 }
 
 // QuestionsList returns a list of questions.
-func (s *Store) QuestionsList(query url.Values) (*Questions, error) {
-	q := new(Questions)
-	err := s.db.Model(q).
+func (s *Store) QuestionsList(query url.Values) (Questions, error) {
+	var q Questions
+
+	err := s.db.Model(&q).
 		Apply(orm.Pagination(query)).
 		Relation("Replies").
 		Relation("Comments").

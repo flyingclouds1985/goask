@@ -18,15 +18,16 @@ type QuestionStore interface {
 
 // Question model
 type Question struct {
-	Id        int `json:"id"`
-	Post      `pg:"override"`
-	Title     string    `json:"title"`
-	Answered  int       `json:"answered" sql:"default:0"`
-	Replies   []Reply   `json:"replies"`
-	Comments  []Comment `json:"comments" pg:"polymorphic:trackable_"`
-	Tags      []Tag     `json:"tags"`
-	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
-	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
+	Id         int `json:"id"`
+	Post       `pg:"override"`
+	Title      string    `json:"title"`
+	Answered   int       `json:"answered" sql:"default:0"`
+	Replies    []Reply   `json:"replies"`
+	Comments   []Comment `json:"comments" pg:"polymorphic:trackable_"`
+	TagsString string    `json:"tags_string"`
+	Tags       []Tag     `json:"tags"`
+	CreatedAt  time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
+	UpdatedAt  time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
 func (q *Question) BeforeInsert(db orm.DB) error {
