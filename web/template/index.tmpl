@@ -17,12 +17,12 @@
                             <div class="card-body">
                                 <h5 class="card-title"><a href="/questions/{{ .Id }}">{{ .Title }}</a></h5>
                                 <ul class="tags-list">
+                                    {{ range .Tags}}
                                     <li>
-                                            <button type="button" class="btn btn-outline-success btn-sm">success</button>
+                                            <button type="button" class="btn btn-outline-success btn-sm">{{ .Name }}</button>
                                     </li>
-                                    <li>
-                                            <button type="button" class="btn btn-outline-success btn-sm">success</button>
-                                    </li>
+                                    {{ end }}
+                                    
                                 </ul>
                             </div>
                             <div class="card-footer text-muted">
@@ -34,7 +34,7 @@
                                         <small class="text-muted">view: 1423</small>
                                     </li>
                                     <li>
-                                        <small class="text-muted"><span class="custom-badge badge-success">answers: {{ len .Replies }}</span></small>
+                                        <small class="text-muted"><span class="{{ if .Answered }}custom-badge badge-success{{ end }}">answers: {{ len .Replies }}</span></small>
                                     </li>
                                     <li>
                                         <small class="text-muted">asked 52 secs ago <a href="#">Striker</a></small>

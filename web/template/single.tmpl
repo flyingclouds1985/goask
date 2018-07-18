@@ -17,12 +17,11 @@
                                     {{ .Body }}
                                 </p>
                                 <ul class="tags-list" style="margin-left: 30px;margin-top: 20px;">
+                                    {{ range .Tags }}
                                     <li>
-                                            <button type="button" class="btn btn-outline-success btn-sm">javscript</button>
+                                            <button type="button" class="btn btn-outline-success btn-sm">{{ .Name }}</button>
                                     </li>
-                                    <li>
-                                            <button type="button" class="btn btn-outline-success btn-sm">google-cloud-firestor</button>
-                                    </li>
+                                    {{ end }}
                                     <li class="float-right">
                                             <button type="button" class="btn btn-primary btn-sm">edit</button>
                                     </li>
