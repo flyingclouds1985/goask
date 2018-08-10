@@ -1,0 +1,103 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    margin-bottom: 60px;
+}
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+p {
+    margin: 0;
+}
+.navbar {
+    margin-bottom: 30px;
+}
+.content-wrapper {
+    padding: 10px;
+}
+
+.content-wrapper > header {
+    border-bottom: 2px solid #eee;
+    margin-bottom: 15px;
+}
+
+.content-wrapper header > p {
+    display: inline-block;
+    line-height: 50px;
+    margin-bottom: 0;
+}
+
+.content-wrapper header .btn-group {
+    margin-bottom: 1rem;
+}
+
+.card {
+    margin-bottom: 15px;
+    box-shadow: 2px 2px 5px #eee;
+}
+
+.tags-list li, .meta-list li {
+    display: inline-block;
+}
+
+.meta-list li {
+    margin-right: 10px;
+    padding-right: 10px;
+}
+
+.custom-badge {
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.sidebar-wrapper {
+    padding: 10px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    line-height: 60px; /* Vertically center the text there */
+    background-color: #24272A;
+}
+
+
+/***********************************
+*
+*   Single Page CSS
+*
+************************************/
+.vote {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+}
+
+.vote p {
+    text-align: center;
+}
+
+.vote .oi-caret-top, .vote .oi-caret-bottom {
+    font-size: 25px;
+}
+
+.comments li {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+}
+
+.comment-text {
+    color: #24272A;
+}
+
+.oi-person {
+    margin-left: 5px;
+}

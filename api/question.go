@@ -39,18 +39,13 @@ func (a *Api) PostQuestion(c *gin.Context) {
 		JSONBadRequestError("Error in binding question. ", err, c)
 	}
 
-	tags, _ := a.Store.TagCreate(in.TagsString)
+	tags, _ := a.Store.TagCreate(in.TagString)
 
 	q := new(model.Question)
 
 	q.Title = in.Title
 	q.Body = in.Body
-	q.TagsString = in.TagsString
-	q.Tags = make([]model.Tag, len(tags))
-
-	for k, v := range tags {
-		q.Tags[k] = *v
-	}
+	q.Tags = tags
 	// q.AuthorID = claims["id"]
 
 	if err = a.Store.QuestionCreate(q); err != nil {
