@@ -14,7 +14,7 @@ func (s *Server) GetQuestionCommentList(c *gin.Context) {
 	list, err := s.Store.QuestionCommentList(query)
 
 	if err != nil {
-		JSONBadRequestError("Error in getting comments list. ", err, c)
+		JSONBadRequestError(ListErr("comment"), err, c)
 	}
 
 	c.JSON(200, list)
@@ -27,7 +27,7 @@ func (s *Server) PostQuestionComment(c *gin.Context) {
 	err := c.ShouldBind(in)
 
 	if err != nil {
-		JSONBadRequestError("Error in binding comment. ", err, c)
+		JSONBadRequestError(BindErr("comment"), err, c)
 	}
 
 	comment := new(model.Comment)
@@ -38,7 +38,7 @@ func (s *Server) PostQuestionComment(c *gin.Context) {
 	comment.TrackableType = "Question"
 
 	if err = s.Store.CommentCreate(comment); err != nil {
-		JSONBadRequestError("Error in inserting comment. ", err, c)
+		JSONBadRequestError(InsertErr("comment"), err, c)
 	}
 
 	c.JSON(200, comment)
@@ -51,7 +51,7 @@ func (s *Server) GetReplyCommentList(c *gin.Context) {
 	list, err := s.Store.ReplyCommentList(query)
 
 	if err != nil {
-		JSONBadRequestError("Error in getting reply comment list. ", err, c)
+		JSONBadRequestError(ListErr("comment"), err, c)
 	}
 
 	c.JSON(200, list)
@@ -64,7 +64,7 @@ func (s *Server) PostReplyComment(c *gin.Context) {
 	err := c.ShouldBind(in)
 
 	if err != nil {
-		JSONBadRequestError("Error in binding comment. ", err, c)
+		JSONBadRequestError(BindErr("comment"), err, c)
 	}
 
 	comment := new(model.Comment)
@@ -75,7 +75,7 @@ func (s *Server) PostReplyComment(c *gin.Context) {
 	comment.TrackableType = "Reply"
 
 	if err = s.Store.CommentCreate(comment); err != nil {
-		JSONBadRequestError("Error in inserting comment. ", err, c)
+		JSONBadRequestError(InsertErr("comment"), err, c)
 	}
 
 	c.JSON(200, comment)

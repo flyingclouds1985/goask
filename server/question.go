@@ -18,7 +18,7 @@ func (s *Server) GetQuestion(c *gin.Context) {
 	q, err := s.Store.QuestionSingleWithRelations(id)
 
 	if err != nil {
-		JSONBadRequestError("Error in finding question. ", err, c)
+		JSONNotFoundError(NotFoundErr("question"), err, c)
 	}
 	// rewrite url if the question title isn't correct.
 	titleSlug := slug.Make(q.Title)
@@ -38,7 +38,7 @@ func (s *Server) PostQuestion(c *gin.Context) {
 	err := c.ShouldBind(in)
 
 	if err != nil {
-		JSONBadRequestError("Error in binding question. ", err, c)
+		JSONBadRequestError(BindErr("question"), err, c)
 	}
 
 	tags, _ := s.Store.TagCreate(in.TagString)
@@ -51,7 +51,7 @@ func (s *Server) PostQuestion(c *gin.Context) {
 	// q.AuthorID = claims["id"]
 
 	if err = s.Store.QuestionCreate(q); err != nil {
-		JSONBadRequestError("Error in inserting question. ", err, c)
+		JSONBadRequestError(InsertErr("question"), err, c)
 	}
 
 	c.JSON(200, q)
@@ -69,11 +69,11 @@ func (s *Server) PatchQuestion(c *gin.Context) {
 	}
 
 	if err != nil {
-		JSONBadRequestError("Error in binding question. ", err, c)
+		JSONBadRequestError(BindErr("question"), err, c)
 	}
 
 	if err = s.Store.QuestionUpdate(in); err != nil {
-		JSONBadRequestError("Error in updating question. ", err, c)
+		JSONBadRequestError(UpdateErr("question"), err, c)
 	}
 
 	c.JSON(200, in)
@@ -87,7 +87,7 @@ func (s *Server) PatchVoteQuestion(c *gin.Context) {
 
 	// Check if there's such a question.
 	if err != nil {
-		JSONBadRequestError("Error in finding question. ", err, c)
+		JSONNotFoundError(NotFoundErr("question"), err, c)
 	}
 
 	if v == "upvote" {
@@ -98,7 +98,7 @@ func (s *Server) PatchVoteQuestion(c *gin.Context) {
 
 	err = s.Store.QuestionVoteUpdate(q)
 	if err != nil {
-		JSONBadRequestError("Error in voting question. ", err, c)
+		JSONBadRequestError(VoteErr("question"), err, c)
 	}
 
 	titleSlug := slug.Make(q.Title)
@@ -110,7 +110,7 @@ func (s *Server) GetQuestionList(c *gin.Context) {
 	list, err := s.Store.QuestionsList(c.Request.URL.Query())
 
 	if err != nil {
-		JSONBadRequestError("Error in getting the questions list. ", err, c)
+		JSONBadRequestError(ListErr("question"), err, c)
 	}
 
 	c.JSON(200, list)

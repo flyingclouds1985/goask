@@ -27,6 +27,7 @@ func setup() *Server {
 
 func TestGetQuestion(t *testing.T) {
 	s := setup()
+
 	tests := map[string]struct {
 		id string
 	}{

@@ -11,7 +11,7 @@ func (s *Server) GetReplyList(c *gin.Context) {
 	list, err := s.Store.ReplyList(c.Request.URL.Query())
 
 	if err != nil {
-		JSONBadRequestError("Error in getting reply list. ", err, c)
+		JSONBadRequestError(ListErr("reply"), err, c)
 	}
 
 	c.JSON(200, list)
@@ -23,7 +23,7 @@ func (s *Server) PostReply(c *gin.Context) {
 	err := c.ShouldBind(in)
 
 	if err != nil {
-		JSONBadRequestError("Error in binding reply. ", err, c)
+		JSONBadRequestError(BindErr("reply"), err, c)
 	}
 	qid, _ := strconv.Atoi(c.Param("question_id"))
 	r := new(model.Reply)
@@ -32,7 +32,7 @@ func (s *Server) PostReply(c *gin.Context) {
 	// r.AuthorID = claims["id"]
 
 	if err = s.Store.ReplyCreate(r); err != nil {
-		JSONBadRequestError("Error in inserting reply. ", err, c)
+		JSONBadRequestError(InsertErr("reply"), err, c)
 	}
 
 	c.JSON(200, r)
@@ -48,11 +48,11 @@ func (s *Server) PatchReply(c *gin.Context) {
 	}
 
 	if err != nil {
-		JSONBadRequestError("Error in binding reply. ", err, c)
+		JSONBadRequestError(BindErr("reply"), err, c)
 	}
 
 	if err = s.Store.ReplyUpdate(in); err != nil {
-		JSONBadRequestError("Error in updating question. ", err, c)
+		JSONBadRequestError(UpdateErr("reply"), err, c)
 	}
 
 	c.JSON(200, in)
