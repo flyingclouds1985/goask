@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"strconv"
@@ -8,10 +8,10 @@ import (
 )
 
 // GetQuestionCommentList returns a list consists of comments for the question.
-func (a *Api) GetQuestionCommentList(c *gin.Context) {
+func (s *Server) GetQuestionCommentList(c *gin.Context) {
 	query := c.Request.URL.Query()
 	query.Set("question_id", c.Param("question_id"))
-	list, err := a.Store.QuestionCommentList(query)
+	list, err := s.Store.QuestionCommentList(query)
 
 	if err != nil {
 		JSONBadRequestError("Error in getting comments list. ", err, c)
@@ -21,7 +21,7 @@ func (a *Api) GetQuestionCommentList(c *gin.Context) {
 }
 
 // PostQuestionComment creates a comment for the question.
-func (a *Api) PostQuestionComment(c *gin.Context) {
+func (s *Server) PostQuestionComment(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Comment)
 	err := c.ShouldBind(in)
@@ -37,7 +37,7 @@ func (a *Api) PostQuestionComment(c *gin.Context) {
 	comment.TrackableId = qid
 	comment.TrackableType = "Question"
 
-	if err = a.Store.CommentCreate(comment); err != nil {
+	if err = s.Store.CommentCreate(comment); err != nil {
 		JSONBadRequestError("Error in inserting comment. ", err, c)
 	}
 
@@ -45,10 +45,10 @@ func (a *Api) PostQuestionComment(c *gin.Context) {
 }
 
 // GetReplyCommentList returns a list consists of comments for the reply.
-func (a *Api) GetReplyCommentList(c *gin.Context) {
+func (s *Server) GetReplyCommentList(c *gin.Context) {
 	query := c.Request.URL.Query()
 	query.Set("reply_id", c.Param("reply_id"))
-	list, err := a.Store.ReplyCommentList(query)
+	list, err := s.Store.ReplyCommentList(query)
 
 	if err != nil {
 		JSONBadRequestError("Error in getting reply comment list. ", err, c)
@@ -58,7 +58,7 @@ func (a *Api) GetReplyCommentList(c *gin.Context) {
 }
 
 // PostReplyComment creates a comment for the reply.
-func (a *Api) PostReplyComment(c *gin.Context) {
+func (s *Server) PostReplyComment(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Comment)
 	err := c.ShouldBind(in)
@@ -74,7 +74,7 @@ func (a *Api) PostReplyComment(c *gin.Context) {
 	comment.TrackableId = rid
 	comment.TrackableType = "Reply"
 
-	if err = a.Store.CommentCreate(comment); err != nil {
+	if err = s.Store.CommentCreate(comment); err != nil {
 		JSONBadRequestError("Error in inserting comment. ", err, c)
 	}
 

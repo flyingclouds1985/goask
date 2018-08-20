@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from './Card';
+import CardList from './CardList/CardList';
 
 
 class IndexContent extends React.Component {
@@ -19,7 +19,8 @@ class IndexContent extends React.Component {
                             <button type="button" className="btn btn-light">Month</button>
                         </div>
                     </header>
-                    <Card />
+
+                    <CardList />
 
                     <nav aria-label="Page navigation example">
                         <ul className="pagination justify-content-center">

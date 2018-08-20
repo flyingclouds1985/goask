@@ -1,12 +1,9 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 import IndexContent from './IndexContent';
+import frontWrapper from '../../hoc/FrontWrapper';
 
 class Index extends React.Component {
-
-    componentDidMount() {
-        console.log("hello");
-    }
 
     render() {
         return(
@@ -19,4 +16,4 @@ class Index extends React.Component {
 
 }
 
-export default Index;
+export default frontWrapper(Index);

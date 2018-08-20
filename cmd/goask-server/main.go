@@ -7,7 +7,7 @@ import (
 
 	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/postgres"
-	"github.com/Alireza-Ta/GOASK/router"
+	"github.com/Alireza-Ta/GOASK/server"
 )
 
 func main() {
@@ -18,7 +18,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	router := router.Initialize(store)
+	server := &server.Server{}
+	server.Store = store
+	router := server.SetupRoute()
 
 	fmt.Println("App is running...")
 	http.ListenAndServe(config.PORT, router)

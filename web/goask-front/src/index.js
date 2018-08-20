@@ -4,7 +4,7 @@ import registerServiceWorker from './registerServiceWorker';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/style.css';
-import Index from './components/Index';
+import Index from './components/front/Index';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 class App extends Component {
@@ -25,6 +25,7 @@ const NotFound = () => {
         <h1>Not Found</h1>
     );
 }
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();

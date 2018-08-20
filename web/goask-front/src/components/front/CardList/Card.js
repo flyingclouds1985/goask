@@ -6,18 +6,25 @@ class Card extends React.Component {
         return (
             <div className="card">
                 <div className="card-body">
-                    <h5 className="card-title"><a href="/questions/{{ .Id }}"></a></h5>
+                    <h5 className="card-title">{this.props.question.title}<a href={"/questions/" + this.props.question.id}></a></h5>
                     <ul className="tags-list">
-                        <li>
-                            <button type="button" className="btn btn-outline-success btn-sm"></button>
-                        </li>
+                        {
+                            this.props.question.tags.map( tag => {
+                                return (
+                                    <li key={tag.id}>
+                                        <button type="button" className="btn btn-outline-success btn-sm">{tag.name}</button>
+                                    </li>
+                        
+                                );
+                            })
+                        }
                         
                     </ul>
                 </div>
                 <div className="card-footer text-muted">
                     <ul className="meta-list">
                         <li>
-                            <small className="text-muted">votes: </small>
+                            <small className="text-muted">votes: {this.props.question.vote}</small>
                         </li>
                         <li>
                             <small className="text-muted">view: 1423</small>

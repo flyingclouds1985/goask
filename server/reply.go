@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"strconv"
@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (a *Api) GetReplyList(c *gin.Context) {
-	list, err := a.Store.ReplyList(c.Request.URL.Query())
+func (s *Server) GetReplyList(c *gin.Context) {
+	list, err := s.Store.ReplyList(c.Request.URL.Query())
 
 	if err != nil {
 		JSONBadRequestError("Error in getting reply list. ", err, c)
@@ -17,7 +17,7 @@ func (a *Api) GetReplyList(c *gin.Context) {
 	c.JSON(200, list)
 }
 
-func (a *Api) PostReply(c *gin.Context) {
+func (s *Server) PostReply(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Reply)
 	err := c.ShouldBind(in)
@@ -31,14 +31,14 @@ func (a *Api) PostReply(c *gin.Context) {
 	r.QuestionId = qid
 	// r.AuthorID = claims["id"]
 
-	if err = a.Store.ReplyCreate(r); err != nil {
+	if err = s.Store.ReplyCreate(r); err != nil {
 		JSONBadRequestError("Error in inserting reply. ", err, c)
 	}
 
 	c.JSON(200, r)
 }
 
-func (a *Api) PatchReply(c *gin.Context) {
+func (s *Server) PatchReply(c *gin.Context) {
 	in := new(model.Reply)
 	err := c.ShouldBind(in)
 
@@ -51,7 +51,7 @@ func (a *Api) PatchReply(c *gin.Context) {
 		JSONBadRequestError("Error in binding reply. ", err, c)
 	}
 
-	if err = a.Store.ReplyUpdate(in); err != nil {
+	if err = s.Store.ReplyUpdate(in); err != nil {
 		JSONBadRequestError("Error in updating question. ", err, c)
 	}
 

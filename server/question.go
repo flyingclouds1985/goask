@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"net/http"
@@ -12,25 +12,27 @@ import (
 )
 
 // GetQuestion returns a question based on id and title.
-func (a *Api) GetQuestion(c *gin.Context) {
+func (s *Server) GetQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	title := c.Param("question")
-	q, err := a.Store.QuestionSingleWithRelations(id)
+	q, err := s.Store.QuestionSingleWithRelations(id)
 
 	if err != nil {
 		JSONBadRequestError("Error in finding question. ", err, c)
 	}
 	// rewrite url if the question title isn't correct.
-	s := slug.Make(q.Title)
-	if title != s {
-		c.Redirect(http.StatusTemporaryRedirect, config.DOMAIN+"/questions/"+c.Param("id")+"/"+s)
+	titleSlug := slug.Make(q.Title)
+	if title != titleSlug {
+		urlStr := config.DOMAIN + "/questions/" + c.Param("id") + "/" + titleSlug
+		c.Writer.Header().Set("Location", urlStr)
 	}
 
-	RenderByContentType(200, c, q, "single.tmpl")
+	// RenderByContentType(200, c, q, "single.tmpl")
+	c.JSON(200, q)
 }
 
 // PostAskQuestion creates a question.
-func (a *Api) PostQuestion(c *gin.Context) {
+func (s *Server) PostQuestion(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Question)
 	err := c.ShouldBind(in)
@@ -39,7 +41,7 @@ func (a *Api) PostQuestion(c *gin.Context) {
 		JSONBadRequestError("Error in binding question. ", err, c)
 	}
 
-	tags, _ := a.Store.TagCreate(in.TagString)
+	tags, _ := s.Store.TagCreate(in.TagString)
 
 	q := new(model.Question)
 
@@ -48,7 +50,7 @@ func (a *Api) PostQuestion(c *gin.Context) {
 	q.Tags = tags
 	// q.AuthorID = claims["id"]
 
-	if err = a.Store.QuestionCreate(q); err != nil {
+	if err = s.Store.QuestionCreate(q); err != nil {
 		JSONBadRequestError("Error in inserting question. ", err, c)
 	}
 
@@ -56,7 +58,7 @@ func (a *Api) PostQuestion(c *gin.Context) {
 }
 
 // PatchQuestion upadte a question.
-func (a *Api) PatchQuestion(c *gin.Context) {
+func (s *Server) PatchQuestion(c *gin.Context) {
 	in := new(model.Question)
 	err := c.ShouldBind(in)
 
@@ -70,7 +72,7 @@ func (a *Api) PatchQuestion(c *gin.Context) {
 		JSONBadRequestError("Error in binding question. ", err, c)
 	}
 
-	if err = a.Store.QuestionUpdate(in); err != nil {
+	if err = s.Store.QuestionUpdate(in); err != nil {
 		JSONBadRequestError("Error in updating question. ", err, c)
 	}
 
@@ -78,10 +80,10 @@ func (a *Api) PatchQuestion(c *gin.Context) {
 }
 
 // PatchVoteQuestion gives a vote to a question.
-func (a *Api) PatchVoteQuestion(c *gin.Context) {
+func (s *Server) PatchVoteQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	v := c.Param("vote")
-	q, err := a.Store.QuestionFind(id)
+	q, err := s.Store.QuestionFind(id)
 
 	// Check if there's such a question.
 	if err != nil {
@@ -94,22 +96,22 @@ func (a *Api) PatchVoteQuestion(c *gin.Context) {
 		q.Vote--
 	}
 
-	err = a.Store.QuestionVoteUpdate(q)
+	err = s.Store.QuestionVoteUpdate(q)
 	if err != nil {
 		JSONBadRequestError("Error in voting question. ", err, c)
 	}
 
-	s := slug.Make(q.Title)
-	c.Redirect(http.StatusSeeOther, config.DOMAIN+"/questions/"+c.Param("id")+"/"+s)
+	titleSlug := slug.Make(q.Title)
+	c.Redirect(http.StatusSeeOther, config.DOMAIN+"/questions/"+c.Param("id")+"/"+titleSlug)
 }
 
 // GetQuestionList returns a list of questions.
-func (a *Api) GetQuestionList(c *gin.Context) {
-	list, err := a.Store.QuestionsList(c.Request.URL.Query())
+func (s *Server) GetQuestionList(c *gin.Context) {
+	list, err := s.Store.QuestionsList(c.Request.URL.Query())
 
 	if err != nil {
 		JSONBadRequestError("Error in getting the questions list. ", err, c)
 	}
 
-	RenderByContentType(200, c, list, "index.tmpl")
+	c.JSON(200, list)
 }
