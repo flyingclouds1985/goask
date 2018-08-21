@@ -35,24 +35,21 @@ func (s *Server) GetQuestion(c *gin.Context) {
 func (s *Server) PostQuestion(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Question)
-	err := c.ShouldBind(in)
-
+	err := c.ShouldBindJSON(in)
 	if err != nil {
 		JSONBadRequestError(BindErr("question"), err, c)
 	}
 
-	tags, _ := s.Store.TagCreate(in.TagString)
-
 	q := new(model.Question)
-
 	q.Title = in.Title
 	q.Body = in.Body
-	q.Tags = tags
+	q.Tags = in.Tags
 	// q.AuthorID = claims["id"]
 
 	if err = s.Store.QuestionCreate(q); err != nil {
 		JSONBadRequestError(InsertErr("question"), err, c)
 	}
+	s.Store.TagCreate(in.Tags, q.Id)
 
 	c.JSON(200, q)
 }
@@ -60,7 +57,7 @@ func (s *Server) PostQuestion(c *gin.Context) {
 // PatchQuestion upadte a question.
 func (s *Server) PatchQuestion(c *gin.Context) {
 	in := new(model.Question)
-	err := c.ShouldBind(in)
+	err := c.ShouldBindJSON(in)
 
 	// If client didn't specified the id in the request.
 	if in.Id == 0 {

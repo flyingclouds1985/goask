@@ -24,7 +24,7 @@ func (s *Server) GetQuestionCommentList(c *gin.Context) {
 func (s *Server) PostQuestionComment(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Comment)
-	err := c.ShouldBind(in)
+	err := c.ShouldBindJSON(in)
 
 	if err != nil {
 		JSONBadRequestError(BindErr("comment"), err, c)
@@ -61,7 +61,7 @@ func (s *Server) GetReplyCommentList(c *gin.Context) {
 func (s *Server) PostReplyComment(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Comment)
-	err := c.ShouldBind(in)
+	err := c.ShouldBindJSON(in)
 
 	if err != nil {
 		JSONBadRequestError(BindErr("comment"), err, c)

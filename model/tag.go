@@ -7,18 +7,22 @@ import (
 	"github.com/go-pg/pg/orm"
 )
 
+// Tag Model
 type Tag struct {
-	Id        int       `json:"id"`
-	Name      string    `json:"name" sql:",unique"`
-	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
-	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
+	Id         int    `json:"id"`
+	Name       string `json:"name"`
+	QuestionId int
+	CreatedAt  time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
+	UpdatedAt  time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
+// BeforeInsert tag
 func (t *Tag) BeforeInsert(db orm.DB) error {
 	t.UpdatedAt = time.Now()
 	return nil
 }
 
+// BeforeUpdate tag
 func (t *Tag) BeforeUpdate(db orm.DB) error {
 	t.UpdatedAt = time.Now()
 	if t.CreatedAt.IsZero() {

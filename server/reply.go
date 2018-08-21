@@ -22,7 +22,7 @@ func (s *Server) GetReplyList(c *gin.Context) {
 func (s *Server) PostReply(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Reply)
-	err := c.ShouldBind(in)
+	err := c.ShouldBindJSON(in)
 
 	if err != nil {
 		JSONBadRequestError(BindErr("reply"), err, c)
@@ -43,7 +43,7 @@ func (s *Server) PostReply(c *gin.Context) {
 // PatchReply updates a reply.
 func (s *Server) PatchReply(c *gin.Context) {
 	in := new(model.Reply)
-	err := c.ShouldBind(in)
+	err := c.ShouldBindJSON(in)
 
 	if in.Id == 0 {
 		rid, _ := strconv.Atoi(c.Param("reply_id"))

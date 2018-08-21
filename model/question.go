@@ -24,7 +24,6 @@ type Question struct {
 	Answered  int       `json:"answered" sql:"default:0"`
 	Replies   []Reply   `json:"replies"`
 	Comments  []Comment `json:"comments" pg:"polymorphic:trackable_"`
-	TagString string    `json:"tag_string" sql:"-"`
 	Tags      []Tag     `json:"tags"`
 	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
 	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`

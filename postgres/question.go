@@ -23,6 +23,7 @@ func (s *Store) QuestionsList(query url.Values) (Questions, error) {
 		Apply(orm.Pagination(query)).
 		Relation("Replies").
 		Relation("Comments").
+		Relation("Tags").
 		Select()
 
 	return q, err
