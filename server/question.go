@@ -27,7 +27,6 @@ func (s *Server) GetQuestion(c *gin.Context) {
 		c.Writer.Header().Set("Location", urlStr)
 	}
 
-	// RenderByContentType(200, c, q, "single.tmpl")
 	c.JSON(200, q)
 }
 

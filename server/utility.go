@@ -25,15 +25,6 @@ func JSONNotFoundError(customErr error, err error, c *gin.Context) {
 	return
 }
 
-// RenderByContentType represents multiple way of rendering based on header content-type.
-func RenderByContentType(status int, c *gin.Context, data interface{}, tmplName string) {
-	if c.GetHeader("Content-type") == "application/json" {
-		c.JSON(status, data)
-	} else {
-		c.HTML(status, tmplName, data)
-	}
-}
-
 func NotFoundErr(context string) error {
 	return errors.New(context + " not found.")
 }
