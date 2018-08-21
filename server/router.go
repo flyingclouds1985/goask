@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SetupRoute setups gin with common middlewares.
 func (s *Server) SetupRoute() http.Handler {
 	// gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
@@ -14,8 +15,6 @@ func (s *Server) SetupRoute() http.Handler {
 	r.Use(gin.Recovery())
 	r.Use(cors.Default())
 
-	// r.LoadHTMLGlob("web/template/*")
-	// r.Static("/assets", "web/static")
 	s.Router = r
 	s.routeList(r)
 

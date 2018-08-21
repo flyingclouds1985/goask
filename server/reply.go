@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetReplyList returns list of replies.
 func (s *Server) GetReplyList(c *gin.Context) {
 	list, err := s.Store.ReplyList(c.Request.URL.Query())
 
@@ -17,6 +18,7 @@ func (s *Server) GetReplyList(c *gin.Context) {
 	c.JSON(200, list)
 }
 
+// PostReply creates a reply.
 func (s *Server) PostReply(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Reply)
@@ -38,6 +40,7 @@ func (s *Server) PostReply(c *gin.Context) {
 	c.JSON(200, r)
 }
 
+// PatchReply updates a reply.
 func (s *Server) PatchReply(c *gin.Context) {
 	in := new(model.Reply)
 	err := c.ShouldBind(in)

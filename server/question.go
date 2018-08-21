@@ -20,6 +20,7 @@ func (s *Server) GetQuestion(c *gin.Context) {
 	if err != nil {
 		JSONNotFoundError(NotFoundErr("question"), err, c)
 	}
+
 	// rewrite url if the question title isn't correct.
 	titleSlug := slug.Make(q.Title)
 	if title != titleSlug {
@@ -30,7 +31,7 @@ func (s *Server) GetQuestion(c *gin.Context) {
 	c.JSON(200, q)
 }
 
-// PostAskQuestion creates a question.
+// PostQuestion creates a question.
 func (s *Server) PostQuestion(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Question)
