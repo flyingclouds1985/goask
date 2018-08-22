@@ -45,11 +45,10 @@ func (s *Server) PostQuestion(c *gin.Context) {
 	q.Body = in.Body
 	q.Tags = in.Tags
 	// q.AuthorID = claims["id"]
-
+	s.Store.TagCreate(in.Tags, q.Id)
 	if err = s.Store.QuestionCreate(q); err != nil {
 		JSONBadRequestError(InsertErr("question"), err, c)
 	}
-	s.Store.TagCreate(in.Tags, q.Id)
 
 	c.JSON(200, q)
 }
