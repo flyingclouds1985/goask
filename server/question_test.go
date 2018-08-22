@@ -65,3 +65,14 @@ func TestCreateQuestion(t *testing.T) {
 	}
 
 }
+
+func TestQuestionNotFound(t *testing.T) {
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", "/questions/10000", nil)
+	if err != nil {
+		t.Error("Error in sending request.")
+	}
+	TestServer.Router.ServeHTTP(res, req)
+
+	assert.Equal(t, 404, res.Code, "Question not found.")
+}
