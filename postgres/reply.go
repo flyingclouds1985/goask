@@ -12,7 +12,7 @@ type Replies []model.Reply
 func (s *Store) ReplyList(query url.Values) (Replies, error) {
 	var replies Replies
 
-	err := s.db.Model(&replies).
+	err := s.DB.Model(&replies).
 		Apply(orm.Pagination(query)).
 		Relation("Comments").
 		Select()
@@ -21,9 +21,9 @@ func (s *Store) ReplyList(query url.Values) (Replies, error) {
 }
 
 func (s *Store) ReplyCreate(r *model.Reply) error {
-	return s.db.Insert(r)
+	return s.DB.Insert(r)
 }
 
 func (s *Store) ReplyUpdate(r *model.Reply) error {
-	return s.db.Update(r)
+	return s.DB.Update(r)
 }

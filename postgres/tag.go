@@ -10,7 +10,7 @@ import (
 func (s *Store) TagCreate(tags []*model.Tag, qid int) {
 	for _, t := range tags {
 		t.QuestionId = qid
-		err := s.db.Insert(t)
+		err := s.DB.Insert(t)
 		if err != nil {
 			log.Fatal("Error in inserting tag...", err)
 		}

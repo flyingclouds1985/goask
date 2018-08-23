@@ -10,10 +10,8 @@ import (
 	"github.com/Alireza-Ta/GOASK/server"
 )
 
-var Ali string
-
 func main() {
-	store := postgres.New()
+	store := postgres.New(config.DBUSERNAME, config.DBPASSWORD, config.DBNAME)
 	err := store.CreateSchema()
 
 	if err != nil {

@@ -11,7 +11,7 @@ import (
 func AuthMiddleware() *jwt.GinJWTMiddleware {
 	return &jwt.GinJWTMiddleware{
 		Realm:      config.REALM,
-		Key:        []byte(config.SECRET_KEY),
+		Key:        []byte(config.SECRETKEY),
 		Timeout:    time.Hour,
 		MaxRefresh: time.Hour,
 

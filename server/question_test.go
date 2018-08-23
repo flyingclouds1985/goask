@@ -29,11 +29,14 @@ func TestCreateQuestion(t *testing.T) {
 		},
 	}
 
-	for k, question := range testCases {
-		assert := assert.New(t)
-		t.Run(k, func(t *testing.T) {
+	for tc, q := range testCases {
+		t.Run(tc, func(t *testing.T) {
+			assert := assert.New(t)
+			SetupSubTest()
+			defer TeardownSubTest()
+
 			res := httptest.NewRecorder()
-			body, err := json.Marshal(question)
+			body, err := json.Marshal(q)
 			if err != nil {
 				t.Error("error in json parsing.")
 			}
@@ -44,20 +47,20 @@ func TestCreateQuestion(t *testing.T) {
 
 			TestServer.Router.ServeHTTP(res, req)
 
-			if k == "BodyTitleTags" {
-				var b model.Question
-				err := json.Unmarshal(res.Body.Bytes(), &b)
-				if err != nil {
-					t.Error("error in json unmarshal.")
-				}
-
-				assert.Equal(200, res.Code, "got question.")
-				assert.Equal(testCases["BodyTitleTags"].Post, b.Post, "got body.")
-				assert.Equal(testCases["BodyTitleTags"].Title, b.Title, "got title.")
-				assert.Equal(testCases["BodyTitleTags"].Tags[0].Name, b.Tags[0].Name, "got first tag.")
-				assert.Equal(testCases["BodyTitleTags"].Tags[1].Name, b.Tags[1].Name, "got second tag.")
+			var b model.Question
+			err = json.Unmarshal(res.Body.Bytes(), &b)
+			if err != nil {
+				t.Error("error in json unmarshal.")
 			}
+
+			assert.Equal(200, res.Code, "got question.")
+			assert.Equal(1, b.Id, "got id 1.")
+			assert.Equal(q.Post, b.Post, "got body.")
+			assert.Equal(q.Title, b.Title, "got title.")
+			assert.Equal(q.Tags[0].Name, b.Tags[0].Name, "got first tag.")
+			assert.Equal(q.Tags[1].Name, b.Tags[1].Name, "got second tag.")
 		})
+
 	}
 
 }

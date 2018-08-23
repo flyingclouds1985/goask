@@ -29,7 +29,7 @@ func (s *Store) ReplyCommentList(query url.Values) (Comments, error) {
 }
 
 func (s *Store) pagination(model interface{}, query url.Values, id int, relation string) (interface{}, error) {
-	err := s.db.Model(model).
+	err := s.DB.Model(model).
 		Apply(orm.Pagination(query)).
 		Where("id = ?", id).
 		Relation(relation).
@@ -39,5 +39,5 @@ func (s *Store) pagination(model interface{}, query url.Values, id int, relation
 }
 
 func (s *Store) CommentCreate(c *model.Comment) error {
-	return s.db.Insert(c)
+	return s.DB.Insert(c)
 }

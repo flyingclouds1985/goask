@@ -15,13 +15,13 @@ var models = []interface{}{
 }
 
 type Store struct {
-	db *pg.DB
+	DB *pg.DB
 }
 
-func New() *Store {
+func New(username, password, dbname string) *Store {
 	// Don't forget to fill password field.
 	return &Store{
-		db: openDB("postgres", "secret", "g"),
+		DB: openDB(username, password, dbname),
 	}
 }
 
@@ -41,7 +41,7 @@ func openDB(username, password, dbname string) *pg.DB {
 // CreateSchema create tables.
 func (s *Store) CreateSchema() error {
 	for _, model := range models {
-		err := s.db.CreateTable(model, &orm.CreateTableOptions{
+		err := s.DB.CreateTable(model, &orm.CreateTableOptions{
 			FKConstraints: true,
 			IfNotExists:   true,
 		})
