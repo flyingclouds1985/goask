@@ -3,7 +3,6 @@ package server
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -117,8 +116,20 @@ func TestGetQuestion(t *testing.T) {
 
 	newRes := httptest.NewRecorder()
 	req, err = http.NewRequest("GET", "/questions/1/this-is-the-question-title", nil)
+	if err != nil {
+		t.Error("Error in getting question...")
+	}
 	TestServer.Router.ServeHTTP(newRes, req)
 
-	fmt.Println(oldRes.Body)
-	fmt.Println(newRes.Body)
+	var or map[string]interface{}
+	var nr map[string]interface{}
+	_ = json.Unmarshal(oldRes.Body.Bytes(), &or)
+	_ = json.Unmarshal(newRes.Body.Bytes(), &nr)
+	delete(or, "created_at")
+	delete(nr, "created_at")
+	delete(or, "updated_at")
+	delete(nr, "updated_at")
+	delete(or, "tags")
+	delete(nr, "tags")
+	assert.Equal(t, or, nr, "got question")
 }
