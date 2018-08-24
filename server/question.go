@@ -14,7 +14,6 @@ import (
 // GetQuestion returns a question based on id and title.
 func (s *Server) GetQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	title := c.Param("question")
 	q, err := s.Store.QuestionWithRelations(id)
 
 	if err != nil {
@@ -22,14 +21,14 @@ func (s *Server) GetQuestion(c *gin.Context) {
 		return
 	}
 
-	// rewrite url if the question title isn't correct.
+	// rewrite url if the question title does not provide or isn't in correct format.
+	title := c.Param("question")
 	titleSlug := slug.Make(q.Title)
 	if title != titleSlug {
 		urlStr := config.DOMAIN + "/questions/" + c.Param("id") + "/" + titleSlug
-
-		c.Writer.Header().Set("Location", urlStr)
+		c.Redirect(http.StatusMovedPermanently, urlStr)
+		return
 	}
-
 	c.JSON(200, q)
 }
 
@@ -48,11 +47,11 @@ func (s *Server) PostQuestion(c *gin.Context) {
 	q.Body = in.Body
 	q.Tags = in.Tags
 	// q.AuthorID = claims["id"]
-	s.Store.TagCreate(in.Tags, q.Id)
 	if err = s.Store.QuestionCreate(q); err != nil {
 		JSONBadRequestError(InsertErr("question"), err, c)
 		return
 	}
+	s.Store.TagCreate(in.Tags, q.Id)
 
 	c.JSON(200, q)
 }

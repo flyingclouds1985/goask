@@ -20,7 +20,7 @@ type QuestionStore interface {
 type Question struct {
 	Id        int `json:"id"`
 	Post      `pg:"override"`
-	Title     string    `json:"title"`
+	Title     string    `json:"title" binding:"required,min=15"`
 	Answered  int       `json:"answered" sql:"default:0"`
 	Replies   []Reply   `json:"replies"`
 	Comments  []Comment `json:"comments" pg:"polymorphic:trackable_"`

@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/Alireza-Ta/GOASK/server/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -22,9 +23,12 @@ func (s *Server) SetupRoute() http.Handler {
 }
 
 func (s *Server) routeList(router *gin.Engine) {
-	s.Router.POST("/login", AuthMiddleware().LoginHandler)
-	auth := s.Router.Group("/auth")
-	auth.GET("/refresh_token", AuthMiddleware().RefreshHandler)
+	s.Router.POST("/login", middleware.Auth().LoginHandler)
+
+	a := s.Router.Group("/auth")
+	{
+		a.GET("/refresh_token", middleware.Auth().RefreshHandler)
+	}
 
 	// for testing purposes
 	s.Router.GET("/test", func(c *gin.Context) {

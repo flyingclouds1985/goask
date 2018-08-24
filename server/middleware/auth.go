@@ -1,4 +1,4 @@
-package server
+package middleware
 
 import (
 	"time"
@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthMiddleware() *jwt.GinJWTMiddleware {
+func Auth() *jwt.GinJWTMiddleware {
 	return &jwt.GinJWTMiddleware{
 		Realm:      config.REALM,
 		Key:        []byte(config.SECRETKEY),

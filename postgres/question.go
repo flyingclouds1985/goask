@@ -32,7 +32,7 @@ func (s *Store) QuestionsList(query url.Values) (Questions, error) {
 func (s *Store) QuestionWithRelations(id int) (*model.Question, error) {
 	q := new(model.Question)
 
-	err := s.DB.Model(q).Where("id = ?", id).Relation("Replies").Relation("Comments").Select()
+	err := s.DB.Model(q).Where("id = ?", id).Relation("Replies").Relation("Comments").Relation("Tags").Select()
 
 	return q, err
 }

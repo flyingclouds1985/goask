@@ -24,25 +24,25 @@ func JSONNotFoundError(customErr error, err error, c *gin.Context) {
 }
 
 func NotFoundErr(context string) error {
-	return errors.New(context + " not found.")
+	return errors.New(context + " not found. ")
 }
 
 func BindErr(context string) error {
-	return errors.New(context + " error in binding.")
+	return errors.New(context + " error in binding. ")
 }
 
 func InsertErr(context string) error {
-	return errors.New(context + " error in inserting.")
+	return errors.New(context + " error in inserting. ")
 }
 
 func UpdateErr(context string) error {
-	return errors.New(context + " error in updating.")
+	return errors.New(context + " error in updating. ")
 }
 
 func VoteErr(context string) error {
-	return errors.New(context + " voting error.")
+	return errors.New(context + " voting error. ")
 }
 
 func ListErr(context string) error {
-	return errors.New(context + " error in getting list.")
+	return errors.New(context + " error in getting list. ")
 }
