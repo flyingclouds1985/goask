@@ -30,7 +30,7 @@ type Question struct {
 }
 
 func (q *Question) BeforeInsert(db orm.DB) error {
-	q.UpdatedAt = time.Now()
+	q.UpdatedAt = UnixTime()
 	return nil
 }
 

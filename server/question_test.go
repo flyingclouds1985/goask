@@ -121,15 +121,5 @@ func TestGetQuestion(t *testing.T) {
 	}
 	TestServer.Router.ServeHTTP(newRes, req)
 
-	var or map[string]interface{}
-	var nr map[string]interface{}
-	_ = json.Unmarshal(oldRes.Body.Bytes(), &or)
-	_ = json.Unmarshal(newRes.Body.Bytes(), &nr)
-	delete(or, "created_at")
-	delete(nr, "created_at")
-	delete(or, "updated_at")
-	delete(nr, "updated_at")
-	delete(or, "tags")
-	delete(nr, "tags")
-	assert.Equal(t, or, nr, "got question")
+	assert.Equal(t, oldRes.Body.String(), newRes.Body.String(), "got question")
 }

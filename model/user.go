@@ -17,6 +17,6 @@ type User struct {
 }
 
 func (u *User) BeforeInsert(db orm.DB) error {
-	u.UpdatedAt = time.Now()
+	u.UpdatedAt = UnixTime()
 	return nil
 }

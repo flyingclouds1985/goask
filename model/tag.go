@@ -18,7 +18,7 @@ type Tag struct {
 
 // BeforeInsert tag
 func (t *Tag) BeforeInsert(db orm.DB) error {
-	t.UpdatedAt = time.Now()
+	t.UpdatedAt = UnixTime()
 	return nil
 }
 

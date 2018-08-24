@@ -18,7 +18,7 @@ type Reply struct {
 }
 
 func (r *Reply) BeforeInsert(db orm.DB) error {
-	r.UpdatedAt = time.Now()
+	r.UpdatedAt = UnixTime()
 	return nil
 }
 

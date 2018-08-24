@@ -21,7 +21,7 @@ type Comment struct {
 }
 
 func (c *Comment) BeforeInsert(db orm.DB) error {
-	c.UpdatedAt = time.Now()
+	c.UpdatedAt = UnixTime()
 	return nil
 }
 
