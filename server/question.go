@@ -15,16 +15,18 @@ import (
 func (s *Server) GetQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	title := c.Param("question")
-	q, err := s.Store.QuestionSingleWithRelations(id)
+	q, err := s.Store.QuestionWithRelations(id)
 
 	if err != nil {
 		JSONNotFoundError(NotFoundErr("question"), err, c)
+		return
 	}
 
 	// rewrite url if the question title isn't correct.
 	titleSlug := slug.Make(q.Title)
 	if title != titleSlug {
 		urlStr := config.DOMAIN + "/questions/" + c.Param("id") + "/" + titleSlug
+
 		c.Writer.Header().Set("Location", urlStr)
 	}
 
@@ -38,6 +40,7 @@ func (s *Server) PostQuestion(c *gin.Context) {
 	err := c.ShouldBindJSON(in)
 	if err != nil {
 		JSONBadRequestError(BindErr("question"), err, c)
+		return
 	}
 
 	q := new(model.Question)
@@ -48,6 +51,7 @@ func (s *Server) PostQuestion(c *gin.Context) {
 	s.Store.TagCreate(in.Tags, q.Id)
 	if err = s.Store.QuestionCreate(q); err != nil {
 		JSONBadRequestError(InsertErr("question"), err, c)
+		return
 	}
 
 	c.JSON(200, q)
@@ -66,10 +70,12 @@ func (s *Server) PatchQuestion(c *gin.Context) {
 
 	if err != nil {
 		JSONBadRequestError(BindErr("question"), err, c)
+		return
 	}
 
 	if err = s.Store.QuestionUpdate(in); err != nil {
 		JSONBadRequestError(UpdateErr("question"), err, c)
+		return
 	}
 
 	c.JSON(200, in)
@@ -84,6 +90,7 @@ func (s *Server) PatchVoteQuestion(c *gin.Context) {
 	// Check if there's such a question.
 	if err != nil {
 		JSONNotFoundError(NotFoundErr("question"), err, c)
+		return
 	}
 
 	if v == "upvote" {
@@ -95,6 +102,7 @@ func (s *Server) PatchVoteQuestion(c *gin.Context) {
 	err = s.Store.QuestionVoteUpdate(q)
 	if err != nil {
 		JSONBadRequestError(VoteErr("question"), err, c)
+		return
 	}
 
 	titleSlug := slug.Make(q.Title)
@@ -107,6 +115,7 @@ func (s *Server) GetQuestionList(c *gin.Context) {
 
 	if err != nil {
 		JSONBadRequestError(ListErr("question"), err, c)
+		return
 	}
 
 	c.JSON(200, list)

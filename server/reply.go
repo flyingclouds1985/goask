@@ -13,6 +13,7 @@ func (s *Server) GetReplyList(c *gin.Context) {
 
 	if err != nil {
 		JSONBadRequestError(ListErr("reply"), err, c)
+		return
 	}
 
 	c.JSON(200, list)
@@ -26,6 +27,7 @@ func (s *Server) PostReply(c *gin.Context) {
 
 	if err != nil {
 		JSONBadRequestError(BindErr("reply"), err, c)
+		return
 	}
 	qid, _ := strconv.Atoi(c.Param("question_id"))
 	r := new(model.Reply)
@@ -35,6 +37,7 @@ func (s *Server) PostReply(c *gin.Context) {
 
 	if err = s.Store.ReplyCreate(r); err != nil {
 		JSONBadRequestError(InsertErr("reply"), err, c)
+		return
 	}
 
 	c.JSON(200, r)
@@ -52,10 +55,12 @@ func (s *Server) PatchReply(c *gin.Context) {
 
 	if err != nil {
 		JSONBadRequestError(BindErr("reply"), err, c)
+		return
 	}
 
 	if err = s.Store.ReplyUpdate(in); err != nil {
 		JSONBadRequestError(UpdateErr("reply"), err, c)
+		return
 	}
 
 	c.JSON(200, in)

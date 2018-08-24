@@ -13,7 +13,6 @@ func JSONBadRequestError(customErr error, err error, c *gin.Context) {
 		"error":  customErr.Error() + err.Error(),
 		"status": 400,
 	})
-	return
 }
 
 // JSONNotFoundError expresses not found request error in json format.
@@ -22,7 +21,6 @@ func JSONNotFoundError(customErr error, err error, c *gin.Context) {
 		"error":  customErr.Error() + err.Error(),
 		"status": 404,
 	})
-	return
 }
 
 func NotFoundErr(context string) error {

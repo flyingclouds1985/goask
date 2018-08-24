@@ -15,6 +15,7 @@ func (s *Server) GetQuestionCommentList(c *gin.Context) {
 
 	if err != nil {
 		JSONBadRequestError(ListErr("comment"), err, c)
+		return
 	}
 
 	c.JSON(200, list)
@@ -28,6 +29,7 @@ func (s *Server) PostQuestionComment(c *gin.Context) {
 
 	if err != nil {
 		JSONBadRequestError(BindErr("comment"), err, c)
+		return
 	}
 
 	comment := new(model.Comment)
@@ -39,6 +41,7 @@ func (s *Server) PostQuestionComment(c *gin.Context) {
 
 	if err = s.Store.CommentCreate(comment); err != nil {
 		JSONBadRequestError(InsertErr("comment"), err, c)
+		return
 	}
 
 	c.JSON(200, comment)
@@ -52,6 +55,7 @@ func (s *Server) GetReplyCommentList(c *gin.Context) {
 
 	if err != nil {
 		JSONBadRequestError(ListErr("comment"), err, c)
+		return
 	}
 
 	c.JSON(200, list)
@@ -65,6 +69,7 @@ func (s *Server) PostReplyComment(c *gin.Context) {
 
 	if err != nil {
 		JSONBadRequestError(BindErr("comment"), err, c)
+		return
 	}
 
 	comment := new(model.Comment)
@@ -76,6 +81,7 @@ func (s *Server) PostReplyComment(c *gin.Context) {
 
 	if err = s.Store.CommentCreate(comment); err != nil {
 		JSONBadRequestError(InsertErr("comment"), err, c)
+		return
 	}
 
 	c.JSON(200, comment)

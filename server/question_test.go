@@ -66,6 +66,8 @@ func TestCreateQuestion(t *testing.T) {
 }
 
 func TestQuestionNotFound(t *testing.T) {
+	defer TeardownSubTest()
+
 	res := httptest.NewRecorder()
 	req, err := http.NewRequest("GET", "/questions/10000", nil)
 	if err != nil {
