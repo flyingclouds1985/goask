@@ -2,6 +2,7 @@ package server
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -45,4 +46,15 @@ func VoteErr(context string) error {
 
 func ListErr(context string) error {
 	return errors.New(context + " error in getting list. ")
+}
+
+func checkNil(item interface{}, message string) {
+	var err string
+	e, ok := item.(error)
+	if ok {
+		err = e.Error()
+	}
+	if item != nil {
+		fmt.Printf("Error: %s, Message %s", err, message)
+	}
 }

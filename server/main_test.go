@@ -2,7 +2,10 @@ package server
 
 import (
 	"fmt"
+	"io"
 	"log"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 
@@ -49,4 +52,13 @@ func TestMain(m *testing.M) {
 	setup()
 	code := m.Run()
 	os.Exit(code)
+}
+
+func makeRequest(method string, url string, body io.Reader) *httptest.ResponseRecorder {
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest(method, url, body)
+	checkNil(err, "error in makeing request.")
+	TestServer.Router.ServeHTTP(res, req)
+
+	return res
 }

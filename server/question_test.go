@@ -3,8 +3,6 @@ package server
 import (
 	"bytes"
 	"encoding/json"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/Alireza-Ta/GOASK/model"
@@ -49,23 +47,15 @@ func TestCreateQuestion(t *testing.T) {
 			SetupSubTest()
 			defer TeardownSubTest()
 
-			res := httptest.NewRecorder()
 			body, err := json.Marshal(q)
-			if err != nil {
-				t.Error("error in json parsing.")
-			}
-			req, err := http.NewRequest("POST", "/questions/", bytes.NewBuffer(body))
-			if err != nil {
-				t.Error("error in getting queestion from endpoint!!!")
-			}
+			checkNil(err, "error in json parsing.")
 
-			TestServer.Router.ServeHTTP(res, req)
+			res := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
 
 			var b model.Question
 			err = json.Unmarshal(res.Body.Bytes(), &b)
-			if err != nil {
-				t.Error("error in json unmarshal.")
-			}
+			checkNil(err, "error in json unmarshal.")
+
 			if tc == "complete" {
 				assert.Equal(200, res.Code, "got question.")
 				assert.Equal(1, b.Id, "got id 1.")
@@ -89,13 +79,7 @@ func TestCreateQuestion(t *testing.T) {
 func TestQuestionNotFound(t *testing.T) {
 	defer TeardownSubTest()
 
-	res := httptest.NewRecorder()
-	req, err := http.NewRequest("GET", "/questions/10000", nil)
-	if err != nil {
-		t.Error("Error in sending request.")
-	}
-	TestServer.Router.ServeHTTP(res, req)
-
+	res := makeRequest("GET", "/questions/10000", nil)
 	assert.Equal(t, 404, res.Code, "Question not found.")
 }
 
@@ -103,23 +87,46 @@ func TestGetQuestion(t *testing.T) {
 	SetupSubTest()
 	defer TeardownSubTest()
 
-	oldRes := httptest.NewRecorder()
 	body, err := json.Marshal(testCases["complete"])
-	if err != nil {
-		t.Error("Error in json marshal...")
-	}
-	req, err := http.NewRequest("POST", "/questions/", bytes.NewBuffer(body))
-	if err != nil {
-		t.Error("Error in posting question...")
-	}
-	TestServer.Router.ServeHTTP(oldRes, req)
+	checkNil(err, "error in json marshal.")
+	oldRes := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
+	redirectRes := makeRequest("GET", "/questions/1", nil)
+	location := redirectRes.Header().Get("Location")
 
-	newRes := httptest.NewRecorder()
-	req, err = http.NewRequest("GET", "/questions/1/this-is-the-question-title", nil)
-	if err != nil {
-		t.Error("Error in getting question...")
-	}
-	TestServer.Router.ServeHTTP(newRes, req)
+	newRes := makeRequest("GET", location, nil)
 
 	assert.Equal(t, oldRes.Body.String(), newRes.Body.String(), "got question")
+}
+
+func TestPatchQuestion(t *testing.T) {
+	SetupSubTest()
+	defer TeardownSubTest()
+
+	body, err := json.Marshal(testCases["complete"])
+	checkNil(err, "error in json marshal.")
+
+	res := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
+	res = makeRequest("GET", "/questions/1/this-is-the-question-title", nil)
+
+	var b model.Question
+	err = json.Unmarshal(res.Body.Bytes(), &b)
+	checkNil(err, "error in json unmarshal.")
+
+	b.Id = 0
+	b.Title = "this is the question title that is more than 15 words length."
+	b.Answered = 1
+	b.Body = "Edited : This is the question body that must be more than 50 words till the API let us pass the this test nicely."
+	body, err = json.Marshal(b)
+	checkNil(err, "error in json marshal.")
+
+	res = makeRequest("PATCH", "/questions/1", bytes.NewBuffer(body))
+
+	var rb model.Question
+	err = json.Unmarshal(res.Body.Bytes(), &rb)
+	checkNil(err, "error in json unmarshal.")
+
+	assert.Equal(t, b.Title, rb.Title, "got title")
+	assert.Equal(t, b.Body, rb.Body, "got body")
+	assert.Equal(t, b.Answered, rb.Answered, "got answered 1.")
+	assert.NotEqual(t, b.UpdatedAt, rb.UpdatedAt, "different update time.")
 }

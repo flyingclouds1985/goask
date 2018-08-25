@@ -105,7 +105,7 @@ func (s *Server) PatchVoteQuestion(c *gin.Context) {
 	}
 
 	titleSlug := slug.Make(q.Title)
-	c.Redirect(http.StatusSeeOther, config.DOMAIN+"/questions/"+c.Param("id")+"/"+titleSlug)
+	c.Redirect(http.StatusMovedPermanently, config.DOMAIN+"/questions/"+c.Param("id")+"/"+titleSlug)
 }
 
 // GetQuestionList returns a list of questions.
