@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/Alireza-Ta/GOASK/server"
@@ -19,7 +21,7 @@ func main() {
 
 	server := &server.Server{}
 	server.Store = store
-	router := server.SetupRoute()
+	router := server.SetupRoute(gin.DebugMode)
 
 	fmt.Println("App is running...")
 	http.ListenAndServe(config.PORT, router)

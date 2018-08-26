@@ -29,20 +29,21 @@ func Auth() *jwt.GinJWTMiddleware {
 	}
 }
 
-func authenticator(username, password string, c *gin.Context) (string, bool) {
-	if username == "admin" && password == "admin" {
-		return username, true
+func authenticator(c *gin.Context) (interface{}, error) {
+	if c.Param("username") == "admin" && c.Param("password") == "admin" {
+		return "admin", nil
 	}
 
-	return username, false
+	return "admin", jwt.ErrFailedAuthentication
 }
 
-func authorizator(username string, c *gin.Context) bool {
-	if username == "admin" {
-		return true
-	}
+func authorizator(data interface{}, c *gin.Context) bool {
+	// if v, ok := data.(string); ok && v == "admin" {
+	// 	return true
+	// }
 
-	return false
+	// return false
+	return true
 }
 
 func unauthorized(c *gin.Context, code int, message string) {

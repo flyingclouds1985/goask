@@ -40,7 +40,7 @@ var testCases = map[string]model.Question{
 	},
 }
 
-func TestCreateQuestion(t *testing.T) {
+func TestPostQuestion(t *testing.T) {
 	for tc, q := range testCases {
 		t.Run(tc, func(t *testing.T) {
 			assert := assert.New(t)
@@ -99,6 +99,7 @@ func TestGetQuestion(t *testing.T) {
 }
 
 func TestPatchQuestion(t *testing.T) {
+	assert := assert.New(t)
 	SetupSubTest()
 	defer TeardownSubTest()
 
@@ -125,8 +126,8 @@ func TestPatchQuestion(t *testing.T) {
 	err = json.Unmarshal(res.Body.Bytes(), &rb)
 	checkNil(err, "error in json unmarshal.")
 
-	assert.Equal(t, b.Title, rb.Title, "got title")
-	assert.Equal(t, b.Body, rb.Body, "got body")
-	assert.Equal(t, b.Answered, rb.Answered, "got answered 1.")
-	assert.NotEqual(t, b.UpdatedAt, rb.UpdatedAt, "different update time.")
+	assert.Equal(b.Title, rb.Title, "got title")
+	assert.Equal(b.Body, rb.Body, "got body")
+	assert.Equal(b.Answered, rb.Answered, "got answered 1.")
+	assert.NotEqual(b.UpdatedAt, rb.UpdatedAt, "different update time.")
 }

@@ -9,8 +9,8 @@ import (
 )
 
 // SetupRoute setups gin with common middlewares.
-func (s *Server) SetupRoute() http.Handler {
-	// gin.SetMode(gin.ReleaseMode)
+func (s *Server) SetupRoute(mode string) http.Handler {
+	gin.SetMode(mode)
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
@@ -23,40 +23,52 @@ func (s *Server) SetupRoute() http.Handler {
 }
 
 func (s *Server) routeList(router *gin.Engine) {
-	s.Router.POST("/login", middleware.Auth().LoginHandler)
-
-	a := s.Router.Group("/auth")
+	public := s.Router.Group("/")
 	{
-		a.GET("/refresh_token", middleware.Auth().RefreshHandler)
+		q := public.Group("questions")
+		{
+			q.GET("/", s.GetQuestionList)
+			q.GET("/:id", s.GetQuestion)
+			q.GET("/:id/:question", s.GetQuestion)
+		}
+		c := public.Group("comments")
+		{
+			c.GET("/questions/:question_id", s.GetQuestionCommentList)
+			c.GET("/replies/:reply_id", s.GetReplyCommentList)
+		}
+		r := public.Group("replies")
+		{
+			r.GET("/questions/:question_id", s.GetReplyList)
+		}
+
+		// for testing purposes
+		public.GET("/test", func(c *gin.Context) {
+
+		})
 	}
 
-	// for testing purposes
-	s.Router.GET("/test", func(c *gin.Context) {
-
-	})
-
-	q := s.Router.Group("questions")
+	private := s.Router.Group("/")
 	{
-		q.GET("/", s.GetQuestionList)
-		q.POST("/", s.PostQuestion)
-		q.GET("/:id", s.GetQuestion)
-		q.PATCH("/:id", s.PatchQuestion)
-		q.GET("/:id/:question", s.GetQuestion)
-		q.PATCH("/:id/:vote", s.PatchVoteQuestion)
+		private.POST("/login", middleware.Auth().LoginHandler)
+		private.GET("/refresh_token", middleware.Auth().RefreshHandler)
+		q := private.Group("questions")
+		{
+			q.POST("/", s.PostQuestion)
+			q.PATCH("/:id", s.PatchQuestion)
+			q.PATCH("/:id/:vote", s.PatchVoteQuestion)
+		}
+
+		c := private.Group("comments")
+		{
+			c.POST("/questions/:question_id", s.PostQuestionComment)
+			c.POST("/replies/:reply_id", s.PostReplyComment)
+		}
+
+		r := private.Group("replies")
+		{
+			r.POST("/questions/:question_id", s.PostReply)
+			r.PATCH("/:reply_id/questions/:question_id/", s.PatchReply)
+		}
 	}
 
-	c := s.Router.Group("comments")
-	{
-		c.GET("/questions/:question_id", s.GetQuestionCommentList)
-		c.POST("/questions/:question_id", s.PostQuestionComment)
-		c.GET("/replies/:reply_id", s.GetReplyCommentList)
-		c.POST("/replies/:reply_id", s.PostReplyComment)
-	}
-
-	r := s.Router.Group("replies")
-	{
-		r.GET("/questions/:question_id", s.GetReplyList)
-		r.POST("/questions/:question_id", s.PostReply)
-		r.PATCH("/:reply_id/questions/:question_id/", s.PatchReply)
-	}
 }

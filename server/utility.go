@@ -50,8 +50,7 @@ func ListErr(context string) error {
 
 func checkNil(item interface{}, message string) {
 	var err string
-	e, ok := item.(error)
-	if ok {
+	if e, ok := item.(error); ok {
 		err = e.Error()
 	}
 	if item != nil {

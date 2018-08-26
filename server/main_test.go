@@ -9,29 +9,35 @@ import (
 	"os"
 	"testing"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/Alireza-Ta/GOASK/postgres"
 )
 
-var TestServer *Server
-var models []string = []string{
-	"users",
-	"comments",
-	"questions",
-	"replies",
-	"tags",
-}
+var (
+	TestServer *Server
+	models     = []string{
+		"users",
+		"comments",
+		"questions",
+		"replies",
+		"tags",
+	}
+)
 
 func setup() {
 	store := postgres.New("postgres", "secret", "GoaskTest")
 
 	TestServer = &Server{}
 	TestServer.Store = store
-	TestServer.SetupRoute()
+	TestServer.SetupRoute(gin.TestMode)
 }
 
 func truncateAllTables() {
 	for _, model := range models {
-		_, err := TestServer.Store.DB.Model(model).Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY CASCADE", model))
+		_, err := TestServer.Store.DB.Model(model).Exec(
+			fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY CASCADE", model),
+		)
 		if err != nil {
 			log.Fatal("Error in truncating...", err)
 		}

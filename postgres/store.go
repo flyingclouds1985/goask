@@ -25,11 +25,6 @@ func New(username, password, dbname string) *Store {
 	}
 }
 
-// NewTest opens a database connection for testing purposes.
-func NewTest() {
-
-}
-
 func openDB(username, password, dbname string) *pg.DB {
 	return pg.Connect(&pg.Options{
 		User:     username,
