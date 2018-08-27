@@ -12,19 +12,20 @@ type Tag struct {
 	Id         int    `json:"id"`
 	Name       string `json:"name"`
 	QuestionId int
-	CreatedAt  time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
+	CreatedAt  time.Time `json:"created_at" sql:"type:timestamptz"`
 	UpdatedAt  time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
 // BeforeInsert tag
 func (t *Tag) BeforeInsert(db orm.DB) error {
+	t.CreatedAt = UnixTime()
 	t.UpdatedAt = UnixTime()
 	return nil
 }
 
 // BeforeUpdate tag
 func (t *Tag) BeforeUpdate(db orm.DB) error {
-	t.UpdatedAt = time.Now()
+	t.UpdatedAt = UnixTime()
 	if t.CreatedAt.IsZero() {
 		data := new(Tag)
 		data.Id = t.Id

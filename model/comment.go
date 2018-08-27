@@ -16,17 +16,18 @@ type Comment struct {
 	TrackableId   int    `json:"trackable_id"`
 	TrackableType string `json:"trackable_type"`
 	Post          `pg:"override"`
-	CreatedAt     time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
+	CreatedAt     time.Time `json:"created_at" sql:"type:timestamptz"`
 	UpdatedAt     time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
 func (c *Comment) BeforeInsert(db orm.DB) error {
+	c.CreatedAt = UnixTime()
 	c.UpdatedAt = UnixTime()
 	return nil
 }
 
 func (c *Comment) BeforeUpdate(db orm.DB) error {
-	c.UpdatedAt = time.Now()
+	c.UpdatedAt = UnixTime()
 	if c.CreatedAt.IsZero() {
 		data := new(Comment)
 		err := db.Model(data).Column("created_at").WherePK().Select()

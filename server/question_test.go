@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var testCases = map[string]model.Question{
+var questionTestCases = map[string]model.Question{
 	"complete": model.Question{
 		Post:  model.Post{Body: "This is the question body that must be more than 50 words till the API let us pass the this test nicely."},
 		Title: "This is the question title.",
@@ -41,7 +41,7 @@ var testCases = map[string]model.Question{
 }
 
 func TestPostQuestion(t *testing.T) {
-	for tc, q := range testCases {
+	for tc, q := range questionTestCases {
 		t.Run(tc, func(t *testing.T) {
 			assert := assert.New(t)
 			SetupSubTest()
@@ -87,7 +87,7 @@ func TestGetQuestion(t *testing.T) {
 	SetupSubTest()
 	defer TeardownSubTest()
 
-	body, err := json.Marshal(testCases["complete"])
+	body, err := json.Marshal(questionTestCases["complete"])
 	checkNil(err, "error in json marshal.")
 	oldRes := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
 	redirectRes := makeRequest("GET", "/questions/1", nil)
@@ -103,7 +103,7 @@ func TestPatchQuestion(t *testing.T) {
 	SetupSubTest()
 	defer TeardownSubTest()
 
-	body, err := json.Marshal(testCases["complete"])
+	body, err := json.Marshal(questionTestCases["complete"])
 	checkNil(err, "error in json marshal.")
 
 	res := makeRequest("POST", "/questions/", bytes.NewBuffer(body))

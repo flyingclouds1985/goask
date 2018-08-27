@@ -25,17 +25,18 @@ type Question struct {
 	Replies   []Reply   `json:"replies"`
 	Comments  []Comment `json:"comments" pg:"polymorphic:trackable_"`
 	Tags      []*Tag    `json:"tags"`
-	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
+	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz"`
 	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
 func (q *Question) BeforeInsert(db orm.DB) error {
+	q.CreatedAt = UnixTime()
 	q.UpdatedAt = UnixTime()
 	return nil
 }
 
 func (q *Question) BeforeUpdate(db orm.DB) error {
-	q.UpdatedAt = time.Now()
+	q.UpdatedAt = UnixTime()
 	if q.CreatedAt.IsZero() {
 		data := new(Question)
 		data.Id = q.Id

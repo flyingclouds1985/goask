@@ -1,7 +1,8 @@
 package server
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestPostUser(t *testing.T) {
-
 }

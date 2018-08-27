@@ -13,17 +13,18 @@ type Reply struct {
 	Approved   int       `json:"approved"`
 	QuestionId int       `json:"question_id"`
 	Comments   []Comment `json:"comments" pg:"polymorphic:trackable_"`
-	CreatedAt  time.Time `json:"created_at" sql:"type:timestamptz, default:now()"`
+	CreatedAt  time.Time `json:"created_at" sql:"type:timestamptz"`
 	UpdatedAt  time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
 func (r *Reply) BeforeInsert(db orm.DB) error {
+	r.CreatedAt = UnixTime()
 	r.UpdatedAt = UnixTime()
 	return nil
 }
 
 func (r *Reply) BeforeUpdate(db orm.DB) error {
-	r.UpdatedAt = time.Now()
+	r.UpdatedAt = UnixTime()
 	if r.CreatedAt.IsZero() {
 		data := new(Reply)
 		data.Id = r.Id
