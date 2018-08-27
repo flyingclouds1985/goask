@@ -2,19 +2,10 @@ package model
 
 import (
 	"log"
-	"net/url"
 	"time"
 
 	"github.com/go-pg/pg/orm"
 )
-
-type QuestionStore interface {
-	QuestionCreate(*Question) error
-	QuestionsList(url.Values) (*[]Question, error)
-	QuestionFind(int) (*Question, error)
-	QuestionUpdate(*Question) error
-	QuestionVoteUpdaete(*Question) error
-}
 
 // Question model
 type Question struct {

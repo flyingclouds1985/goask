@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"testing"
+	"time"
 
 	"github.com/Alireza-Ta/GOASK/model"
 
@@ -116,6 +117,10 @@ func TestPatchQuestion(t *testing.T) {
 	b.Id = 0
 	b.Title = "this is the question title that is more than 15 words length."
 	b.Answered = 1
+
+	// To have different update times !
+	time.Sleep(1 * time.Second)
+
 	b.Body = "Edited : This is the question body that must be more than 50 words till the API let us pass the this test nicely."
 	body, err = json.Marshal(b)
 	checkNil(err, "error in json marshal.")
