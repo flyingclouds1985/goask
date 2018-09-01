@@ -49,13 +49,13 @@ func TestPostQuestion(t *testing.T) {
 			defer TeardownSubTest()
 
 			body, err := json.Marshal(q)
-			checkNil(err, "error in json parsing.")
+			checkNil(err, " question: error in json parsing.")
 
 			res := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
 
 			var b model.Question
 			err = json.Unmarshal(res.Body.Bytes(), &b)
-			checkNil(err, "error in json unmarshal.")
+			checkNil(err, " question: error in json unmarshal.")
 
 			if tc == "complete" {
 				assert.Equal(200, res.Code, "got question.")
@@ -89,7 +89,7 @@ func TestGetQuestion(t *testing.T) {
 	defer TeardownSubTest()
 
 	body, err := json.Marshal(questionTestCases["complete"])
-	checkNil(err, "error in json marshal.")
+	checkNil(err, " question: error in json marshal.")
 	oldRes := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
 	redirectRes := makeRequest("GET", "/questions/1", nil)
 	location := redirectRes.Header().Get("Location")
@@ -105,14 +105,14 @@ func TestPatchQuestion(t *testing.T) {
 	defer TeardownSubTest()
 
 	body, err := json.Marshal(questionTestCases["complete"])
-	checkNil(err, "error in json marshal.")
+	checkNil(err, " question: error in json marshal.")
 
 	res := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
 	res = makeRequest("GET", "/questions/1/this-is-the-question-title", nil)
 
 	var b model.Question
 	err = json.Unmarshal(res.Body.Bytes(), &b)
-	checkNil(err, "error in json unmarshal.")
+	checkNil(err, " question: error in json unmarshal.")
 
 	b.Id = 0
 	b.Title = "this is the question title that is more than 15 words length."
@@ -123,13 +123,13 @@ func TestPatchQuestion(t *testing.T) {
 
 	b.Body = "Edited : This is the question body that must be more than 50 words till the API let us pass the this test nicely."
 	body, err = json.Marshal(b)
-	checkNil(err, "error in json marshal.")
+	checkNil(err, " question: error in json marshal.")
 
 	res = makeRequest("PATCH", "/questions/1", bytes.NewBuffer(body))
 
 	var rb model.Question
 	err = json.Unmarshal(res.Body.Bytes(), &rb)
-	checkNil(err, "error in json unmarshal.")
+	checkNil(err, " question: error in json unmarshal.")
 
 	assert.Equal(b.Title, rb.Title, "got title")
 	assert.Equal(b.Body, rb.Body, "got body")
