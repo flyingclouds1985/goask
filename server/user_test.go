@@ -9,8 +9,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var userTestCases = map[string]model.User{
-	"complete": model.User{
+var userTestCases = map[string]*model.User{
+	"complete": &model.User{
+		Id:       1,
 		Username: "John",
 		Email:    "john@example.com",
 		Password: "secret",
@@ -34,6 +35,7 @@ func TestPostUser(t *testing.T) {
 			checkNil(err, " user: err in json unmarshal.")
 
 			assert.Equal(t, 200, res.Code, "user created.")
+			assert.Equal(t, u.ExcludeTimes(), b.ExcludeTimes(), "got user.")
 		})
 	}
 }

@@ -69,6 +69,11 @@ func (s *Server) routeList(router *gin.Engine) {
 			r.POST("/questions/:question_id", s.PostReply)
 			r.PATCH("/:reply_id/questions/:question_id/", s.PatchReply)
 		}
+
+		u := private.Group("users")
+		{
+			u.POST("/", s.PostUser)
+		}
 	}
 
 }
