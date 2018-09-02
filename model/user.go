@@ -17,9 +17,9 @@ var (
 // User model
 type User struct {
 	Id        int       `json: "id"`
-	Username  string    `json:"username"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
+	Username  string    `json:"username" binding:"required,min=5,max=32"`
+	Email     string    `json:"email" binding:"required,email"`
+	Password  string    `json:"password" binding:"required,min=8,max=64"`
 	Bio       string    `json:"bio"`
 	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz"`
 	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`

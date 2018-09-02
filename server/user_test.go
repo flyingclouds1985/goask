@@ -12,11 +12,18 @@ import (
 var userTestCases = map[string]*model.User{
 	"complete": &model.User{
 		Id:       1,
-		Username: "John",
-		Email:    "john@example.com",
-		Password: "secret",
+		Username: "John25",
+		Email:    "john25@example.com",
+		Password: "secretpassword",
 		Bio:      "I'm a new user.",
 	},
+	// "broken": &model.User{
+	// 	Id:       1,
+	// 	Username: "John",
+	// 	Email:    "John@example.com",
+	// 	Password: "secret",
+	// 	Bio:      "I'm a new user.",
+	// },
 }
 
 func TestPostUser(t *testing.T) {
