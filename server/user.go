@@ -9,10 +9,21 @@ import (
 
 var PasswordHashErr = errors.New("Problem in creating user, try again!")
 
+func (s *Server) GetUser(c *gin.Context) {
+	username := c.Param("username")
+	u, err := s.Store.UserFind(username)
+	if err != nil {
+		JSONNotFoundError(NotFoundErr("user"), err, c)
+		return
+	}
+
+	c.JSON(200, u.Copy())
+}
+
 func (s *Server) PostUser(c *gin.Context) {
 	in := new(model.User)
-	err := c.ShouldBindJSON(in)
-	if err != nil {
+
+	if err := c.ShouldBindJSON(in); err != nil {
 		JSONBadRequestError(BindErr("user"), err, c)
 		return
 	}
@@ -27,6 +38,10 @@ func (s *Server) PostUser(c *gin.Context) {
 	u.Password = pass
 	u.Email = in.Email
 	u.Bio = in.Bio
+	if err = u.ValidateUsername(); err != nil {
+		JSONBadRequestError(InsertErr("user"), err, c)
+		return
+	}
 
 	if err = s.Store.UserCreate(u); err != nil {
 		JSONBadRequestError(InsertErr("user"), err, c)

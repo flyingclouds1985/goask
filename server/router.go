@@ -40,7 +40,10 @@ func (s *Server) routeList(router *gin.Engine) {
 		{
 			r.GET("/questions/:question_id", s.GetReplyList)
 		}
-
+		u := public.Group("users")
+		{
+			u.GET("/:username", s.GetUser)
+		}
 		// for testing purposes
 		public.GET("/test", func(c *gin.Context) {
 

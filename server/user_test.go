@@ -39,3 +39,22 @@ func TestPostUser(t *testing.T) {
 		})
 	}
 }
+
+func TestUserNotFound(t *testing.T) {
+	defer TeardownSubTest()
+
+	res := makeRequest("GET", "/users/russ", nil)
+	assert.Equal(t, 404, res.Code, "User not found.")
+}
+
+func TestGetUser(t *testing.T) {
+	SetupSubTest()
+	defer TeardownSubTest()
+
+	body, err := json.Marshal(userTestCases["complete"])
+	checkNil(err, " user: error in json marshal.")
+	oldRes := makeRequest("POST", "/users/", bytes.NewBuffer([]byte(body)))
+	newRes := makeRequest("GET", "/users/John", nil)
+
+	assert.Equal(t, oldRes.Body, newRes.Body, "got user.")
+}

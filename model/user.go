@@ -1,12 +1,20 @@
 package model
 
 import (
+	"errors"
 	"log"
+	"regexp"
 	"time"
 
 	"github.com/go-pg/pg/orm"
 )
 
+var (
+	errUsernameRegex = errors.New("Invalid username.It must start with alphabet")
+	regexUsername    = regexp.MustCompile("^[a-zA-Z][a-zA-Z0-9-_.]+$")
+)
+
+// User model
 type User struct {
 	Id        int       `json: "id"`
 	Username  string    `json:"username"`
@@ -17,13 +25,14 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
+// BeforeInsert runs before every insert.(orm hook)
 func (u *User) BeforeInsert(db orm.DB) error {
 	u.CreatedAt = UnixTime()
 	u.UpdatedAt = UnixTime()
 	return nil
 }
 
-// BeforeUpdate user
+// BeforeUpdate runs before every update.(orm hook)
 func (u *User) BeforeUpdate(db orm.DB) error {
 	u.UpdatedAt = UnixTime()
 	if u.CreatedAt.IsZero() {
@@ -58,4 +67,12 @@ func (u *User) ExcludeTimes() *User {
 		Email:    u.Email,
 		Bio:      u.Bio,
 	}
+}
+
+// ValidateUsername validates the username in regex format.
+func (u *User) ValidateUsername() error {
+	if !regexUsername.MatchString(u.Username) {
+		return errUsernameRegex
+	}
+	return nil
 }
