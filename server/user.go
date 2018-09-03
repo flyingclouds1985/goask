@@ -3,6 +3,7 @@ package server
 import (
 	"errors"
 
+	"github.com/Alireza-Ta/GOASK/internal/validation"
 	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/gin-gonic/gin"
 )
@@ -24,7 +25,7 @@ func (s *Server) PostUser(c *gin.Context) {
 	in := new(model.User)
 
 	if err := c.ShouldBindJSON(in); err != nil {
-		JSONBadRequestError(BindErr("user"), err, c)
+		JSONValidationError(validation.ErrorMessages(err), c)
 		return
 	}
 

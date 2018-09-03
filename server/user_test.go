@@ -12,18 +12,18 @@ import (
 var userTestCases = map[string]*model.User{
 	"complete": &model.User{
 		Id:       1,
-		Username: "John25",
-		Email:    "john25@example.com",
+		Username: "Tommy",
+		Email:    "Tommy25@example.com",
 		Password: "secretpassword",
 		Bio:      "I'm a new user.",
 	},
-	// "broken": &model.User{
-	// 	Id:       1,
-	// 	Username: "John",
-	// 	Email:    "John@example.com",
-	// 	Password: "secret",
-	// 	Bio:      "I'm a new user.",
-	// },
+	"broken": &model.User{
+		Id:       1,
+		Username: "John",
+		Email:    "John@example.com",
+		Password: "secret",
+		Bio:      "I'm a new user.",
+	},
 }
 
 func TestPostUser(t *testing.T) {
@@ -41,8 +41,16 @@ func TestPostUser(t *testing.T) {
 			err = json.Unmarshal(res.Body.Bytes(), &b)
 			checkNil(err, " user: err in json unmarshal.")
 
-			assert.Equal(t, 200, res.Code, "user created.")
-			assert.Equal(t, u.ExcludeTimes(), b.ExcludeTimes(), "got user.")
+			if res.Code == 400 {
+				var e map[string]map[string]interface{}
+				err = json.Unmarshal(res.Body.Bytes(), &e)
+				checkNil(err, " user: err in json unmarshal.")
+
+				assert.Equal(t, "400", e["errors"]["status"], "got errors.")
+			} else {
+				assert.Equal(t, 200, res.Code, "user created.")
+				assert.Equal(t, u.ExcludeTimes(), b.ExcludeTimes(), "got user.")
+			}
 		})
 	}
 }
@@ -61,7 +69,7 @@ func TestGetUser(t *testing.T) {
 	body, err := json.Marshal(userTestCases["complete"])
 	checkNil(err, " user: error in json marshal.")
 	oldRes := makeRequest("POST", "/users/", bytes.NewBuffer([]byte(body)))
-	newRes := makeRequest("GET", "/users/John", nil)
+	newRes := makeRequest("GET", "/users/Tommy", nil)
 
 	assert.Equal(t, oldRes.Body, newRes.Body, "got user.")
 }

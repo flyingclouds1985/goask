@@ -26,6 +26,15 @@ func JSONNotFoundError(customErr error, err error, c *gin.Context) {
 	})
 }
 
+func JSONValidationError(messages map[string]string, c *gin.Context) {
+	c.JSON(http.StatusBadRequest, gin.H{
+		"errors": map[string]interface{}{
+			"status":   "400",
+			"messages": messages,
+		},
+	})
+}
+
 func NotFoundErr(context string) error {
 	return errors.New(context + " not found. ")
 }
