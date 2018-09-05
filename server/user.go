@@ -1,6 +1,8 @@
 package server
 
 import (
+	"net/http"
+
 	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
@@ -15,7 +17,7 @@ func (s *Server) GetUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, u.Copy())
+	c.JSON(http.StatusOK, u.Copy())
 }
 
 // PostUser create new user.
@@ -50,7 +52,7 @@ func (s *Server) PostUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, u.Copy())
+	c.JSON(http.StatusOK, u.Copy())
 }
 
 // PatchUser updates user.
@@ -81,5 +83,5 @@ func (s *Server) PatchUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, u.Copy())
+	c.JSON(http.StatusOK, u.Copy())
 }

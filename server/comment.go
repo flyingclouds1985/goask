@@ -1,6 +1,7 @@
 package server
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/Alireza-Ta/GOASK/model"
@@ -19,7 +20,7 @@ func (s *Server) GetQuestionCommentList(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, list)
+	c.JSON(http.StatusOK, list)
 }
 
 // PostQuestionComment creates a comment for the question.
@@ -43,7 +44,7 @@ func (s *Server) PostQuestionComment(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, comment)
+	c.JSON(http.StatusOK, comment)
 }
 
 // GetReplyCommentList returns a list consists of comments for the reply.
@@ -57,7 +58,7 @@ func (s *Server) GetReplyCommentList(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, list)
+	c.JSON(http.StatusOK, list)
 }
 
 // PostReplyComment creates a comment for the reply.
@@ -81,5 +82,5 @@ func (s *Server) PostReplyComment(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, comment)
+	c.JSON(http.StatusOK, comment)
 }

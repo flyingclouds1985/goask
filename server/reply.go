@@ -1,6 +1,7 @@
 package server
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/Alireza-Ta/GOASK/model"
@@ -17,7 +18,7 @@ func (s *Server) GetReplyList(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, list)
+	c.JSON(http.StatusOK, list)
 }
 
 // PostReply creates a reply.
@@ -40,7 +41,7 @@ func (s *Server) PostReply(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, r)
+	c.JSON(http.StatusOK, r)
 }
 
 // PatchReply updates a reply.
@@ -61,5 +62,5 @@ func (s *Server) PatchReply(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, in)
+	c.JSON(http.StatusOK, in)
 }

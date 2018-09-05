@@ -1,6 +1,7 @@
 package server
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/Alireza-Ta/GOASK/config"
@@ -24,10 +25,10 @@ func (s *Server) GetQuestion(c *gin.Context) {
 	titleSlug := slug.Make(q.Title)
 	if title != titleSlug {
 		urlStr := config.DOMAIN + "/questions/" + c.Param("id") + "/" + titleSlug
-		c.Redirect(301, urlStr)
+		c.Redirect(http.StatusSeeOther, urlStr)
 		return
 	}
-	c.JSON(200, q)
+	c.JSON(http.StatusOK, q)
 }
 
 // PostQuestion creates a question.
@@ -50,7 +51,7 @@ func (s *Server) PostQuestion(c *gin.Context) {
 	}
 	s.Store.TagCreate(in.Tags, q.Id)
 
-	c.JSON(200, q)
+	c.JSON(http.StatusOK, q)
 }
 
 // PatchQuestion upadtes a question.
@@ -71,7 +72,7 @@ func (s *Server) PatchQuestion(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, in)
+	c.JSON(http.StatusOK, in)
 }
 
 // PatchVoteQuestion gives a vote to a question.
@@ -96,7 +97,7 @@ func (s *Server) PatchVoteQuestion(c *gin.Context) {
 	}
 
 	titleSlug := slug.Make(q.Title)
-	c.Redirect(301, config.DOMAIN+"/questions/"+c.Param("id")+"/"+titleSlug)
+	c.Redirect(http.StatusSeeOther, config.DOMAIN+"/questions/"+c.Param("id")+"/"+titleSlug)
 }
 
 // GetQuestionList returns a list of questions.
@@ -108,5 +109,5 @@ func (s *Server) GetQuestionList(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, list)
+	c.JSON(http.StatusOK, list)
 }
