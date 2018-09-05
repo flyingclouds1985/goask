@@ -10,8 +10,9 @@ import (
 )
 
 var (
-	errUsernameRegex = errors.New("Invalid username.It must start with alphabet")
-	regexUsername    = regexp.MustCompile("^[a-zA-Z][a-zA-Z0-9-_.]+$")
+	errUsernameRegex    = errors.New("Invalid username.It must start with alphabet")
+	errPasswordRequired = errors.New("Password field required")
+	regexUsername       = regexp.MustCompile("^[a-zA-Z][a-zA-Z0-9-_.]+$")
 )
 
 // User model
@@ -19,7 +20,7 @@ type User struct {
 	Id        int       `json: "id"`
 	Username  string    `json:"username" binding:"required,min=5,max=32"`
 	Email     string    `json:"email" binding:"required,email"`
-	Password  string    `json:"password" binding:"required,min=8,max=64"`
+	Password  string    `json:"password" binding:"min=8,max=64"`
 	Bio       string    `json:"bio"`
 	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz"`
 	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
@@ -73,6 +74,14 @@ func (u *User) ExcludeTimes() *User {
 func (u *User) ValidateUsername() error {
 	if !regexUsername.MatchString(u.Username) {
 		return errUsernameRegex
+	}
+	return nil
+}
+
+// ValidatePassword validates the password for required rule.
+func (u *User) ValidatePassword() error {
+	if u.Password == "" {
+		return errPasswordRequired
 	}
 	return nil
 }

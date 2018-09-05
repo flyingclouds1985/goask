@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,7 +15,7 @@ func (s *Server) GetQuestionCommentList(c *gin.Context) {
 	list, err := s.Store.QuestionCommentList(query)
 
 	if err != nil {
-		JSONBadRequestError(ListErr("comment"), err, c)
+		JSONNotFound("Error finding question comments list. ", err, c)
 		return
 	}
 
@@ -25,10 +26,8 @@ func (s *Server) GetQuestionCommentList(c *gin.Context) {
 func (s *Server) PostQuestionComment(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Comment)
-	err := c.ShouldBindJSON(in)
-
-	if err != nil {
-		JSONBadRequestError(BindErr("comment"), err, c)
+	if err := c.ShouldBindJSON(in); err != nil {
+		JSONValidation(validation.Messages(err), c)
 		return
 	}
 
@@ -39,8 +38,8 @@ func (s *Server) PostQuestionComment(c *gin.Context) {
 	comment.TrackableId = qid
 	comment.TrackableType = "Question"
 
-	if err = s.Store.CommentCreate(comment); err != nil {
-		JSONBadRequestError(InsertErr("comment"), err, c)
+	if err := s.Store.CommentCreate(comment); err != nil {
+		JSONInternalServer("Error inserting question comment. ", err, c)
 		return
 	}
 
@@ -54,7 +53,7 @@ func (s *Server) GetReplyCommentList(c *gin.Context) {
 	list, err := s.Store.ReplyCommentList(query)
 
 	if err != nil {
-		JSONBadRequestError(ListErr("comment"), err, c)
+		JSONInternalServer("Error finding reply comments list. ", err, c)
 		return
 	}
 
@@ -65,10 +64,8 @@ func (s *Server) GetReplyCommentList(c *gin.Context) {
 func (s *Server) PostReplyComment(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Comment)
-	err := c.ShouldBindJSON(in)
-
-	if err != nil {
-		JSONBadRequestError(BindErr("comment"), err, c)
+	if err := c.ShouldBindJSON(in); err != nil {
+		JSONValidation(validation.Messages(err), c)
 		return
 	}
 
@@ -79,8 +76,8 @@ func (s *Server) PostReplyComment(c *gin.Context) {
 	comment.TrackableId = rid
 	comment.TrackableType = "Reply"
 
-	if err = s.Store.CommentCreate(comment); err != nil {
-		JSONBadRequestError(InsertErr("comment"), err, c)
+	if err := s.Store.CommentCreate(comment); err != nil {
+		JSONInternalServer("Error inserting reply comment. ", err, c)
 		return
 	}
 

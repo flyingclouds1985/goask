@@ -6,16 +6,20 @@ import (
 	validator "gopkg.in/go-playground/validator.v8"
 )
 
-var field = "{field}"
-var param = "{param}"
-var rulesMessages = map[string]map[string]string{
-	"string": {
-		"min":      "{field} field must be {param} characters at least.",
-		"required": "{field} field is required!",
-	},
-}
+var (
+	field         = "{field}"
+	param         = "{param}"
+	rulesMessages = map[string]map[string]string{
+		"string": {
+			"min":      "{field} field must be {param} characters at least.",
+			"max":      "{field} field can be {param} characters at most.",
+			"required": "{field} field is required!",
+		},
+	}
+)
 
-func ErrorMessages(errors interface{}) map[string]string {
+// Messages returns validation errors.
+func Messages(errors interface{}) map[string]string {
 	messages := make(map[string]string)
 	if errs, ok := errors.(validator.ValidationErrors); ok {
 		for _, err := range errs {

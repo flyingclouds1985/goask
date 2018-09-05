@@ -76,6 +76,7 @@ func (s *Server) routeList(router *gin.Engine) {
 		u := private.Group("users")
 		{
 			u.POST("/", s.PostUser)
+			u.PATCH("/:id", s.PatchUser)
 		}
 	}
 

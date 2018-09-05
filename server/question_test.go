@@ -114,14 +114,13 @@ func TestPatchQuestion(t *testing.T) {
 	err = json.Unmarshal(res.Body.Bytes(), &b)
 	checkNil(err, " question: error in json unmarshal.")
 
-	b.Id = 0
+	b.Id = 1
 	b.Title = "this is the question title that is more than 15 words length."
 	b.Answered = 1
-
-	// To have different update times !
+	b.Body = "Edited : This is the question body that must be more than 50 words till the API let us pass the this test nicely."
+	// To have different timestamps.
 	time.Sleep(1 * time.Second)
 
-	b.Body = "Edited : This is the question body that must be more than 50 words till the API let us pass the this test nicely."
 	body, err = json.Marshal(b)
 	checkNil(err, " question: error in json marshal.")
 

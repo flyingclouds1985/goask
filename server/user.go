@@ -1,31 +1,36 @@
 package server
 
 import (
-	"errors"
-
-	"github.com/Alireza-Ta/GOASK/internal/validation"
 	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
 )
 
-var PasswordHashErr = errors.New("Problem in creating user, try again!")
-
+// GetUser responds user by username.
 func (s *Server) GetUser(c *gin.Context) {
 	username := c.Param("username")
-	u, err := s.Store.UserFind(username)
+	u, err := s.Store.UserFindByName(username)
 	if err != nil {
-		JSONNotFoundError(NotFoundErr("user"), err, c)
+		JSONNotFound("Error user not found. ", err, c)
 		return
 	}
 
 	c.JSON(200, u.Copy())
 }
 
+// PostUser create new user.
 func (s *Server) PostUser(c *gin.Context) {
 	in := new(model.User)
-
 	if err := c.ShouldBindJSON(in); err != nil {
-		JSONValidationError(validation.ErrorMessages(err), c)
+		JSONValidation(validation.Messages(err), c)
+		return
+	}
+	if err := in.ValidateUsername(); err != nil {
+		JSONInternalServer("Error inserting user. ", err, c)
+		return
+	}
+	if err := in.ValidatePassword(); err != nil {
+		JSONInternalServer("Error inserting user. ", err, c)
 		return
 	}
 
@@ -33,19 +38,46 @@ func (s *Server) PostUser(c *gin.Context) {
 	u.Username = in.Username
 	pass, err := HashPassword(in.Password)
 	if err != nil {
-		JSONBadRequestError(PasswordHashErr, err, c)
+		JSONInternalServer("Error inserting user. ", err, c)
 		return
 	}
 	u.Password = pass
 	u.Email = in.Email
 	u.Bio = in.Bio
-	if err = u.ValidateUsername(); err != nil {
-		JSONBadRequestError(InsertErr("user"), err, c)
+
+	if err = s.Store.UserCreate(u); err != nil {
+		JSONInternalServer("Error inserting user. ", err, c)
 		return
 	}
 
-	if err = s.Store.UserCreate(u); err != nil {
-		JSONBadRequestError(InsertErr("user"), err, c)
+	c.JSON(200, u.Copy())
+}
+
+// PatchUser updates user.
+func (s *Server) PatchUser(c *gin.Context) {
+	in := new(model.User)
+	if err := c.ShouldBindJSON(in); err != nil {
+		msg := validation.Messages(err)
+		if _, ok := msg["password"]; ok && len(msg) > 1 {
+			JSONValidation(msg, c)
+			return
+		}
+	}
+
+	u, err := s.Store.UserFind(in.Id)
+	if err != nil {
+		JSONInternalServer("Error finding user. ", err, c)
+	}
+
+	u.Username = in.Username
+	u.Email = in.Email
+	// for now we have no validation for Bio.
+	if in.Bio != "" {
+		u.Bio = in.Bio
+	}
+
+	if _, err := s.Store.UserUpdateExcludePassword(u); err != nil {
+		JSONInternalServer("Error updating user. ", err, c)
 		return
 	}
 

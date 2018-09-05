@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"testing"
+	"time"
 
 	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/stretchr/testify/assert"
@@ -72,4 +73,57 @@ func TestGetUser(t *testing.T) {
 	newRes := makeRequest("GET", "/users/Tommy", nil)
 
 	assert.Equal(t, oldRes.Body, newRes.Body, "got user.")
+}
+
+func PatchUser(t *testing.T) {
+	SetupSubTest()
+	defer TeardownSubTest()
+
+	body, err := json.Marshal(questionTestCases["complete"])
+	checkNil(err, " question: error in json marshal.")
+	oldRes := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
+	redirectRes := makeRequest("GET", "/questions/1", nil)
+	location := redirectRes.Header().Get("Location")
+
+	newRes := makeRequest("GET", location, nil)
+
+	assert.Equal(t, oldRes.Body.String(), newRes.Body.String(), "got question")
+}
+
+func TestPatchUser(t *testing.T) {
+	assert := assert.New(t)
+	SetupSubTest()
+	defer TeardownSubTest()
+
+	body, err := json.Marshal(userTestCases["complete"])
+	checkNil(err, " user: error in json marshal.")
+
+	res := makeRequest("POST", "/users/", bytes.NewBuffer(body))
+	res = makeRequest("GET", "/users/Tommy", nil)
+
+	var b model.User
+	err = json.Unmarshal(res.Body.Bytes(), &b)
+	checkNil(err, " user: error in json unmarshal.")
+
+	b.Id = 1
+	b.Username = "Tommy2"
+	b.Email = "Tommy2@example.com"
+	b.Bio = "This is my new bio."
+	// To have different timestamps.
+	time.Sleep(1 * time.Second)
+
+	body, err = json.Marshal(b)
+	checkNil(err, " user: error in json marshal.")
+
+	res = makeRequest("PATCH", "/users/1", bytes.NewBuffer(body))
+
+	var rb model.User
+	err = json.Unmarshal(res.Body.Bytes(), &rb)
+	checkNil(err, " user: error in json unmarshal.")
+
+	assert.Equal(b.Username, rb.Username, "got username")
+	assert.Equal(b.Email, rb.Email, "got email")
+	assert.Equal(b.Bio, rb.Bio, "got bio.")
+	assert.Equal(b.CreatedAt, rb.CreatedAt, "got created_at.")
+	assert.NotEqual(b.UpdatedAt, rb.UpdatedAt, "different update time.")
 }

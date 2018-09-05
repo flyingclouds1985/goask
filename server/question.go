@@ -1,23 +1,21 @@
 package server
 
 import (
-	"net/http"
 	"strconv"
-
-	"github.com/gosimple/slug"
 
 	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
+	"github.com/gosimple/slug"
 )
 
 // GetQuestion returns a question based on id and title.
 func (s *Server) GetQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	q, err := s.Store.QuestionWithRelations(id)
-
 	if err != nil {
-		JSONNotFoundError(NotFoundErr("question"), err, c)
+		JSONNotFound("Error question not found. ", err, c)
 		return
 	}
 
@@ -26,7 +24,7 @@ func (s *Server) GetQuestion(c *gin.Context) {
 	titleSlug := slug.Make(q.Title)
 	if title != titleSlug {
 		urlStr := config.DOMAIN + "/questions/" + c.Param("id") + "/" + titleSlug
-		c.Redirect(http.StatusMovedPermanently, urlStr)
+		c.Redirect(301, urlStr)
 		return
 	}
 	c.JSON(200, q)
@@ -36,9 +34,8 @@ func (s *Server) GetQuestion(c *gin.Context) {
 func (s *Server) PostQuestion(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Question)
-	err := c.ShouldBindJSON(in)
-	if err != nil {
-		JSONBadRequestError(BindErr("question"), err, c)
+	if err := c.ShouldBindJSON(in); err != nil {
+		JSONValidation(validation.Messages(err), c)
 		return
 	}
 
@@ -47,8 +44,8 @@ func (s *Server) PostQuestion(c *gin.Context) {
 	q.Body = in.Body
 	q.Tags = in.Tags
 	// q.AuthorID = claims["id"]
-	if err = s.Store.QuestionCreate(q); err != nil {
-		JSONBadRequestError(InsertErr("question"), err, c)
+	if err := s.Store.QuestionCreate(q); err != nil {
+		JSONInternalServer("Error inserting question. ", err, c)
 		return
 	}
 	s.Store.TagCreate(in.Tags, q.Id)
@@ -56,24 +53,21 @@ func (s *Server) PostQuestion(c *gin.Context) {
 	c.JSON(200, q)
 }
 
-// PatchQuestion upadte a question.
+// PatchQuestion upadtes a question.
 func (s *Server) PatchQuestion(c *gin.Context) {
 	in := new(model.Question)
-	err := c.ShouldBindJSON(in)
-
-	// If client didn't specified the id in the request.
-	if in.Id == 0 {
-		id, _ := strconv.Atoi(c.Param("id"))
-		in.Id = id
-	}
-
-	if err != nil {
-		JSONBadRequestError(BindErr("question"), err, c)
+	if err := c.ShouldBindJSON(in); err != nil {
+		JSONValidation(validation.Messages(err), c)
 		return
 	}
+	// If client didn't specified the id in the request.
+	// if in.Id == 0 {
+	// 	id, _ := strconv.Atoi(c.Param("id"))
+	// 	in.Id = id
+	// }
 
-	if err = s.Store.QuestionUpdate(in); err != nil {
-		JSONBadRequestError(UpdateErr("question"), err, c)
+	if err := s.Store.QuestionUpdate(in); err != nil {
+		JSONInternalServer("Error updating question. ", err, c)
 		return
 	}
 
@@ -85,13 +79,10 @@ func (s *Server) PatchVoteQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	v := c.Param("vote")
 	q, err := s.Store.QuestionFind(id)
-
-	// Check if there's such a question.
 	if err != nil {
-		JSONNotFoundError(NotFoundErr("question"), err, c)
+		JSONNotFound("Error question not found. ", err, c)
 		return
 	}
-
 	if v == "upvote" {
 		q.Vote++
 	} else if v == "downvote" {
@@ -100,12 +91,12 @@ func (s *Server) PatchVoteQuestion(c *gin.Context) {
 
 	err = s.Store.QuestionVoteUpdate(q)
 	if err != nil {
-		JSONBadRequestError(VoteErr("question"), err, c)
+		JSONInternalServer("Error in question voting. ", err, c)
 		return
 	}
 
 	titleSlug := slug.Make(q.Title)
-	c.Redirect(http.StatusMovedPermanently, config.DOMAIN+"/questions/"+c.Param("id")+"/"+titleSlug)
+	c.Redirect(301, config.DOMAIN+"/questions/"+c.Param("id")+"/"+titleSlug)
 }
 
 // GetQuestionList returns a list of questions.
@@ -113,7 +104,7 @@ func (s *Server) GetQuestionList(c *gin.Context) {
 	list, err := s.Store.QuestionsList(c.Request.URL.Query())
 
 	if err != nil {
-		JSONBadRequestError(ListErr("question"), err, c)
+		JSONNotFound("Error finding questions list. ", err, c)
 		return
 	}
 
