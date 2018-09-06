@@ -59,11 +59,8 @@ func (s *Server) PostUser(c *gin.Context) {
 func (s *Server) PatchUser(c *gin.Context) {
 	in := new(model.User)
 	if err := c.ShouldBindJSON(in); err != nil {
-		msg := validation.Messages(err)
-		if _, ok := msg["password"]; ok && len(msg) > 1 {
-			JSONValidation(msg, c)
-			return
-		}
+		JSONValidation(validation.Messages(err), c)
+		return
 	}
 
 	u, err := s.Store.UserFind(in.Id)
