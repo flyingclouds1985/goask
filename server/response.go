@@ -10,7 +10,7 @@ import (
 func JSONBadRequest(customErr string, err error, c *gin.Context) {
 	c.JSON(http.StatusBadRequest, gin.H{
 		"errors": map[string]interface{}{
-			"status":   "400",
+			"status":   400,
 			"messages": customErr + err.Error(),
 		},
 	})
@@ -20,7 +20,7 @@ func JSONBadRequest(customErr string, err error, c *gin.Context) {
 func JSONValidation(messages map[string]string, c *gin.Context) {
 	c.JSON(http.StatusBadRequest, gin.H{
 		"errors": map[string]interface{}{
-			"status":   "400",
+			"status":   400,
 			"messages": messages,
 		},
 	})
@@ -30,7 +30,7 @@ func JSONValidation(messages map[string]string, c *gin.Context) {
 func JSONNotFound(customErr string, err error, c *gin.Context) {
 	c.JSON(http.StatusNotFound, gin.H{
 		"errors": map[string]interface{}{
-			"status":   "404",
+			"status":   404,
 			"messages": customErr + err.Error(),
 		},
 	})
@@ -40,7 +40,7 @@ func JSONNotFound(customErr string, err error, c *gin.Context) {
 func JSONInternalServer(customErr string, err error, c *gin.Context) {
 	c.JSON(http.StatusInternalServerError, gin.H{
 		"errors": map[string]interface{}{
-			"status":   "500",
+			"status":   500,
 			"messages": customErr + err.Error(),
 		},
 	})

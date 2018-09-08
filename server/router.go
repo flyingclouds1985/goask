@@ -25,6 +25,7 @@ func (s *Server) SetupRoute(mode string) http.Handler {
 func (s *Server) routeList(router *gin.Engine) {
 	public := s.Router.Group("/")
 	{
+		public.GET("login")
 		q := public.Group("questions")
 		{
 			q.GET("/", s.GetQuestionList)
@@ -52,8 +53,18 @@ func (s *Server) routeList(router *gin.Engine) {
 
 	private := s.Router.Group("/")
 	{
-		private.POST("/login", middleware.Auth().LoginHandler)
-		private.GET("/refresh_token", middleware.Auth().RefreshHandler)
+		private.POST("login", middleware.Auth().LoginHandler)
+		auth := private.Group("auth")
+		auth.Use(middleware.Auth().MiddlewareFunc())
+		{
+			auth.GET("refresh_token", middleware.Auth().RefreshHandler)
+			auth.GET("hello", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"data": "asd",
+					"c":    c.Keys,
+				})
+			})
+		}
 		q := private.Group("questions")
 		{
 			q.POST("/", s.PostQuestion)

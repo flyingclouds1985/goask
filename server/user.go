@@ -52,6 +52,11 @@ func (s *Server) PostUser(c *gin.Context) {
 		return
 	}
 
+	// user created
+	// login user
+	// get token
+	// back to page
+
 	c.JSON(http.StatusOK, u.Copy())
 }
 

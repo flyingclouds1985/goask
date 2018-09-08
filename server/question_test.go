@@ -51,7 +51,7 @@ func TestPostQuestion(t *testing.T) {
 			body, err := json.Marshal(q)
 			checkNil(err, " question: error in json parsing.")
 
-			res := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
+			res := makeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
 
 			var b model.Question
 			err = json.Unmarshal(res.Body.Bytes(), &b)
@@ -80,7 +80,7 @@ func TestPostQuestion(t *testing.T) {
 func TestQuestionNotFound(t *testing.T) {
 	defer TeardownSubTest()
 
-	res := makeRequest("GET", "/questions/10000", nil)
+	res := makeRequest("GET", "/questions/10000", nil, nil)
 	assert.Equal(t, 404, res.Code, "Question not found.")
 }
 
@@ -90,11 +90,11 @@ func TestGetQuestion(t *testing.T) {
 
 	body, err := json.Marshal(questionTestCases["complete"])
 	checkNil(err, " question: error in json marshal.")
-	oldRes := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
-	redirectRes := makeRequest("GET", "/questions/1", nil)
+	oldRes := makeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
+	redirectRes := makeRequest("GET", "/questions/1", nil, nil)
 	location := redirectRes.Header().Get("Location")
 
-	newRes := makeRequest("GET", location, nil)
+	newRes := makeRequest("GET", location, nil, nil)
 
 	assert.Equal(t, oldRes.Body.String(), newRes.Body.String(), "got question")
 }
@@ -107,8 +107,8 @@ func TestPatchQuestion(t *testing.T) {
 	body, err := json.Marshal(questionTestCases["complete"])
 	checkNil(err, " question: error in json marshal.")
 
-	res := makeRequest("POST", "/questions/", bytes.NewBuffer(body))
-	res = makeRequest("GET", "/questions/1/this-is-the-question-title", nil)
+	res := makeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
+	res = makeRequest("GET", "/questions/1/this-is-the-question-title", nil, nil)
 
 	var b model.Question
 	err = json.Unmarshal(res.Body.Bytes(), &b)
@@ -124,7 +124,7 @@ func TestPatchQuestion(t *testing.T) {
 	body, err = json.Marshal(b)
 	checkNil(err, " question: error in json marshal.")
 
-	res = makeRequest("PATCH", "/questions/1", bytes.NewBuffer(body))
+	res = makeRequest("PATCH", "/questions/1", bytes.NewBuffer(body), nil)
 
 	var rb model.Question
 	err = json.Unmarshal(res.Body.Bytes(), &rb)

@@ -60,10 +60,14 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func makeRequest(method string, url string, body io.Reader) *httptest.ResponseRecorder {
+func makeRequest(method string, url string, body io.Reader, headers map[string]string) *httptest.ResponseRecorder {
 	res := httptest.NewRecorder()
 	req, err := http.NewRequest(method, url, body)
 	checkNil(err, "error in makeing request.")
+	for k, v := range headers {
+		fmt.Println("-------------", k, v)
+		req.Header.Set(k, v)
+	}
 	TestServer.Router.ServeHTTP(res, req)
 
 	return res
