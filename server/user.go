@@ -27,11 +27,7 @@ func (s *Server) PostUser(c *gin.Context) {
 		JSONValidation(validation.Messages(err), c)
 		return
 	}
-	if err := in.ValidateUsername(); err != nil {
-		JSONInternalServer("Error inserting user. ", err, c)
-		return
-	}
-	if err := in.ValidatePassword(); err != nil {
+	if err := in.Validate(); err != nil {
 		JSONInternalServer("Error inserting user. ", err, c)
 		return
 	}
@@ -51,11 +47,6 @@ func (s *Server) PostUser(c *gin.Context) {
 		JSONInternalServer("Error inserting user. ", err, c)
 		return
 	}
-
-	// user created
-	// login user
-	// get token
-	// back to page
 
 	c.JSON(http.StatusOK, u.Copy())
 }

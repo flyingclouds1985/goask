@@ -70,18 +70,14 @@ func (u *User) ExcludeTimes() *User {
 	}
 }
 
-// ValidateUsername validates the username in regex format.
-func (u *User) ValidateUsername() error {
-	if !regexUsername.MatchString(u.Username) {
+// Validate validates the credentials.
+func (u *User) Validate() error {
+	switch {
+	case regexUsername.MatchString(u.Username) == false:
 		return errUsernameRegex
-	}
-	return nil
-}
-
-// ValidatePassword validates the password for required rule.
-func (u *User) ValidatePassword() error {
-	if u.Password == "" {
+	case u.Password == "":
 		return errPasswordRequired
+	default:
+		return nil
 	}
-	return nil
 }
