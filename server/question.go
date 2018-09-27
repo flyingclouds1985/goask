@@ -28,6 +28,7 @@ func (s *Server) GetQuestion(c *gin.Context) {
 		c.Redirect(http.StatusSeeOther, urlStr)
 		return
 	}
+
 	c.JSON(http.StatusOK, q)
 }
 

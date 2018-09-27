@@ -1,28 +1,54 @@
 import React, { Component } from 'react';
+import frontWrapper from '../../hoc/FrontWrapper';
 
 class Question extends Component {
     constructor (props) {
         super(props)
+        this.id = props.match.params.id
     }
+
+    state = {
+        question: {}
+    }
+
+    componentDidMount = () => {
+        if (this.props.location.state === undefined) {
+            fetch('http://localhost:9090/questions/' + this.id)
+            .then(response => {
+                if (response.status === 404)
+                    throw new Error("NotFound")
+                return response.json()
+            })
+            .then(data => {this.setState({question: data})})
+            .catch(err => {
+                if (err.message === 'NotFound') {
+                    this.props.history.push('/404')
+                }
+            })
+        } else {
+            this.setState({question: this.props.location.state.question})
+        }
+    }
+
+
     render () {
-        let question = this.props.location.state.question
         return (
             <div className="col-lg-8">
                 <div className="content-wrapper">
                     <header>
                         <h5>
-                            { question.title }
+                            { this.state.question.title }
                         </h5>
                     </header>
                     <div className="card">
                         <div className="card-body">
                             <div className="vote">
                                     <a href="#" style={{color: "#586268"}}><span className="oi oi-caret-top"></span></a>
-                                        <p>{question.vote}</p>
+                                        <p>{this.state.question.vote}</p>
                                     <a href="#" style={{color: "#586268"}}><span className="oi oi-caret-bottom"></span></a>
                             </div>
                             <p className="card-text" style={{marginLeft: "30px"}}>
-                                { question.body }
+                                { this.state.question.body }
                             </p>
                             <ul className="tags-list" style={{marginLeft: "30px", marginTop: "20px"}}>
                                 {/* {{ range .Tags }}
@@ -53,4 +79,4 @@ class Question extends Component {
 }
            
 
-export default Question;
+export default frontWrapper(Question);

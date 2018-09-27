@@ -7,6 +7,7 @@ import './assets/css/style.css';
 import Index from './components/front/Index';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import QuestionRoute from './components/front/QuestionRoute';
+import NotFound from './NotFound';
 
 class App extends Component {
     render() {
@@ -15,6 +16,7 @@ class App extends Component {
                 <Switch>
                     <Route exact path="/" component={Index} />
                     <Route path="/questions/" component={QuestionRoute} />
+                    <Route path="/404" component={NotFound} />  
                     <Route component={NotFound} />
                 </Switch>
             </BrowserRouter>
@@ -22,11 +24,7 @@ class App extends Component {
     }
 }
 
-const NotFound = () => {
-    return(
-        <h1>Not Found</h1>
-    );
-}
+
 
 
 ReactDOM.render(<App />, document.getElementById('root'));
