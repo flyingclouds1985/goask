@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from './AuxiliaryWrapper';
-import Header from '../components/common/Header';
-import Footer from '../components/common/Footer';
+import Header from '../components/front/Header';
+import Footer from '../components/front/Footer';
 
 const frontWrapper = (WrappedComponent) => {
     return (props) => {

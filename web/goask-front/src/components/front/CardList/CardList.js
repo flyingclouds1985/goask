@@ -17,7 +17,6 @@ class CardList extends Component {
     }
 
     render() {
-        console.log(this.state.questions[0]);
         return this.state.questions.map( data => {
             return <Card key={data.id}  question={data} />
         })

@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/style.css';
 import Index from './components/front/Index';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import QuestionRoute from './components/front/QuestionRoute';
 
 class App extends Component {
     render() {
@@ -13,6 +14,7 @@ class App extends Component {
             <BrowserRouter>
                 <Switch>
                     <Route exact path="/" component={Index} />
+                    <Route path="/questions/" component={QuestionRoute} />
                     <Route component={NotFound} />
                 </Switch>
             </BrowserRouter>
