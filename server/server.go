@@ -6,8 +6,16 @@ import (
 	"github.com/Alireza-Ta/GOASK/postgres"
 )
 
+type Config struct {
+	Port            string
+	Domain          string
+	Realm           string
+	RouterSecretKey string
+}
+
 // Server type
 type Server struct {
+	Config *Config
 	Router *gin.Engine
 	Store  *postgres.Store
 }

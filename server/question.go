@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
@@ -24,7 +23,7 @@ func (s *Server) GetQuestion(c *gin.Context) {
 	title := c.Param("question")
 	titleSlug := slug.Make(q.Title)
 	if title != titleSlug {
-		urlStr := config.DOMAIN + "/questions/" + c.Param("id") + "/" + titleSlug
+		urlStr := s.Config.Domain + "/questions/" + c.Param("id") + "/" + titleSlug
 		c.Redirect(http.StatusSeeOther, urlStr)
 		return
 	}
@@ -98,7 +97,7 @@ func (s *Server) PatchVoteQuestion(c *gin.Context) {
 	}
 
 	titleSlug := slug.Make(q.Title)
-	c.Redirect(http.StatusSeeOther, config.DOMAIN+"/questions/"+c.Param("id")+"/"+titleSlug)
+	c.Redirect(http.StatusSeeOther, s.Config.Domain+"/questions/"+c.Param("id")+"/"+titleSlug)
 }
 
 // GetQuestionList returns a list of questions.

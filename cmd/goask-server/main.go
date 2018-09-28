@@ -12,15 +12,28 @@ import (
 	"github.com/Alireza-Ta/GOASK/server"
 )
 
+const (
+	DBNAME     = "GOASK"
+	DBPASSWORD = "secret"
+	DBUSERNAME = "postgres"
+)
+
 func main() {
-	store := postgres.New(config.DBUSERNAME, config.DBPASSWORD, config.DBNAME)
+	store := postgres.New(DBUSERNAME, DBPASSWORD, DBNAME)
 	err := store.CreateSchema()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	server := &server.Server{}
-	server.Store = store
+	server := &server.Server{
+		Config: &server.Config{
+			Port:            "localhost:9090",
+			Domain:          "http://localhost:9090",
+			Realm:           "Question.com",
+			RouterSecretKey: "asd!#@@#$nd189ehas-sS@mda",
+		},
+		Store: store,
+	}
 	router := server.SetupRouter(gin.DebugMode)
 
 	fmt.Println("App is running...")

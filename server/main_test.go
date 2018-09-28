@@ -29,6 +29,12 @@ func setup() {
 	store := postgres.New("postgres", "secret", "GoaskTest")
 
 	TestServer = &Server{
+		Config: &Config{
+			Port:            "localhost:9090",
+			Domain:          "http://localhost:9090",
+			Realm:           "Question.com",
+			RouterSecretKey: "asd!#@@#$nd189ehas-sS@mda",
+		},
 		Store: store,
 	}
 	TestServer.SetupRouter(gin.TestMode)
