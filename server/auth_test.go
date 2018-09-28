@@ -15,7 +15,7 @@ func TestPostLogin(t *testing.T) {
 	}
 	body, err := json.Marshal(user)
 	checkNil(err, "error in json marshal.")
-	res := makeRequest("POST", "/login", bytes.NewBuffer(body), nil)
+	res := testMakeRequest("POST", "/login", bytes.NewBuffer(body), nil)
 
 	var b map[string]interface{}
 	err = json.Unmarshal(res.Body.Bytes(), &b)
@@ -25,6 +25,6 @@ func TestPostLogin(t *testing.T) {
 	// 	"Authorization": "Bearer " + b["token"].(string),
 	// }
 
-	// res2 := makeRequest("GET", "/auth/hello", nil, headers)
+	// res2 := testMakeRequest("GET", "/auth/hello", nil, headers)
 
 }

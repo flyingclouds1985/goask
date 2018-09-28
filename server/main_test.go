@@ -28,9 +28,10 @@ var (
 func setup() {
 	store := postgres.New("postgres", "secret", "GoaskTest")
 
-	TestServer = &Server{}
-	TestServer.Store = store
-	TestServer.SetupRoute(gin.TestMode)
+	TestServer = &Server{
+		Store: store,
+	}
+	TestServer.SetupRouter(gin.TestMode)
 }
 
 func truncateAllTables() {
@@ -60,12 +61,14 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func makeRequest(method string, url string, body io.Reader, headers map[string]string) *httptest.ResponseRecorder {
+func testMakeRequest(
+	method, url string,
+	body io.Reader,
+	headers map[string]string) *httptest.ResponseRecorder {
 	res := httptest.NewRecorder()
 	req, err := http.NewRequest(method, url, body)
 	checkNil(err, "error in makeing request.")
 	for k, v := range headers {
-		fmt.Println("-------------", k, v)
 		req.Header.Set(k, v)
 	}
 	TestServer.Router.ServeHTTP(res, req)

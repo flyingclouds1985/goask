@@ -13,7 +13,7 @@ import (
 
 var questionTestCases = map[string]model.Question{
 	"complete": model.Question{
-		Post:  model.Post{Body: "This is the question body that must be more than 50 words till the API let us pass the this test nicely."},
+		Body:  "This is the question body that must be more than 50 words till the API let us pass the this test nicely.",
 		Title: "This is the question title.",
 		Tags: []*model.Tag{
 			&model.Tag{
@@ -25,18 +25,18 @@ var questionTestCases = map[string]model.Question{
 		},
 	},
 	"withoutTitle": model.Question{
-		Post:  model.Post{Body: "This is the question body."},
+		Body:  "This is the question body.",
 		Title: "",
 	},
 	"minLengthTitle": model.Question{
-		Post:  model.Post{Body: "This is the question body."},
+		Body:  "This is the question body.",
 		Title: "title min:15",
 	},
 	"withoutBody": model.Question{
 		Title: "This is the question title.",
 	},
 	"minLengthBody": model.Question{
-		Post:  model.Post{Body: "This is the question body less than 50 words."},
+		Body:  "This is the question body less than 50 words.",
 		Title: "This is the question title.",
 	},
 }
@@ -51,7 +51,7 @@ func TestPostQuestion(t *testing.T) {
 			body, err := json.Marshal(q)
 			checkNil(err, " question: error in json parsing.")
 
-			res := makeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
+			res := testMakeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
 
 			var b model.Question
 			err = json.Unmarshal(res.Body.Bytes(), &b)
@@ -60,7 +60,7 @@ func TestPostQuestion(t *testing.T) {
 			if tc == "complete" {
 				assert.Equal(200, res.Code, "got question.")
 				assert.Equal(1, b.Id, "got id 1.")
-				assert.Equal(q.Post, b.Post, "got body.")
+				assert.Equal(q.Body, b.Body, "got body.")
 				assert.Equal(q.Title, b.Title, "got title.")
 				assert.Equal(q.Tags[0].Name, b.Tags[0].Name, "got first tag.")
 				assert.Equal(q.Tags[1].Name, b.Tags[1].Name, "got second tag.")
@@ -80,7 +80,7 @@ func TestPostQuestion(t *testing.T) {
 func TestQuestionNotFound(t *testing.T) {
 	defer TeardownSubTest()
 
-	res := makeRequest("GET", "/questions/10000", nil, nil)
+	res := testMakeRequest("GET", "/questions/10000", nil, nil)
 	assert.Equal(t, 404, res.Code, "Question not found.")
 }
 
@@ -90,11 +90,11 @@ func TestGetQuestion(t *testing.T) {
 
 	body, err := json.Marshal(questionTestCases["complete"])
 	checkNil(err, " question: error in json marshal.")
-	oldRes := makeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
-	redirectRes := makeRequest("GET", "/questions/1", nil, nil)
+	oldRes := testMakeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
+	redirectRes := testMakeRequest("GET", "/questions/1", nil, nil)
 	location := redirectRes.Header().Get("Location")
 
-	newRes := makeRequest("GET", location, nil, nil)
+	newRes := testMakeRequest("GET", location, nil, nil)
 
 	assert.Equal(t, oldRes.Body.String(), newRes.Body.String(), "got question")
 }
@@ -107,8 +107,8 @@ func TestPatchQuestion(t *testing.T) {
 	body, err := json.Marshal(questionTestCases["complete"])
 	checkNil(err, " question: error in json marshal.")
 
-	res := makeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
-	res = makeRequest("GET", "/questions/1/this-is-the-question-title", nil, nil)
+	res := testMakeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
+	res = testMakeRequest("GET", "/questions/1/this-is-the-question-title", nil, nil)
 
 	var b model.Question
 	err = json.Unmarshal(res.Body.Bytes(), &b)
@@ -124,7 +124,7 @@ func TestPatchQuestion(t *testing.T) {
 	body, err = json.Marshal(b)
 	checkNil(err, " question: error in json marshal.")
 
-	res = makeRequest("PATCH", "/questions/1", bytes.NewBuffer(body), nil)
+	res = testMakeRequest("PATCH", "/questions/1", bytes.NewBuffer(body), nil)
 
 	var rb model.Question
 	err = json.Unmarshal(res.Body.Bytes(), &rb)

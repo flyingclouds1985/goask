@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// SetupRoute setups gin with common middlewares.
-func (s *Server) SetupRoute(mode string) http.Handler {
+// SetupRouter setups gin with common middlewares.
+func (s *Server) SetupRouter(mode string) http.Handler {
 	gin.SetMode(mode)
 	r := gin.New()
 	r.Use(gin.Logger())

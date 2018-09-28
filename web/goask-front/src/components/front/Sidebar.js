@@ -8,9 +8,9 @@ class Sidebar extends React.Component {
                     <div className="card">
                         <div className="card-header">Top Tags</div>
                         <div className="card-body">
-                            <p className="card-text"><a href="#">Javascript</a> <span className="badge badge-light">12312229</span></p>
-                            <p className="card-text"><a href="#">Golang</a> <span className="badge badge-light">12229</span></p>
-                            <p className="card-text"><a href="#">Java</a> <span className="badge badge-light">32143</span></p>
+                            <p className="card-text"><a href="">Javascript</a> <span className="badge badge-light">12312229</span></p>
+                            <p className="card-text"><a href="">Golang</a> <span className="badge badge-light">12229</span></p>
+                            <p className="card-text"><a href="">Java</a> <span className="badge badge-light">32143</span></p>
                         </div>
                     </div>
                 </div>

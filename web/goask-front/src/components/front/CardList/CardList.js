@@ -2,10 +2,6 @@ import React, {Component} from 'react';
 import Card from './Card';
 
 class CardList extends Component {
-    constructor(props) {
-        super(props);
-    }
-    
     state = {
         questions: [],
     }

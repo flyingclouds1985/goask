@@ -5,7 +5,7 @@ const (
 	DOMAIN     = "http://localhost:9090"
 	REALM      = "Question.com"
 	SECRETKEY  = "asd!#@@#$nd189ehas-sS@mda"
-	DBNAME     = "g"
+	DBNAME     = "GOASK"
 	DBPASSWORD = "secret"
 	DBUSERNAME = "postgres"
 )

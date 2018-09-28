@@ -40,7 +40,7 @@ class Card extends React.Component {
                                 <small className="text-muted"><span className="custom-badge badge-success">answers: </span></small>
                             </li>
                             <li>
-                                <small className="text-muted">asked 52 secs ago <a href="#">Striker</a></small>
+                                <small className="text-muted">asked 52 secs ago <a href="">Striker</a></small>
                             </li>
                         </ul>
                     </div>

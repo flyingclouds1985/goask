@@ -36,7 +36,7 @@ func TestPostUser(t *testing.T) {
 			body, err := json.Marshal(u)
 			checkNil(err, "user: err in json parsing.")
 
-			res := makeRequest("POST", "/users/", bytes.NewBuffer([]byte(body)), nil)
+			res := testMakeRequest("POST", "/users/", bytes.NewBuffer([]byte(body)), nil)
 
 			var b model.User
 			err = json.Unmarshal(res.Body.Bytes(), &b)
@@ -59,7 +59,7 @@ func TestPostUser(t *testing.T) {
 func TestUserNotFound(t *testing.T) {
 	defer TeardownSubTest()
 
-	res := makeRequest("GET", "/users/russ", nil, nil)
+	res := testMakeRequest("GET", "/users/russ", nil, nil)
 	assert.Equal(t, 404, res.Code, "User not found.")
 }
 
@@ -69,8 +69,8 @@ func TestGetUser(t *testing.T) {
 
 	body, err := json.Marshal(userTestCases["complete"])
 	checkNil(err, " user: error in json marshal.")
-	oldRes := makeRequest("POST", "/users/", bytes.NewBuffer([]byte(body)), nil)
-	newRes := makeRequest("GET", "/users/Tommy", nil, nil)
+	oldRes := testMakeRequest("POST", "/users/", bytes.NewBuffer([]byte(body)), nil)
+	newRes := testMakeRequest("GET", "/users/Tommy", nil, nil)
 
 	assert.Equal(t, oldRes.Body, newRes.Body, "got user.")
 }
@@ -81,11 +81,11 @@ func PatchUser(t *testing.T) {
 
 	body, err := json.Marshal(questionTestCases["complete"])
 	checkNil(err, " question: error in json marshal.")
-	oldRes := makeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
-	redirectRes := makeRequest("GET", "/questions/1", nil, nil)
+	oldRes := testMakeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
+	redirectRes := testMakeRequest("GET", "/questions/1", nil, nil)
 	location := redirectRes.Header().Get("Location")
 
-	newRes := makeRequest("GET", location, nil, nil)
+	newRes := testMakeRequest("GET", location, nil, nil)
 
 	assert.Equal(t, oldRes.Body.String(), newRes.Body.String(), "got question")
 }
@@ -98,8 +98,8 @@ func TestPatchUser(t *testing.T) {
 	body, err := json.Marshal(userTestCases["complete"])
 	checkNil(err, " user: error in json marshal.")
 
-	res := makeRequest("POST", "/users/", bytes.NewBuffer(body), nil)
-	res = makeRequest("GET", "/users/Tommy", nil, nil)
+	res := testMakeRequest("POST", "/users/", bytes.NewBuffer(body), nil)
+	res = testMakeRequest("GET", "/users/Tommy", nil, nil)
 
 	var b model.User
 	err = json.Unmarshal(res.Body.Bytes(), &b)
@@ -115,7 +115,7 @@ func TestPatchUser(t *testing.T) {
 	body, err = json.Marshal(b)
 	checkNil(err, " user: error in json marshal.")
 
-	res = makeRequest("PATCH", "/users/1", bytes.NewBuffer(body), nil)
+	res = testMakeRequest("PATCH", "/users/1", bytes.NewBuffer(body), nil)
 
 	var rb model.User
 	err = json.Unmarshal(res.Body.Bytes(), &rb)

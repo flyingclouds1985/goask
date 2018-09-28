@@ -21,7 +21,7 @@ func main() {
 
 	server := &server.Server{}
 	server.Store = store
-	router := server.SetupRoute(gin.DebugMode)
+	router := server.SetupRouter(gin.DebugMode)
 
 	fmt.Println("App is running...")
 	http.ListenAndServe(config.PORT, router)
