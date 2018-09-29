@@ -9,7 +9,7 @@ import (
 type Config struct {
 	Port            string
 	Domain          string
-	Realm           string
+	RouterRealm     string
 	RouterSecretKey string
 }
 

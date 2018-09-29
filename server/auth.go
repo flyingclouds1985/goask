@@ -12,7 +12,7 @@ import (
 
 func (s *Server) Auth() *jwt.GinJWTMiddleware {
 	return &jwt.GinJWTMiddleware{
-		Realm:      s.Config.Realm,
+		Realm:      s.Config.RouterRealm,
 		Key:        []byte(s.Config.RouterSecretKey),
 		Timeout:    time.Hour,
 		MaxRefresh: time.Hour,

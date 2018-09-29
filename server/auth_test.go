@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPostLogin(t *testing.T) {
@@ -21,10 +22,9 @@ func TestPostLogin(t *testing.T) {
 	err = json.Unmarshal(res.Body.Bytes(), &b)
 	checkNil(err, "json unmarshal.")
 
-	// headers := map[string]string{
-	// 	"Authorization": "Bearer " + b["token"].(string),
-	// }
-
-	// res2 := testMakeRequest("GET", "/auth/hello", nil, headers)
-
+	headers := map[string]string{
+		"Authorization": "Bearer " + b["token"].(string),
+	}
+	res2 := testMakeRequest("GET", "/auth/hello", nil, headers)
+	assert.Equal(t, headers["Authorization"], res2.Header().Get("Authorization"), "got Authorization header.")
 }

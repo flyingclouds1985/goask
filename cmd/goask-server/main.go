@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/Alireza-Ta/GOASK/server"
 )
@@ -29,7 +28,7 @@ func main() {
 		Config: &server.Config{
 			Port:            "localhost:9090",
 			Domain:          "http://localhost:9090",
-			Realm:           "Question.com",
+			RouterRealm:     "Question.com",
 			RouterSecretKey: "asd!#@@#$nd189ehas-sS@mda",
 		},
 		Store: store,
@@ -37,5 +36,5 @@ func main() {
 	router := server.SetupRouter(gin.DebugMode)
 
 	fmt.Println("App is running...")
-	http.ListenAndServe(config.PORT, router)
+	http.ListenAndServe(server.Config.Port, router)
 }

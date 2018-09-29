@@ -32,7 +32,7 @@ func setup() {
 		Config: &Config{
 			Port:            "localhost:9090",
 			Domain:          "http://localhost:9090",
-			Realm:           "Question.com",
+			RouterRealm:           "Question.com",
 			RouterSecretKey: "asd!#@@#$nd189ehas-sS@mda",
 		},
 		Store: store,
