@@ -7,13 +7,13 @@ const frontWrapper = (WrappedComponent) => {
     return (props) => {
         return (
             <Aux>
-                <Header />
+                <Header {...props} />
                 
                 <div className="container-fluid">
                     <WrappedComponent {...props} />
                 </div>
 
-                <Footer />
+                <Footer {...props} />
             </Aux>
         );
     }

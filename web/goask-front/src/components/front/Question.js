@@ -86,8 +86,6 @@ class Question extends Component {
                                 {
                                     this.state.hasComment
                                     ? this.state.question.comments.map(comment => {
-                                        console.log(comment);
-                                        
                                         return (
                                             <li key={ comment.id }>
                                                 <small className="comment-text">{ comment.body }<span className="oi oi-person"></span> <a href="">apokryfos</a> <span className="text-muted">Jul 3 at 16:03</span><a href="" style={{marginLeft: 5}}>edit</a></small>
