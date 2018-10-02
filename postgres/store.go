@@ -14,14 +14,30 @@ var models = []interface{}{
 	&model.Tag{},
 }
 
-type Store struct {
-	DB *pg.DB
+// Config type.Default value for password is empty string.
+type Config struct {
+	Username string
+	Password string
+	DBname   string
 }
 
-func New(username, password, dbname string) *Store {
-	// Don't forget to fill password field.
+// Store represents postgres store instance.
+type Store struct {
+	Config *Config
+	DB     *pg.DB
+}
+
+// New makes a new psotgres instance.
+func New(conf *Config) *Store {
+	if conf.Username == "" {
+		conf.Username = "postgres"
+	}
+	if conf.DBname == "" {
+		conf.DBname = "GOASK"
+	}
+
 	return &Store{
-		DB: openDB(username, password, dbname),
+		DB: openDB(conf.Username, conf.Password, conf.DBname),
 	}
 }
 

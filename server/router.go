@@ -1,27 +1,22 @@
 package server
 
 import (
-	"net/http"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 // SetupRouter setups gin with common middlewares.
-func (s *Server) SetupRouter(mode string) http.Handler {
+func NewRouter(mode string) *gin.Engine {
 	gin.SetMode(mode)
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.Use(cors.Default())
 
-	s.Router = r
-	s.routeList(r)
-
 	return r
 }
 
-func (s *Server) routeList(router *gin.Engine) {
+func (s *Server) Routes() {
 	public := s.Router.Group("/")
 	{
 		public.GET("login")
