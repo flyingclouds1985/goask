@@ -10,12 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	DBNAME     = "GOASK"
-	DBPASSWORD = "secret"
-	DBUSERNAME = "postgres"
-)
-
 func main() {
 	storeConf := &postgres.Config{Password: "secret"}
 	store := postgres.New(storeConf)
