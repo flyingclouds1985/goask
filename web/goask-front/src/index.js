@@ -9,6 +9,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import QuestionRoute from './components/front/QuestionRoute';
 import NotFound from './NotFound';
 import Register from './components/front/Register';
+import Login from './components/front/Login';
 
 class App extends Component {
     render() {
@@ -17,6 +18,7 @@ class App extends Component {
                 <Switch>
                     <Route exact path='/' component={Index} />
                     <Route path='/register' component={Register} />
+                    <Route path='/login' component={Login} />
                     <Route path='/questions/' component={QuestionRoute} />
                     <Route path='/404' component={NotFound} />  
                     <Route component={NotFound} />

@@ -22,7 +22,7 @@ type Server struct {
 }
 
 // New retunrs a new server.
-func New(store *postgres.Store, routerMode string, config ...*Config) *Server {
+func NewServer(store *postgres.Store, routerMode string, config ...*Config) *Server {
 	conf := initServerConfig(config)
 
 	router := NewRouter(routerMode)

@@ -18,7 +18,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	server := server.New(store, gin.DebugMode)
+	server := server.NewServer(store, gin.DebugMode)
 
 	fmt.Printf("App is running on %s\n", server.Config.Port)
 	http.ListenAndServe(server.Config.Port, server.Router)

@@ -17,13 +17,14 @@ var (
 
 // User model
 type User struct {
-	Id        int       `json: "id"`
-	Username  string    `json:"username" binding:"required,min=5,max=32"`
-	Email     string    `json:"email" binding:"required,email"`
-	Password  string    `json:"password" binding:"omitempty,min=8,max=64"`
-	Bio       string    `json:"bio"`
-	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz"`
-	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
+	Id              int       `json: "id"`
+	Username        string    `json:"username" binding:"required,min=5,max=32"`
+	Email           string    `json:"email" binding:"required,email"`
+	Password        string    `json:"password" binding:"omitempty,min=8,max=64,eqfield=ConfirmPassword"`
+	ConfirmPassword string    `json:"confirmPassword" sql:"-"`
+	Bio             string    `json:"bio"`
+	CreatedAt       time.Time `json:"created_at" sql:"type:timestamptz"`
+	UpdatedAt       time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
 // BeforeInsert runs before every insert.(orm hook)
@@ -73,7 +74,7 @@ func (u *User) ExcludeTimes() *User {
 // Validate validates the credentials.
 func (u *User) Validate() error {
 	switch {
-	case regexUsername.MatchString(u.Username) == false:
+	case !regexUsername.MatchString(u.Username):
 		return errUsernameRegex
 	case u.Password == "":
 		return errPasswordRequired

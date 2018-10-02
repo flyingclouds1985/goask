@@ -28,7 +28,7 @@ func (s *Server) PostUser(c *gin.Context) {
 		return
 	}
 	if err := in.Validate(); err != nil {
-		JSONInternalServer("Error inserting user. ", err, c)
+		JSONBadRequest("Error inserting user. ", err, c)
 		return
 	}
 

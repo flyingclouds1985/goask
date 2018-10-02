@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 
 const header = (props) => {
     const { pathname } = props.location
-    const register = pathname === '/register' ? 'active' : '';
     const home = pathname === '/' ? 'active' : '';
+    const register = pathname === '/register' ? 'active' : '';
+    const login = pathname === '/login' ? 'active' : '';
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -19,6 +20,9 @@ const header = (props) => {
                 </li>
                 <li className={"nav-item " + register}>
                     <Link className="nav-link" to='/register'>Register</Link>
+                </li>
+                <li className={"nav-item " + login}>
+                    <Link className="nav-link" to='/login'>Login</Link>
                 </li>
                 </ul>
                 <form className="form-inline my-2 my-lg-0">

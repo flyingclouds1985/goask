@@ -11,9 +11,10 @@ var (
 	param         = "{param}"
 	rulesMessages = map[string]map[string]string{
 		"string": {
-			"min":      "{field} field must be {param} characters at least.",
-			"max":      "{field} field can be {param} characters at most.",
+			"min":      "{field} field must be {param} characters at least",
+			"max":      "{field} field can be {param} characters at most",
 			"required": "{field} field is required!",
+			"eqfield":  "{field} field is not equal to {param}",
 		},
 	}
 )

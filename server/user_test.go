@@ -12,18 +12,28 @@ import (
 
 var userTestCases = map[string]*model.User{
 	"complete": &model.User{
-		Id:       1,
-		Username: "Tommy",
-		Email:    "Tommy25@example.com",
-		Password: "secretpassword",
-		Bio:      "I'm a new user.",
+		Id:              1,
+		Username:        "Tommy",
+		Email:           "Tommy25@example.com",
+		Password:        "secretpassword",
+		ConfirmPassword: "secretpassword",
+		Bio:             "I'm a new user.",
 	},
-	"broken": &model.User{
-		Id:       1,
-		Username: "John",
-		Email:    "John@example.com",
-		Password: "secret",
-		Bio:      "I'm a new user.",
+	"brokenUsernamePass": &model.User{
+		Id:              1,
+		Username:        "John",
+		Email:           "John@example.com",
+		Password:        "secret",
+		ConfirmPassword: "no-secret",
+		Bio:             "I'm a new user.",
+	},
+	"passwordMismatch": &model.User{
+		Id:              1,
+		Username:        "Samuel",
+		Email:           "Samuel@example.com",
+		Password:        "password",
+		ConfirmPassword: "wrong-password",
+		Bio:             "I'm a new user.",
 	},
 }
 
@@ -46,7 +56,6 @@ func TestPostUser(t *testing.T) {
 				var e map[string]map[string]interface{}
 				err = json.Unmarshal(res.Body.Bytes(), &e)
 				checkNil(err, " user: err in json unmarshal.")
-
 				assert.Equal(t, float64(400), e["errors"]["status"], "got errors.")
 			} else {
 				assert.Equal(t, 200, res.Code, "user created.")

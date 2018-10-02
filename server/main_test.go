@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	TestServer *Server
-	models     = []string{
+	AppServer *Server
+	models    = []string{
 		"users",
 		"comments",
 		"questions",
@@ -26,23 +26,15 @@ var (
 )
 
 func setup() {
-	store := postgres.New("postgres", "secret", "GoaskTest")
+	storeConf := &postgres.Config{Password: "secret", DBname: "GoaskTest"}
+	store := postgres.New(storeConf)
 
-	TestServer = &Server{
-		Config: &Config{
-			Port:            "localhost:9090",
-			Domain:          "http://localhost:9090",
-			RouterRealm:           "Question.com",
-			RouterSecretKey: "asd!#@@#$nd189ehas-sS@mda",
-		},
-		Store: store,
-	}
-	TestServer.SetupRouter(gin.TestMode)
+	AppServer = NewServer(store, gin.TestMode)
 }
 
 func truncateAllTables() {
 	for _, model := range models {
-		_, err := TestServer.Store.DB.Model(model).Exec(
+		_, err := AppServer.Store.DB.Model(model).Exec(
 			fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY CASCADE", model),
 		)
 		if err != nil {
@@ -52,7 +44,7 @@ func truncateAllTables() {
 }
 
 func SetupSubTest() {
-	err := TestServer.Store.CreateSchema()
+	err := AppServer.Store.CreateSchema()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,7 +69,7 @@ func testMakeRequest(
 	for k, v := range headers {
 		req.Header.Set(k, v)
 	}
-	TestServer.Router.ServeHTTP(res, req)
+	AppServer.Router.ServeHTTP(res, req)
 
 	return res
 }
