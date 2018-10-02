@@ -28,16 +28,33 @@ type Store struct {
 }
 
 // New makes a new psotgres instance.
-func New(conf *Config) *Store {
-	if conf.Username == "" {
-		conf.Username = "postgres"
-	}
-	if conf.DBname == "" {
-		conf.DBname = "GOASK"
-	}
-
+func New(config ...*Config) *Store {
+	conf := initPostgresConfig(config)
 	return &Store{
 		DB: openDB(conf.Username, conf.Password, conf.DBname),
+	}
+}
+
+func initPostgresConfig(config []*Config) *Config {
+	defaultConfig := &Config{
+		Username: "postgres",
+		Password: "",
+		DBname:   "GOASK",
+	}
+	switch len(config) {
+	case 0:
+		return defaultConfig
+	case 1:
+		conf := config[0]
+		if conf.Username == "" {
+			conf.Username = defaultConfig.Username
+		}
+		if conf.DBname == "" {
+			conf.DBname = defaultConfig.DBname
+		}
+		return conf
+	default:
+		panic("too much argument!")
 	}
 }
 

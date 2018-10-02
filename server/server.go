@@ -1,9 +1,6 @@
 package server
 
 import (
-	"log"
-	"os"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/Alireza-Ta/GOASK/postgres"
@@ -25,29 +22,8 @@ type Server struct {
 }
 
 // New retunrs a new server.
-func New(store *postgres.Store, routerMode string, conf *Config) *Server {
-	if conf.Port == "" {
-		conf.Port = "localhost:9090"
-	}
-	if conf.Domain == "" {
-		conf.Domain = "http://localhost:9090"
-	}
-	if conf.RouterRealm == "" {
-		conf.RouterRealm = "example.com"
-	}
-	if conf.RouterSecretKey == "" {
-		k := os.Getenv("RouterSecretKey")
-		if k == "" {
-			s := RandomString(20)
-			err := os.Setenv("RouterSecretKey", s)
-			if err != nil {
-				log.Println(err)
-			}
-			conf.RouterSecretKey = s
-		} else {
-			conf.RouterSecretKey = k
-		}
-	}
+func New(store *postgres.Store, routerMode string, config ...*Config) *Server {
+	conf := initServerConfig(config)
 
 	router := NewRouter(routerMode)
 	server := &Server{
@@ -58,4 +34,34 @@ func New(store *postgres.Store, routerMode string, conf *Config) *Server {
 	server.Routes()
 
 	return server
+}
+
+func initServerConfig(config []*Config) *Config {
+	defaultConfig := &Config{
+		Port:            "localhost:9090",
+		Domain:          "http://localhost:9090",
+		RouterRealm:     "goask.com",
+		RouterSecretKey: RouterSecretKey(20),
+	}
+	switch len(config) {
+	case 0:
+		return defaultConfig
+	case 1:
+		conf := config[0]
+		if conf.Port == "" {
+			conf.Port = defaultConfig.Port
+		}
+		if conf.Domain == "" {
+			conf.Domain = defaultConfig.Domain
+		}
+		if conf.RouterRealm == "" {
+			conf.RouterRealm = defaultConfig.RouterRealm
+		}
+		if conf.RouterSecretKey == "" {
+			conf.RouterSecretKey = defaultConfig.RouterSecretKey
+		}
+		return conf
+	default:
+		panic("too much argument!")
+	}
 }

@@ -2,7 +2,9 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
+	"os"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -36,4 +38,18 @@ func RandomString(len int) string {
 		bytes[i] = byte(65 + rand.Intn(25)) //A=65 and Z = 65+25
 	}
 	return string(bytes)
+}
+
+// RouterSecretKey returns the key.
+func RouterSecretKey(len int) string {
+	k := os.Getenv("RouterSecretKey")
+	if k == "" {
+		s := RandomString(len)
+		err := os.Setenv("RouterSecretKey", s)
+		if err != nil {
+			log.Println(err)
+		}
+		return s
+	}
+	return k
 }

@@ -24,9 +24,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	serverConf := &server.Config{RouterRealm: "goask.com"}
-	server := server.New(store, gin.DebugMode, serverConf)
+	server := server.New(store, gin.DebugMode)
 
-	fmt.Println("App is running...")
+	fmt.Printf("App is running on %s\n", server.Config.Port)
 	http.ListenAndServe(server.Config.Port, server.Router)
 }
