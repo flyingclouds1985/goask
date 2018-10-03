@@ -13,9 +13,15 @@ class CardList extends Component {
     }
 
     render() {
-        return this.state.questions.map( data => {
-            return <Card key={data.id}  question={data} />
-        })
+        return (
+            this.state.questions !== null
+            ? this.state.questions.map( data => {
+                return <Card key={data.id}  question={data} />
+            })
+            : <div className="alert alert-warning" role="alert">
+                There is no question right now!
+            </div>
+        );
     }
 }
 
