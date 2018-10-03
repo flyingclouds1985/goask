@@ -16,7 +16,6 @@ func (s *Server) GetUser(c *gin.Context) {
 		JSONNotFound("Error user not found. ", err, c)
 		return
 	}
-
 	c.JSON(http.StatusOK, u.Copy())
 }
 

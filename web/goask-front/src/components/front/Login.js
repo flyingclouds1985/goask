@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import frontWrapper from '../../hoc/FrontWrapper';
 
 class Login extends Component {
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const email = e.target.email.value
+        const password = e.target.password.value
+
+        
+    }
+
     render () {
         return (
             <div className="col-lg-4 offset-lg-4">

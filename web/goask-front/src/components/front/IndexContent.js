@@ -9,7 +9,7 @@ class IndexContent extends React.Component {
     }
 
     handleBtnClick = (e) => {
-        this.setState({'groupBtn': e.target.value})        
+        this.setState({'groupBtn': e.target.name})        
     }
 
     activeBtn = (name) => {
@@ -25,10 +25,10 @@ class IndexContent extends React.Component {
                         Top Questions
                         </p>
                         <div className="btn-group float-right" role="group" aria-label="toolbar">
-                            <button onClick={this.handleBtnClick} value="latest" type="button" className={"btn btn-light" + this.activeBtn('latest')}>Latest</button>
-                            <button onClick={this.handleBtnClick} value="hot" type="button" className={"btn btn-light" + this.activeBtn('hot')}>Hot</button>
-                            <button onClick={this.handleBtnClick} value="week" type="button" className={"btn btn-light" + this.activeBtn('week')}>Week</button>
-                            <button onClick={this.handleBtnClick} value="month" type="button" className={"btn btn-light" + this.activeBtn('month')}>Month</button>
+                            <button onClick={this.handleBtnClick} name="latest" type="button" className={"btn btn-light" + this.activeBtn('latest')}>Latest</button>
+                            <button onClick={this.handleBtnClick} name="hot" type="button" className={"btn btn-light" + this.activeBtn('hot')}>Hot</button>
+                            <button onClick={this.handleBtnClick} name="week" type="button" className={"btn btn-light" + this.activeBtn('week')}>Week</button>
+                            <button onClick={this.handleBtnClick} name="month" type="button" className={"btn btn-light" + this.activeBtn('month')}>Month</button>
                         </div>
                     </header>
 

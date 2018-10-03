@@ -27,10 +27,10 @@ class Question extends Component {
     componentDidMount = () => {
         if (this.props.location.state === undefined) {
             fetch('http://localhost:9090/questions/' + this.id)
-            .then(response => {
-                if (response.status === 404)
+            .then(res => {
+                if (res.status === 404)
                     throw new Error("NotFound")
-                return response.json()
+                return res.json()
             })
             .then(data => this.checkQuestionProperty(data))
             .catch(err => {

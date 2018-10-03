@@ -49,7 +49,7 @@ func (u *User) BeforeUpdate(db orm.DB) error {
 	return nil
 }
 
-// Copy makes a copy of the user without password.
+// Copy makes a copy of the user without password and confirmPassword.
 func (u *User) Copy() *User {
 	return &User{
 		Id:        u.Id,
@@ -61,7 +61,7 @@ func (u *User) Copy() *User {
 	}
 }
 
-// ExcludeTimes makes a copy of the user without timestamps and password.
+// ExcludeTimes makes a copy of the user without timestamps, password and confirmPassword.
 func (u *User) ExcludeTimes() *User {
 	return &User{
 		Id:       u.Id,

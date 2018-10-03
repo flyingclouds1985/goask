@@ -1,19 +1,74 @@
 import React, { Component } from 'react';
 import frontWrapper from '../../hoc/FrontWrapper';
+import swal from 'sweetalert';
 
 class Register extends Component {
     state = {
-
+        hasError: false,
+        errorMessages: {},
     }
 
-    handleSubmit = () => {
-        
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const t = e.target;
+        const username = t.username.value;
+        const email = t.email.value;
+        const password = t.password.value;
+        const confirmPassword = t.confirmPassword.value;
+        const user = {username, email, password, confirmPassword};
+
+        fetch('http://localhost:9090/users/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user)
+        })
+        .then(res => {
+            if (res.status === 200) {
+                this.success();
+            }
+            return res.json()
+        })
+        .then(data => {
+            if (data.errors !== undefined) {
+                this.errors(data)
+            }            
+        })
+    }
+
+    success = () => {
+        this.setState({hasError: false});
+        swal('Let\'s go', 'You have been signed up successfully!', 'success')
+        setTimeout(() => {
+                window.location = '/login';
+        }, 2000)
+    }
+
+    errors = (data) => {
+        this.setState({hasError: true, errorMessages: data.errors.message})        
     }
 
     render () {
         return (
-            <div className="col-lg-4 offset-lg-4">
+            <div className="col-lg-6 offset-lg-3">
                 <div className="content-wrapper">
+                    {
+                        this.state.hasError
+                        ? <div> 
+                            {Object.keys(this.state.errorMessages).map(field => {
+                                    return (
+                                            <div key={field} className="alert alert-danger" role="alert">
+                                                {this.state.errorMessages[field]}
+                                            </div>
+                                    );
+                                })
+                            }
+                        </div>    
+                        : ''
+                    }
+                    
                     <div className="card border-success">
                         <div className="card-header bg-success text-white font-weight-bold">
                             Register
@@ -30,11 +85,11 @@ class Register extends Component {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="password">Password</label>
-                                    <input name="pass" type="password" className="form-control" id="password" />
+                                    <input name="password" type="password" className="form-control" id="password" />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="confirm password">Confirm password</label>
-                                    <input name="confirmPass" type="password" className="form-control" id="confirm password" />
+                                    <input name="confirmPassword" type="password" className="form-control" id="confirm password" />
                                 </div>
 
                                 <button type="submit" className="btn btn-primary">Sign up</button>
