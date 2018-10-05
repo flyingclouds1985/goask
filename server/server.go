@@ -8,10 +8,8 @@ import (
 
 // Config is server configuration parameters.
 type Config struct {
-	Port            string
-	Domain          string
-	RouterRealm     string
-	RouterSecretKey string
+	Port   string
+	Domain string
 }
 
 // Server type.
@@ -38,10 +36,8 @@ func NewServer(store *postgres.Store, routerMode string, config ...*Config) *Ser
 
 func initServerConfig(config []*Config) *Config {
 	defaultConfig := &Config{
-		Port:            "localhost:9090",
-		Domain:          "http://localhost:9090",
-		RouterRealm:     "goask.com",
-		RouterSecretKey: RouterSecretKey(20),
+		Port:   "localhost:9090",
+		Domain: "http://localhost:9090",
 	}
 	switch len(config) {
 	case 0:
@@ -53,12 +49,6 @@ func initServerConfig(config []*Config) *Config {
 		}
 		if conf.Domain == "" {
 			conf.Domain = defaultConfig.Domain
-		}
-		if conf.RouterRealm == "" {
-			conf.RouterRealm = defaultConfig.RouterRealm
-		}
-		if conf.RouterSecretKey == "" {
-			conf.RouterSecretKey = defaultConfig.RouterSecretKey
 		}
 		return conf
 	default:

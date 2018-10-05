@@ -5,12 +5,14 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/Alireza-Ta/GOASK/server"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	config.Setup()
 	storeConf := &postgres.Config{Password: "secret"}
 	store := postgres.New(storeConf)
 	err := store.CreateSchema()

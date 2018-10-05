@@ -16,10 +16,11 @@ func NewRouter(mode string) *gin.Engine {
 	return r
 }
 
+// Routes is list of routes.
 func (s *Server) Routes() {
 	public := s.Router.Group("/")
 	{
-		public.GET("login")
+		public.POST("login", s.Auth().LoginHandler)
 		q := public.Group("questions")
 		{
 			q.GET("/", s.GetQuestionList)
@@ -46,8 +47,8 @@ func (s *Server) Routes() {
 	}
 
 	private := s.Router.Group("/")
+	private.Use()
 	{
-		private.POST("login", s.Auth().LoginHandler)
 		auth := private.Group("auth")
 		auth.Use(s.Auth().MiddlewareFunc())
 		{

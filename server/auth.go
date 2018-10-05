@@ -1,19 +1,31 @@
 package server
 
 import (
+	"log"
 	"net/http"
 	"time"
 
+	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/model"
 
 	jwt "github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"
 )
 
+// Auth is the Authentication middleware.
 func (s *Server) Auth() *jwt.GinJWTMiddleware {
+	realm, err := config.Get("router", "realm")
+	if err != nil {
+		log.Fatal(err)
+	}
+	secretKey, err := config.Get("router", "secretKey")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return &jwt.GinJWTMiddleware{
-		Realm:      s.Config.RouterRealm,
-		Key:        []byte(s.Config.RouterSecretKey),
+		Realm:      realm,
+		Key:        []byte(secretKey),
 		Timeout:    time.Hour,
 		MaxRefresh: time.Hour,
 
