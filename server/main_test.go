@@ -11,12 +11,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/postgres"
 )
 
 var (
-	AppServer *Server
-	models    = []string{
+	TestServer *Server
+	models     = []string{
 		"users",
 		"comments",
 		"questions",
@@ -26,15 +27,16 @@ var (
 )
 
 func setup() {
+	config.Setup()
 	storeConf := &postgres.Config{Password: "secret", DBname: "GoaskTest"}
 	store := postgres.New(storeConf)
 
-	AppServer = NewServer(store, gin.TestMode)
+	TestServer = NewServer(store, gin.TestMode)
 }
 
 func truncateAllTables() {
 	for _, model := range models {
-		_, err := AppServer.Store.DB.Model(model).Exec(
+		_, err := TestServer.Store.DB.Model(model).Exec(
 			fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY CASCADE", model),
 		)
 		if err != nil {
@@ -44,7 +46,7 @@ func truncateAllTables() {
 }
 
 func SetupSubTest() {
-	err := AppServer.Store.CreateSchema()
+	err := TestServer.Store.CreateSchema()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -69,7 +71,7 @@ func testMakeRequest(
 	for k, v := range headers {
 		req.Header.Set(k, v)
 	}
-	AppServer.Router.ServeHTTP(res, req)
+	TestServer.Router.ServeHTTP(res, req)
 
 	return res
 }

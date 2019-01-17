@@ -14,13 +14,13 @@ type Config struct {
 
 // Server type.
 type Server struct {
-	Config *Config
+	Config Config
 	Router *gin.Engine
 	Store  *postgres.Store
 }
 
-// New retunrs a new server.
-func NewServer(store *postgres.Store, routerMode string, config ...*Config) *Server {
+// NewServer is the entry point of the system.
+func NewServer(store *postgres.Store, routerMode string, config ...Config) *Server {
 	conf := initServerConfig(config)
 
 	router := NewRouter(routerMode)
@@ -34,8 +34,8 @@ func NewServer(store *postgres.Store, routerMode string, config ...*Config) *Ser
 	return server
 }
 
-func initServerConfig(config []*Config) *Config {
-	defaultConfig := &Config{
+func initServerConfig(config []Config) Config {
+	defaultConfig := Config{
 		Port:   "localhost:9090",
 		Domain: "http://localhost:9090",
 	}

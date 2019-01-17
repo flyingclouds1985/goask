@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// SetupRouter setups gin with common middlewares.
+// NewRouter setups gin with common middlewares.
 func NewRouter(mode string) *gin.Engine {
 	gin.SetMode(mode)
 	r := gin.New()
