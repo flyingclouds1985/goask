@@ -20,14 +20,14 @@ var (
 func Setup() {
 	_, f, _, _ := runtime.Caller(0)
 	configDir = path.Dir(f)
-	fmt.Println("dddd ", configDir)
+
 	initRouterConfig()
 }
 
 // Get returns value of key.
 func Get(fileName, key string) (string, error) {
 	fn := configDir + "/" + fileName + ".json"
-	fmt.Println(fn)
+
 	if _, err := os.Stat(fn); os.IsNotExist(err) {
 		return "", err
 	}
