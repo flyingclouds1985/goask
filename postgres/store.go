@@ -23,20 +23,20 @@ type Config struct {
 
 // Store represents postgres store instance.
 type Store struct {
-	Config *Config
+	Config Config
 	DB     *pg.DB
 }
 
 // New makes a new psotgres instance.
-func New(config ...*Config) *Store {
+func New(config ...Config) *Store {
 	conf := initPostgresConfig(config)
 	return &Store{
 		DB: openDB(conf.Username, conf.Password, conf.DBname),
 	}
 }
 
-func initPostgresConfig(config []*Config) *Config {
-	defaultConfig := &Config{
+func initPostgresConfig(config []Config) Config {
+	defaultConfig := Config{
 		Username: "postgres",
 		Password: "",
 		DBname:   "GOASK",

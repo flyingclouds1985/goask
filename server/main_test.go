@@ -28,7 +28,7 @@ var (
 
 func setup() {
 	config.Setup()
-	storeConf := &postgres.Config{Password: "secret", DBname: "GoaskTest"}
+	storeConf := postgres.Config{Password: "secret", DBname: "GoaskTest"}
 	store := postgres.New(storeConf)
 
 	TestServer = NewServer(store, gin.TestMode)
