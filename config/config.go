@@ -8,69 +8,95 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"strings"
 )
 
 var (
-	configDir       string
+	_, f, _, _      = runtime.Caller(0)
+	configFile      = path.Dir(path.Dir(f)) + "/configuration.json"
 	errKeyNotExists = errors.New("Key does not exist")
+	errKeyFormat    = errors.New("Key format must be like [key] or [key1.key2] without brackets")
 )
 
 // Setup inits configs.
 func Setup() {
-	_, f, _, _ := runtime.Caller(0)
-	configDir = path.Dir(f)
-
-	initRouterConfig()
+	setSecretKey()
 }
 
-// Get returns value of key.
-func Get(fileName, key string) (string, error) {
-	fn := configDir + "/" + fileName + ".json"
-
-	if _, err := os.Stat(fn); os.IsNotExist(err) {
+// Get returns value of a key.
+func Get(key string) (interface{}, error) {
+	if _, err := os.Stat(configFile); os.IsNotExist(err) {
 		return "", err
 	}
 
-	f, err := ioutil.ReadFile(fn)
+	f, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		return "", err
 	}
 
-	var m map[string]string
+	var m map[string]interface{}
 	err = json.Unmarshal(f, &m)
 	if err != nil {
 		return "", err
 	}
 
-	if v, ok := m[key]; ok {
-		return v, nil
+	keys, err := splitKeys(key)
+	if err != nil {
+		return "", err
 	}
+
+	if len(keys) == 1 {
+		if v, ok := m[key]; ok {
+			return v, nil
+		}
+	} else {
+		if m, ok := m[keys[0]].(map[string]interface{}); ok {
+			if v, ok := m[keys[1]]; ok {
+				return v, nil
+			}
+		}
+	}
+
 	return "", errKeyNotExists
 }
 
-// Set sets a key value in specified config file.
-func Set(fileName, key, value string) error {
-	fn := configDir + "/" + fileName + ".json"
-	if _, err := os.Stat(fn); os.IsNotExist(err) {
+// Set sets a [key/value] or [key1.key2/value] pair without brackets in configuration file.
+func Set(key, value string) error {
+	if _, err := os.Stat(configFile); os.IsNotExist(err) {
 		return err
 	}
 
-	f, err := ioutil.ReadFile(fn)
+	f, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		return err
 	}
 
-	var m map[string]string
+	var m map[string]interface{}
 	err = json.Unmarshal(f, &m)
 	if err != nil {
 		return err
 	}
 
-	m[key] = value
+	keys, err := splitKeys(key)
+	if err != nil {
+		return err
+	}
+	if len(keys) == 1 {
+		m[key] = value
+	} else {
+		// if the key exists add the value to inner map
+		if innerMap, ok := m[keys[0]].(map[string]interface{}); ok {
+			innerMap[keys[1]] = value
+		} else {
+			m[keys[0]] = map[string]interface{}{
+				keys[1]: value,
+			}
+		}
+	}
 
 	b, err := json.MarshalIndent(m, "", "\t")
 
-	err = ioutil.WriteFile(fn, b, 0644)
+	err = ioutil.WriteFile(configFile, b, 0644)
 	if err != nil {
 		return err
 	}
@@ -78,13 +104,25 @@ func Set(fileName, key, value string) error {
 	return nil
 }
 
-func initRouterConfig() {
-	secretKey, err := Get("router", "secretKey")
+func splitKeys(str string) ([]string, error) {
+	k := strings.Split(str, ".")
+
+	if len(k) == 1 {
+		return k, nil
+	} else if len(k) > 2 {
+		return nil, errKeyFormat
+	}
+
+	return k, nil
+}
+
+func setSecretKey() {
+	secretKey, err := Get("router.secretKey")
 	if err != nil {
 		log.Println(err)
 	}
 	if secretKey == "" {
-		err = Set("router", "secretKey", routerSecretKey(20))
+		err = Set("router.secretKey", routerSecretKey(20))
 		if err != nil {
 			log.Println(err)
 		}

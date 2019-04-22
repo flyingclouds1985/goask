@@ -1,0 +1,11 @@
+{
+	"database": {
+		"dbname": "GOASK",
+		"password": "",
+		"username": "postgres"
+	},
+	"router": {
+		"realm": "goask.com",
+		"secretKey": "GMWJGSAPGATLMODYLUMG"
+	}
+}
