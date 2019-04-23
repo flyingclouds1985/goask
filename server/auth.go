@@ -14,11 +14,11 @@ import (
 
 // Auth is the Authentication middleware.
 func (s *Server) Auth() *jwt.GinJWTMiddleware {
-	realm, err := config.Get("router", "realm")
+	realm, err := config.GetString("router.realm")
 	if err != nil {
 		log.Fatal(err)
 	}
-	secretKey, err := config.Get("router", "secretKey")
+	secretKey, err := config.GetString("router.secretKey")
 	if err != nil {
 		log.Fatal(err)
 	}

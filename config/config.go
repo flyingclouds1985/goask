@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -21,6 +22,19 @@ var (
 // Setup inits configs.
 func Setup() {
 	setSecretKey()
+}
+
+//GetString returns value of a key in string format.
+func GetString(key string) (string, error) {
+	v, err := Get(key)
+	if err != nil {
+		return "", err
+	}
+	if v, ok := v.(string); ok {
+		return v, nil
+	}
+
+	return "", fmt.Errorf("Unable to cast %#v of type %T to string", v, v)
 }
 
 // Get returns value of a key.
