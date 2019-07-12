@@ -10,9 +10,9 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-
-	"github.com/Alireza-Ta/GOASK/config"
+	"path/filepath"
 	"github.com/Alireza-Ta/GOASK/postgres"
+	"github.com/Alireza-Ta/GOASK/pkg/config"
 )
 
 var (
@@ -27,11 +27,18 @@ var (
 )
 
 func setup() {
-	config.Setup()
 	storeConf := postgres.Config{Password: "secret", DBname: "GoaskTest"}
 	store := postgres.New(storeConf)
 
-	TestServer = NewServer(store, gin.TestMode)
+	currentDir, err := os.Getwd()
+	root := filepath.Dir(currentDir)
+
+	c, err := config.Load(root + "/configuration.json")
+	if err != nil {
+		panic(err)
+	}
+
+	TestServer = NewServer(store, gin.TestMode, c)
 }
 
 func truncateAllTables() {

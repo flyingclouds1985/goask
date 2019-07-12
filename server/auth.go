@@ -1,31 +1,26 @@
 package server
 
 import (
-	"log"
 	"net/http"
 	"time"
 
-	"github.com/Alireza-Ta/GOASK/config"
 	"github.com/Alireza-Ta/GOASK/model"
 
 	jwt "github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"
 )
 
-// Auth is the Authentication middleware.
-func (s *Server) Auth() *jwt.GinJWTMiddleware {
-	realm, err := config.GetString("router.realm")
-	if err != nil {
-		log.Fatal(err)
-	}
-	secretKey, err := config.GetString("router.secretKey")
-	if err != nil {
-		log.Fatal(err)
-	}
+//AuthAPI manages authentication stuffs.
+type AuthAPI struct {
+	jwtRealm     string
+	jwtSecretKey string
+}
 
+// Auth is the Authentication middleware.
+func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 	return &jwt.GinJWTMiddleware{
-		Realm:      realm,
-		Key:        []byte(secretKey),
+		Realm:      a.jwtRealm,
+		Key:        []byte(a.jwtSecretKey),
 		Timeout:    time.Hour,
 		MaxRefresh: time.Hour,
 

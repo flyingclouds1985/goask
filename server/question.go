@@ -5,15 +5,21 @@ import (
 	"strconv"
 
 	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/gosimple/slug"
 )
 
+type QuestionAPI struct {
+	store *postgres.Store
+	domain string
+}
+
 // GetQuestion returns a question based on id and title.
-func (s *Server) GetQuestion(c *gin.Context) {
+func (qapi *QuestionAPI) GetQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	q, err := s.Store.QuestionWithRelations(id)
+	q, err := qapi.store.QuestionWithRelations(id)
 	if err != nil {
 		JSONNotFound("Error question not found. ", err, c)
 		return
@@ -23,7 +29,7 @@ func (s *Server) GetQuestion(c *gin.Context) {
 	title := c.Param("question")
 	titleSlug := slug.Make(q.Title)
 	if title != titleSlug {
-		urlStr := s.Config.Domain + "/questions/" + c.Param("id") + "/" + titleSlug
+		urlStr := qapi.domain + "/questions/" + c.Param("id") + "/" + titleSlug
 		c.Redirect(http.StatusSeeOther, urlStr)
 		return
 	}
@@ -32,7 +38,7 @@ func (s *Server) GetQuestion(c *gin.Context) {
 }
 
 // PostQuestion creates a question.
-func (s *Server) PostQuestion(c *gin.Context) {
+func (qapi *QuestionAPI) PostQuestion(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Question)
 	if err := c.ShouldBindJSON(in); err != nil {
@@ -45,17 +51,17 @@ func (s *Server) PostQuestion(c *gin.Context) {
 	q.Body = in.Body
 	q.Tags = in.Tags
 	// q.AuthorID = claims["id"]
-	if err := s.Store.QuestionCreate(q); err != nil {
+	if err := qapi.store.QuestionCreate(q); err != nil {
 		JSONInternalServer("Error inserting question. ", err, c)
 		return
 	}
-	s.Store.TagCreate(in.Tags, q.Id)
+	qapi.store.TagCreate(in.Tags, q.Id)
 
 	c.JSON(http.StatusOK, q)
 }
 
 // PatchQuestion upadtes a question.
-func (s *Server) PatchQuestion(c *gin.Context) {
+func (qapi *QuestionAPI) PatchQuestion(c *gin.Context) {
 	in := new(model.Question)
 	if err := c.ShouldBindJSON(in); err != nil {
 		JSONValidation(validation.Messages(err), c)
@@ -67,7 +73,7 @@ func (s *Server) PatchQuestion(c *gin.Context) {
 	// 	in.Id = id
 	// }
 
-	if err := s.Store.QuestionUpdate(in); err != nil {
+	if err := qapi.store.QuestionUpdate(in); err != nil {
 		JSONInternalServer("Error updating question. ", err, c)
 		return
 	}
@@ -76,10 +82,10 @@ func (s *Server) PatchQuestion(c *gin.Context) {
 }
 
 // PatchVoteQuestion gives a vote to a question.
-func (s *Server) PatchVoteQuestion(c *gin.Context) {
+func (qapi *QuestionAPI) PatchVoteQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	v := c.Param("vote")
-	q, err := s.Store.QuestionFind(id)
+	q, err := qapi.store.QuestionFind(id)
 	if err != nil {
 		JSONNotFound("Error question not found. ", err, c)
 		return
@@ -90,19 +96,19 @@ func (s *Server) PatchVoteQuestion(c *gin.Context) {
 		q.Vote--
 	}
 
-	err = s.Store.QuestionVoteUpdate(q)
+	err = qapi.store.QuestionVoteUpdate(q)
 	if err != nil {
 		JSONInternalServer("Error in question voting. ", err, c)
 		return
 	}
 
 	titleSlug := slug.Make(q.Title)
-	c.Redirect(http.StatusSeeOther, s.Config.Domain+"/questions/"+c.Param("id")+"/"+titleSlug)
+	c.Redirect(http.StatusSeeOther, qapi.domain+"/questions/"+c.Param("id")+"/"+titleSlug)
 }
 
 // GetQuestionList returns a list of questions.
-func (s *Server) GetQuestionList(c *gin.Context) {
-	list, err := s.Store.QuestionsList(c.Request.URL.Query())
+func (qapi *QuestionAPI) GetQuestionList(c *gin.Context) {
+	list, err := qapi.store.QuestionsList(c.Request.URL.Query())
 
 	if err != nil {
 		JSONNotFound("Error finding questions list. ", err, c)

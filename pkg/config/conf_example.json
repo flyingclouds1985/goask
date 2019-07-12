@@ -1,0 +1,18 @@
+{
+	"auth": {
+		"token": "jwt"
+	},
+	"database": {
+		"port": 2345,
+		"username": "postgres"
+	},
+	"domain": "www.example.com",
+	"first": "1st",
+	"realm": "example.com",
+	"second": {
+		"third": "3rd"
+	},
+	"server": {
+		"domain": "localhost"
+	}
+}

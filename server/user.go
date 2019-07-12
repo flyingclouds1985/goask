@@ -3,15 +3,20 @@ package server
 import (
 	"net/http"
 
+	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
 )
 
+type UserAPI struct {
+	store *postgres.Store
+}
+
 // GetUser responds user by username.
-func (s *Server) GetUser(c *gin.Context) {
+func (uapi *UserAPI) GetUser(c *gin.Context) {
 	username := c.Param("username")
-	u, err := s.Store.UserFindByName(username)
+	u, err := uapi.store.UserFindByName(username)
 	if err != nil {
 		JSONNotFound("Error user not found. ", err, c)
 		return
@@ -20,7 +25,7 @@ func (s *Server) GetUser(c *gin.Context) {
 }
 
 // PostUser create new user.
-func (s *Server) PostUser(c *gin.Context) {
+func (uapi *UserAPI) PostUser(c *gin.Context) {
 	in := new(model.User)
 	if err := c.ShouldBindJSON(in); err != nil {
 		JSONValidation(validation.Messages(err), c)
@@ -42,7 +47,7 @@ func (s *Server) PostUser(c *gin.Context) {
 	u.Email = in.Email
 	u.Bio = in.Bio
 
-	if err = s.Store.UserCreate(u); err != nil {
+	if err = uapi.store.UserCreate(u); err != nil {
 		JSONInternalServer("Error inserting user. ", err, c)
 		return
 	}
@@ -51,14 +56,14 @@ func (s *Server) PostUser(c *gin.Context) {
 }
 
 // PatchUser updates user.
-func (s *Server) PatchUser(c *gin.Context) {
+func (uapi *UserAPI) PatchUser(c *gin.Context) {
 	in := new(model.User)
 	if err := c.ShouldBindJSON(in); err != nil {
 		JSONValidation(validation.Messages(err), c)
 		return
 	}
 
-	u, err := s.Store.UserFind(in.Id)
+	u, err := uapi.store.UserFind(in.Id)
 	if err != nil {
 		JSONInternalServer("Error finding user. ", err, c)
 	}
@@ -70,7 +75,7 @@ func (s *Server) PatchUser(c *gin.Context) {
 		u.Bio = in.Bio
 	}
 
-	if _, err := s.Store.UserUpdateExcludePassword(u); err != nil {
+	if _, err := uapi.store.UserUpdateExcludePassword(u); err != nil {
 		JSONInternalServer("Error updating user. ", err, c)
 		return
 	}

@@ -5,13 +5,18 @@ import (
 	"strconv"
 
 	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
 )
 
+type ReplyAPI struct {
+	store *postgres.Store
+}
+
 // GetReplyList returns list of replies.
-func (s *Server) GetReplyList(c *gin.Context) {
-	list, err := s.Store.ReplyList(c.Request.URL.Query())
+func (rapi *ReplyAPI) GetReplyList(c *gin.Context) {
+	list, err := rapi.store.ReplyList(c.Request.URL.Query())
 
 	if err != nil {
 		JSONNotFound("Error finding replies list. ", err, c)
@@ -22,7 +27,7 @@ func (s *Server) GetReplyList(c *gin.Context) {
 }
 
 // PostReply creates a reply.
-func (s *Server) PostReply(c *gin.Context) {
+func (rapi *ReplyAPI) PostReply(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Reply)
 	if err := c.ShouldBindJSON(in); err != nil {
@@ -36,7 +41,7 @@ func (s *Server) PostReply(c *gin.Context) {
 	r.QuestionId = qid
 	// r.AuthorID = claims["id"]
 
-	if err := s.Store.ReplyCreate(r); err != nil {
+	if err := rapi.store.ReplyCreate(r); err != nil {
 		JSONInternalServer("Error inserting reply. ", err, c)
 		return
 	}
@@ -45,7 +50,7 @@ func (s *Server) PostReply(c *gin.Context) {
 }
 
 // PatchReply updates a reply.
-func (s *Server) PatchReply(c *gin.Context) {
+func (rapi *ReplyAPI) PatchReply(c *gin.Context) {
 	in := new(model.Reply)
 	if err := c.ShouldBindJSON(in); err != nil {
 		JSONValidation(validation.Messages(err), c)
@@ -57,7 +62,7 @@ func (s *Server) PatchReply(c *gin.Context) {
 	// 	in.Id = rid
 	// }
 
-	if err := s.Store.ReplyUpdate(in); err != nil {
+	if err := rapi.store.ReplyUpdate(in); err != nil {
 		JSONInternalServer("Error updating reply. ", err, c)
 		return
 	}
