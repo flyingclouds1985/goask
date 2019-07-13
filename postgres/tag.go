@@ -6,8 +6,8 @@ import (
 	"github.com/Alireza-Ta/GOASK/model"
 )
 
-// TagCreate creates a tag.
-func (s *Store) TagCreate(tags []*model.Tag, qid int) {
+// CreateTag creates a tag.
+func (s *Store) CreateTag(tags []*model.Tag, qid int) {
 	for _, t := range tags {
 		t.QuestionId = qid
 		err := s.DB.Insert(t)

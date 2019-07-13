@@ -7,6 +7,8 @@ import (
 	"github.com/go-pg/pg/orm"
 )
 
+type Questions []Question
+
 // Question model
 type Question struct {
 	Id        int       `json:"id"`

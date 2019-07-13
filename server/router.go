@@ -28,7 +28,7 @@ func (s *Server) Routes() {
 		domain: s.Config.GetString("server.domain"),
 	}
 
-	commentHandler := CommnetAPI {
+	commentHandler := CommentAPI {
 		store: s.Store,
 	}
 

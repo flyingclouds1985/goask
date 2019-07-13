@@ -3,20 +3,27 @@ package server
 import (
 	"net/http"
 	"strconv"
-
+	"net/url"
 	"github.com/Alireza-Ta/GOASK/model"
-	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
 )
 
+//ReplyStore manages encapsulated database access.
+type ReplyStore interface {
+	ListReply(query url.Values) (model.Replies, error)
+	CreateReply(r *model.Reply) error
+	UpdateReply(r *model.Reply) error
+}
+
+//ReplyAPI provides handlers for managing replies.
 type ReplyAPI struct {
-	store *postgres.Store
+	store ReplyStore
 }
 
 // GetReplyList returns list of replies.
 func (rapi *ReplyAPI) GetReplyList(c *gin.Context) {
-	list, err := rapi.store.ReplyList(c.Request.URL.Query())
+	list, err := rapi.store.ListReply(c.Request.URL.Query())
 
 	if err != nil {
 		JSONNotFound("Error finding replies list. ", err, c)
@@ -41,7 +48,7 @@ func (rapi *ReplyAPI) PostReply(c *gin.Context) {
 	r.QuestionId = qid
 	// r.AuthorID = claims["id"]
 
-	if err := rapi.store.ReplyCreate(r); err != nil {
+	if err := rapi.store.CreateReply(r); err != nil {
 		JSONInternalServer("Error inserting reply. ", err, c)
 		return
 	}
@@ -62,7 +69,7 @@ func (rapi *ReplyAPI) PatchReply(c *gin.Context) {
 	// 	in.Id = rid
 	// }
 
-	if err := rapi.store.ReplyUpdate(in); err != nil {
+	if err := rapi.store.UpdateReply(in); err != nil {
 		JSONInternalServer("Error updating reply. ", err, c)
 		return
 	}

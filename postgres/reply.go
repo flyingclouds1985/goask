@@ -7,10 +7,9 @@ import (
 	"github.com/go-pg/pg/orm"
 )
 
-type Replies []model.Reply
-
-func (s *Store) ReplyList(query url.Values) (Replies, error) {
-	var replies Replies
+// ListReply returns a list of replies.
+func (s *Store) ListReply(query url.Values) (model.Replies, error) {
+	var replies model.Replies
 
 	err := s.DB.Model(&replies).
 		Apply(orm.Pagination(query)).
@@ -20,10 +19,12 @@ func (s *Store) ReplyList(query url.Values) (Replies, error) {
 	return replies, err
 }
 
-func (s *Store) ReplyCreate(r *model.Reply) error {
+// CreateReply creates the reply.
+func (s *Store) CreateReply(r *model.Reply) error {
 	return s.DB.Insert(r)
 }
 
-func (s *Store) ReplyUpdate(r *model.Reply) error {
+// UpdateReply updates the reply.
+func (s *Store) UpdateReply(r *model.Reply) error {
 	return s.DB.Update(r)
 }

@@ -7,9 +7,7 @@ import (
 	"github.com/go-pg/pg/orm"
 )
 
-type CommentStore interface {
-	CreateComment(*Comment) error
-}
+type Comments []Comment
 
 type Comment struct {
 	Id            int       `json: "id"`

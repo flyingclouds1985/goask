@@ -3,23 +3,29 @@ package server
 import (
 	"net/http"
 	"strconv"
-
+	"net/url"
 	"github.com/Alireza-Ta/GOASK/model"
-	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
 )
 
-type CommnetAPI struct {
-	store *postgres.Store
+//CommentStore manages encapsulated database access.
+type CommentStore interface {
+	QuestionCommentList(query url.Values) (model.Comments, error)
+	CommentCreate(c *model.Comment) error
+	ReplyCommentList(query url.Values) (model.Comments, error)
+}
+
+//CommentAPI provides handler for managing comments.
+type CommentAPI struct {
+	store CommentStore
 }
 
 // GetQuestionCommentList returns a list consists of comments for the question.
-func (capi *CommnetAPI) GetQuestionCommentList(c *gin.Context) {
+func (capi *CommentAPI) GetQuestionCommentList(c *gin.Context) {
 	query := c.Request.URL.Query()
 	query.Set("question_id", c.Param("question_id"))
 	list, err := capi.store.QuestionCommentList(query)
-
 	if err != nil {
 		JSONNotFound("Error finding question comments list. ", err, c)
 		return
@@ -29,7 +35,7 @@ func (capi *CommnetAPI) GetQuestionCommentList(c *gin.Context) {
 }
 
 // PostQuestionComment creates a comment for the question.
-func (capi *CommnetAPI) PostQuestionComment(c *gin.Context) {
+func (capi *CommentAPI) PostQuestionComment(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Comment)
 	if err := c.ShouldBindJSON(in); err != nil {
@@ -53,7 +59,7 @@ func (capi *CommnetAPI) PostQuestionComment(c *gin.Context) {
 }
 
 // GetReplyCommentList returns a list consists of comments for the reply.
-func (capi *CommnetAPI) GetReplyCommentList(c *gin.Context) {
+func (capi *CommentAPI) GetReplyCommentList(c *gin.Context) {
 	query := c.Request.URL.Query()
 	query.Set("reply_id", c.Param("reply_id"))
 	list, err := capi.store.ReplyCommentList(query)
@@ -67,7 +73,7 @@ func (capi *CommnetAPI) GetReplyCommentList(c *gin.Context) {
 }
 
 // PostReplyComment creates a comment for the reply.
-func (capi *CommnetAPI) PostReplyComment(c *gin.Context) {
+func (capi *CommentAPI) PostReplyComment(c *gin.Context) {
 	// claims := jwt.ExtractClaims(c)
 	in := new(model.Comment)
 	if err := c.ShouldBindJSON(in); err != nil {

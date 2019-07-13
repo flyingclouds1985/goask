@@ -11,7 +11,7 @@ import (
 )
 
 var userTestCases = map[string]*model.User{
-	"complete": &model.User{
+	"complete": {
 		Id:              1,
 		Username:        "Tommy",
 		Email:           "Tommy25@example.com",
@@ -19,7 +19,7 @@ var userTestCases = map[string]*model.User{
 		ConfirmPassword: "secretpassword",
 		Bio:             "I'm a new user.",
 	},
-	"brokenUsernamePass": &model.User{
+	"brokenUsernamePass": {
 		Id:              1,
 		Username:        "John",
 		Email:           "John@example.com",
@@ -27,7 +27,7 @@ var userTestCases = map[string]*model.User{
 		ConfirmPassword: "no-secret",
 		Bio:             "I'm a new user.",
 	},
-	"passwordMismatch": &model.User{
+	"passwordMismatch": {
 		Id:              1,
 		Username:        "Samuel",
 		Email:           "Samuel@example.com",

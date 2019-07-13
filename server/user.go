@@ -1,22 +1,30 @@
 package server
 
 import (
-	"net/http"
-
-	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/Alireza-Ta/GOASK/model"
 	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
+	"net/http"
 )
 
+//UserStore manages encapsulated database access.
+type UserStore interface {
+	CreateUser(user *model.User) error
+	FindUser(id int) (*model.User, error)
+	FindUserByName(username string) (*model.User, error)
+	UpdateUserExcludePassword(user *model.User) (int, error)
+}
+
+//UserAPI provides handlers for managing users.
 type UserAPI struct {
-	store *postgres.Store
+	store UserStore
 }
 
 // GetUser responds user by username.
 func (uapi *UserAPI) GetUser(c *gin.Context) {
 	username := c.Param("username")
-	u, err := uapi.store.UserFindByName(username)
+	u, err := uapi.store.FindUserByName(username)
 	if err != nil {
 		JSONNotFound("Error user not found. ", err, c)
 		return
@@ -47,7 +55,7 @@ func (uapi *UserAPI) PostUser(c *gin.Context) {
 	u.Email = in.Email
 	u.Bio = in.Bio
 
-	if err = uapi.store.UserCreate(u); err != nil {
+	if err = uapi.store.CreateUser(u); err != nil {
 		JSONInternalServer("Error inserting user. ", err, c)
 		return
 	}
@@ -63,7 +71,7 @@ func (uapi *UserAPI) PatchUser(c *gin.Context) {
 		return
 	}
 
-	u, err := uapi.store.UserFind(in.Id)
+	u, err := uapi.store.FindUser(in.Id)
 	if err != nil {
 		JSONInternalServer("Error finding user. ", err, c)
 	}
@@ -75,9 +83,19 @@ func (uapi *UserAPI) PatchUser(c *gin.Context) {
 		u.Bio = in.Bio
 	}
 
-	if _, err := uapi.store.UserUpdateExcludePassword(u); err != nil {
+	//if _, err := uapi.store.UpdateUserExcludePassword(u); err != nil {
+	//	JSONInternalServer("Error updating user. ", err, c)
+	//	return
+	//}
+	rowsAffected, err := uapi.store.UpdateUserExcludePassword(u);
+	if err != nil {
 		JSONInternalServer("Error updating user. ", err, c)
 		return
+	}
+
+	if rowsAffected < 0 {
+		NoRowsAffected := errors.New("No Rows Affected")
+		JSONInternalServer("Error there's no such user. ", NoRowsAffected, c)
 	}
 
 	c.JSON(http.StatusOK, u.Copy())

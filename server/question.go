@@ -3,16 +3,27 @@ package server
 import (
 	"net/http"
 	"strconv"
-
+	"net/url"
 	"github.com/Alireza-Ta/GOASK/model"
-	"github.com/Alireza-Ta/GOASK/postgres"
 	"github.com/Alireza-Ta/GOASK/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/gosimple/slug"
 )
 
+//QuestionStore manages encapsulated database access.
+type QuestionStore interface {
+	QuestionWithRelations(id int) (*model.Question, error)
+	CreateQuestion(q *model.Question) error 
+	CreateTag(tags []*model.Tag, qid int)
+	UpdateQuestion(q *model.Question) error
+	FindQuestion(id int) (*model.Question, error)
+	UpdateVote(q *model.Question) error
+	ListQuestion(query url.Values) (model.Questions, error)
+}
+
+//QuestionAPI provides handlers for managing questions.
 type QuestionAPI struct {
-	store *postgres.Store
+	store QuestionStore
 	domain string
 }
 
@@ -51,11 +62,11 @@ func (qapi *QuestionAPI) PostQuestion(c *gin.Context) {
 	q.Body = in.Body
 	q.Tags = in.Tags
 	// q.AuthorID = claims["id"]
-	if err := qapi.store.QuestionCreate(q); err != nil {
+	if err := qapi.store.CreateQuestion(q); err != nil {
 		JSONInternalServer("Error inserting question. ", err, c)
 		return
 	}
-	qapi.store.TagCreate(in.Tags, q.Id)
+	qapi.store.CreateTag(in.Tags, q.Id)
 
 	c.JSON(http.StatusOK, q)
 }
@@ -73,7 +84,7 @@ func (qapi *QuestionAPI) PatchQuestion(c *gin.Context) {
 	// 	in.Id = id
 	// }
 
-	if err := qapi.store.QuestionUpdate(in); err != nil {
+	if err := qapi.store.UpdateQuestion(in); err != nil {
 		JSONInternalServer("Error updating question. ", err, c)
 		return
 	}
@@ -85,7 +96,7 @@ func (qapi *QuestionAPI) PatchQuestion(c *gin.Context) {
 func (qapi *QuestionAPI) PatchVoteQuestion(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	v := c.Param("vote")
-	q, err := qapi.store.QuestionFind(id)
+	q, err := qapi.store.FindQuestion(id)
 	if err != nil {
 		JSONNotFound("Error question not found. ", err, c)
 		return
@@ -96,7 +107,7 @@ func (qapi *QuestionAPI) PatchVoteQuestion(c *gin.Context) {
 		q.Vote--
 	}
 
-	err = qapi.store.QuestionVoteUpdate(q)
+	err = qapi.store.UpdateVote(q)
 	if err != nil {
 		JSONInternalServer("Error in question voting. ", err, c)
 		return
@@ -108,7 +119,7 @@ func (qapi *QuestionAPI) PatchVoteQuestion(c *gin.Context) {
 
 // GetQuestionList returns a list of questions.
 func (qapi *QuestionAPI) GetQuestionList(c *gin.Context) {
-	list, err := qapi.store.QuestionsList(c.Request.URL.Query())
+	list, err := qapi.store.ListQuestion(c.Request.URL.Query())
 
 	if err != nil {
 		JSONNotFound("Error finding questions list. ", err, c)

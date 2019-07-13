@@ -8,9 +8,7 @@ import (
 	"github.com/go-pg/pg/orm"
 )
 
-type Comments []model.Comment
-
-func (s *Store) QuestionCommentList(query url.Values) (Comments, error) {
+func (s *Store) QuestionCommentList(query url.Values) (model.Comments, error) {
 	var question model.Question
 
 	qid, _ := strconv.Atoi(query.Get("question_id"))
@@ -19,7 +17,7 @@ func (s *Store) QuestionCommentList(query url.Values) (Comments, error) {
 	return p.(*model.Question).Comments, err
 }
 
-func (s *Store) ReplyCommentList(query url.Values) (Comments, error) {
+func (s *Store) ReplyCommentList(query url.Values) (model.Comments, error) {
 	var reply model.Reply
 
 	rid, _ := strconv.Atoi(query.Get("reply_id"))

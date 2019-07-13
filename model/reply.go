@@ -7,6 +7,8 @@ import (
 	"github.com/go-pg/pg/orm"
 )
 
+type Replies []Reply
+
 type Reply struct {
 	Id         int       `json: "id"`
 	Body       string    `json:"body" sql:"type:text" binding:"required,min=10"`
