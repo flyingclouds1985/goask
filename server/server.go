@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/Alireza-Ta/GOASK/pkg/config"
-	"github.com/Alireza-Ta/GOASK/postgres"
+	"github.com/Alireza-Ta/goask/pkg/config"
+	"github.com/Alireza-Ta/goask/postgres"
 	"github.com/gin-gonic/gin"
 )
 

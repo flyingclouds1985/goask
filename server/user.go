@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/Alireza-Ta/GOASK/model"
-	"github.com/Alireza-Ta/GOASK/validation"
+	"github.com/Alireza-Ta/goask/model"
+	"github.com/Alireza-Ta/goask/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"net/http"

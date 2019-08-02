@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/Alireza-Ta/goask/model"
 
 	jwt "github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"

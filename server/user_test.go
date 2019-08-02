@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/Alireza-Ta/goask/model"
 	"github.com/stretchr/testify/assert"
 )
 
