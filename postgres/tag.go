@@ -3,7 +3,7 @@ package postgres
 import (
 	"log"
 
-	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/Alireza-Ta/goask/model"
 )
 
 // CreateTag creates a tag.

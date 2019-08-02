@@ -3,8 +3,8 @@ package postgres
 import (
 	"net/url"
 
-	"github.com/Alireza-Ta/GOASK/model"
-	"github.com/go-pg/pg/orm"
+	"github.com/Alireza-Ta/goask/model"
+	"github.com/go-pg/pg/urlvalues"
 )
 
 // CreateQuestion persists a question in db.
@@ -15,9 +15,8 @@ func (s *Store) CreateQuestion(q *model.Question) error {
 // ListQuestion returns a list of questions.
 func (s *Store) ListQuestion(query url.Values) (model.Questions, error) {
 	var q model.Questions
-
 	err := s.DB.Model(&q).
-		Apply(orm.Pagination(query)).
+		Apply(urlvalues.Pagination(urlvalues.Values(query))).
 		Relation("Replies").
 		Relation("Comments").
 		Relation("Tags").

@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"github.com/Alireza-Ta/GOASK/pkg/config"
-	"github.com/Alireza-Ta/GOASK/postgres"
-	"github.com/Alireza-Ta/GOASK/server"
+	"github.com/Alireza-Ta/goask/pkg/config"
+	"github.com/Alireza-Ta/goask/postgres"
+	"github.com/Alireza-Ta/goask/server"
 	"github.com/gin-gonic/gin"
 	"path/filepath"
 )

@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/Alireza-Ta/goask/model"
 )
 
 // CreateUser insert new user.

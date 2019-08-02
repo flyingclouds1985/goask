@@ -1,11 +1,11 @@
 package postgres
 
 import (
+	"github.com/go-pg/pg/urlvalues"
 	"net/url"
 	"strconv"
 
-	"github.com/Alireza-Ta/GOASK/model"
-	"github.com/go-pg/pg/orm"
+	"github.com/Alireza-Ta/goask/model"
 )
 
 func (s *Store) QuestionCommentList(query url.Values) (model.Comments, error) {
@@ -28,7 +28,7 @@ func (s *Store) ReplyCommentList(query url.Values) (model.Comments, error) {
 
 func (s *Store) pagination(model interface{}, query url.Values, id int, relation string) (interface{}, error) {
 	err := s.DB.Model(model).
-		Apply(orm.Pagination(query)).
+		Apply(urlvalues.Pagination(urlvalues.Values(query))).
 		Where("id = ?", id).
 		Relation(relation).
 		Select()

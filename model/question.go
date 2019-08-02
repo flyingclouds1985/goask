@@ -1,10 +1,16 @@
 package model
 
 import (
+	"context"
 	"log"
 	"time"
 
-	"github.com/go-pg/pg/orm"
+	"github.com/go-pg/pg/v9/orm"
+)
+
+var (
+	_ orm.BeforeInsertHook = (*Question)(nil)
+	_ orm.BeforeUpdateHook = (*Question)(nil)
 )
 
 type Questions []Question
@@ -25,22 +31,23 @@ type Question struct {
 	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
-func (q *Question) BeforeInsert(db orm.DB) error {
+func (q *Question) BeforeInsert(ctx context.Context) (context.Context, error) {
 	q.CreatedAt = UnixTime()
 	q.UpdatedAt = UnixTime()
-	return nil
+	return ctx, nil
 }
 
-func (q *Question) BeforeUpdate(db orm.DB) error {
+func (q *Question) BeforeUpdate(ctx context.Context) (context.Context, error) {
 	q.UpdatedAt = UnixTime()
 	if q.CreatedAt.IsZero() {
 		data := new(Question)
 		data.Id = q.Id
+		var db orm.DB
 		err := db.Model(data).Column("created_at").WherePK().Select()
 		if err != nil {
 			log.Fatal("Error in finding question created_at column.", err.Error())
 		}
 		q.CreatedAt = data.CreatedAt
 	}
-	return nil
+	return ctx, nil
 }

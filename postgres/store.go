@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"github.com/Alireza-Ta/GOASK/model"
+	"github.com/Alireza-Ta/goask/model"
 	"github.com/go-pg/pg"
 	"github.com/go-pg/pg/orm"
 )

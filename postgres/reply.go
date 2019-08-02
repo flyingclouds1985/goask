@@ -1,10 +1,10 @@
 package postgres
 
 import (
+	"github.com/go-pg/pg/urlvalues"
 	"net/url"
 
-	"github.com/Alireza-Ta/GOASK/model"
-	"github.com/go-pg/pg/orm"
+	"github.com/Alireza-Ta/goask/model"
 )
 
 // ListReply returns a list of replies.
@@ -12,7 +12,7 @@ func (s *Store) ListReply(query url.Values) (model.Replies, error) {
 	var replies model.Replies
 
 	err := s.DB.Model(&replies).
-		Apply(orm.Pagination(query)).
+		Apply(urlvalues.Pagination(urlvalues.Values(query))).
 		Relation("Comments").
 		Select()
 

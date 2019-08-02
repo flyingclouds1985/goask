@@ -1,10 +1,15 @@
 package model
 
 import (
+	"context"
 	"log"
 	"time"
 
-	"github.com/go-pg/pg/orm"
+	"github.com/go-pg/pg/v9/orm"
+)
+var(
+	_ orm.BeforeInsertHook = (*Comment)(nil)
+	_ orm.BeforeUpdateHook = (*Comment)(nil)
 )
 
 type Comments []Comment
@@ -21,21 +26,22 @@ type Comment struct {
 	UpdatedAt     time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
-func (c *Comment) BeforeInsert(db orm.DB) error {
+func (c *Comment) BeforeInsert(ctx context.Context) (context.Context, error) {
 	c.CreatedAt = UnixTime()
 	c.UpdatedAt = UnixTime()
-	return nil
+	return ctx, nil
 }
 
-func (c *Comment) BeforeUpdate(db orm.DB) error {
+func (c *Comment) BeforeUpdate(ctx context.Context) (context.Context, error) {
 	c.UpdatedAt = UnixTime()
 	if c.CreatedAt.IsZero() {
 		data := new(Comment)
+		var db orm.DB
 		err := db.Model(data).Column("created_at").WherePK().Select()
 		if err != nil {
 			log.Fatal("Error in finding comment created_at column.", err.Error())
 		}
 		c.CreatedAt = data.CreatedAt
 	}
-	return nil
+	return ctx, nil
 }

@@ -1,10 +1,16 @@
 package model
 
 import (
+	"context"
 	"log"
 	"time"
 
-	"github.com/go-pg/pg/orm"
+	"github.com/go-pg/pg/v9/orm"
+)
+
+var (
+	_ orm.BeforeInsertHook = (*Reply)(nil)
+	_ orm.BeforeUpdateHook = (*Reply)(nil)
 )
 
 type Replies []Reply
@@ -22,22 +28,23 @@ type Reply struct {
 	UpdatedAt  time.Time `json:"updated_at" sql:"type:timestamptz"`
 }
 
-func (r *Reply) BeforeInsert(db orm.DB) error {
+func (r *Reply) BeforeInsert(ctx context.Context) (context.Context, error) {
 	r.CreatedAt = UnixTime()
 	r.UpdatedAt = UnixTime()
-	return nil
+	return ctx, nil
 }
 
-func (r *Reply) BeforeUpdate(db orm.DB) error {
+func (r *Reply) BeforeUpdate(ctx context.Context) (context.Context, error) {
 	r.UpdatedAt = UnixTime()
 	if r.CreatedAt.IsZero() {
 		data := new(Reply)
 		data.Id = r.Id
+		var db orm.DB
 		err := db.Model(data).Column("created_at").WherePK().Select()
 		if err != nil {
 			log.Fatal("Error in finding reply created_at column.", err.Error())
 		}
 		r.CreatedAt = data.CreatedAt
 	}
-	return nil
+	return ctx, nil
 }
