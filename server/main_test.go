@@ -45,6 +45,8 @@ func truncateAllTables() {
 	for _, model := range models {
 		_, err := TestServer.Store.DB.Model(model).Exec(
 			fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY CASCADE", model),
+			// drop all tables
+			//fmt.Sprintf("DROP SCHEMA public CASCADE; CREATE SCHEMA public;"),
 		)
 		if err != nil {
 			log.Fatal("Error in truncating...", err)

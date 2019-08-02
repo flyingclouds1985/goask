@@ -3,6 +3,7 @@ package postgres
 import (
 	"github.com/go-pg/pg/urlvalues"
 	"net/url"
+	"time"
 
 	"github.com/Alireza-Ta/goask/model"
 )
@@ -26,5 +27,6 @@ func (s *Store) CreateReply(r *model.Reply) error {
 
 // UpdateReply updates the reply.
 func (s *Store) UpdateReply(r *model.Reply) error {
+	r.UpdatedAt = time.Now()
 	return s.DB.Update(r)
 }

@@ -3,38 +3,39 @@ package server
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"github.com/Alireza-Ta/goask/model"
 	"testing"
 	"time"
-	"github.com/Alireza-Ta/goask/model"
 
 	"github.com/stretchr/testify/assert"
 )
 
 var questionTestCases = map[string]model.Question{
-	"complete": model.Question{
+	"complete": {
 		Body:  "This is the question body that must be more than 50 words till the API let us pass the this test nicely.",
 		Title: "This is the question title.",
 		Tags: []*model.Tag{
-			&model.Tag{
+			{
 				Name: "Go",
 			},
-			&model.Tag{
+			{
 				Name: "Test",
 			},
 		},
 	},
-	"withoutTitle": model.Question{
+	"withoutTitle": {
 		Body:  "This is the question body.",
 		Title: "",
 	},
-	"minLengthTitle": model.Question{
+	"minLengthTitle": {
 		Body:  "This is the question body.",
 		Title: "title min:15",
 	},
-	"withoutBody": model.Question{
+	"withoutBody": {
 		Title: "This is the question title.",
 	},
-	"minLengthBody": model.Question{
+	"minLengthBody": {
 		Body:  "This is the question body less than 50 words.",
 		Title: "This is the question title.",
 	},

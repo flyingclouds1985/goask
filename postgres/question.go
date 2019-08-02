@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"net/url"
+	"time"
 
 	"github.com/Alireza-Ta/goask/model"
 	"github.com/go-pg/pg/urlvalues"
@@ -45,6 +46,7 @@ func (s *Store) FindQuestion(id int) (*model.Question, error) {
 
 // UpdateQuestion updates the question.
 func (s *Store) UpdateQuestion(q *model.Question) error {
+	q.UpdatedAt = time.Now()
 	return s.DB.Update(q)
 }
 

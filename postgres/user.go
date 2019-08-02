@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"github.com/Alireza-Ta/goask/model"
+	"time"
 )
 
 // CreateUser insert new user.
@@ -27,6 +28,7 @@ func (s *Store) FindUserByName(username string) (*model.User, error) {
 
 // UpdateUserExcludePassword updates user but not password.
 func (s *Store) UpdateUserExcludePassword(user *model.User) (int, error) {
+	user.UpdatedAt = time.Now()
 	res, err := s.DB.Model(user).ExcludeColumn("password").WherePK().Update()
 	return res.RowsAffected(), err
 }
