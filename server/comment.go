@@ -1,12 +1,12 @@
 package server
 
 import (
-	"net/http"
-	"strconv"
-	"net/url"
 	"github.com/Alireza-Ta/goask/model"
 	"github.com/Alireza-Ta/goask/validation"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"net/url"
+	"strconv"
 )
 
 //CommentStore manages encapsulated database access.

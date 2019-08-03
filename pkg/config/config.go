@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	errKeyFormat    = errors.New("Key format must be like [key] or [key1.key2] without brackets")
+	errKeyFormat = errors.New("Key format must be like [key] or [key1.key2] without brackets")
 )
 
 //Config type.
@@ -46,7 +46,7 @@ func Load(file string) (*Config, error) {
 // 	setSecretKey()
 // }
 
-//GetString returns value of a key in string format. 
+//GetString returns value of a key in string format.
 //If it's not a valid string value it returns an empty string.
 func (c *Config) GetString(key string) string {
 	v := c.Get(key)

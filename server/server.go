@@ -26,5 +26,3 @@ func NewServer(store *postgres.Store, routerMode string, config *config.Config) 
 
 	return server
 }
-
-

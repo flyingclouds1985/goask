@@ -87,7 +87,7 @@ func (uapi *UserAPI) PatchUser(c *gin.Context) {
 	//	JSONInternalServer("Error updating user. ", err, c)
 	//	return
 	//}
-	rowsAffected, err := uapi.store.UpdateUserExcludePassword(u);
+	rowsAffected, err := uapi.store.UpdateUserExcludePassword(u)
 	if err != nil {
 		JSONInternalServer("Error updating user. ", err, c)
 		return

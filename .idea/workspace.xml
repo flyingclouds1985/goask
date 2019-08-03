@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8169eaac-8791-46a0-ab06-8f5936d6db7d" name="Default Changelist" comment="" />
+    <list default="true" id="8169eaac-8791-46a0-ab06-8f5936d6db7d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,16 +33,19 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/question_test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="724">
-              <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
+            <state relative-caret-position="442">
+              <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+              <folding>
+                <element signature="e#16#154#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
@@ -93,8 +98,8 @@
         <option value="$PROJECT_DIR$/postgres/question.go" />
         <option value="$PROJECT_DIR$/postgres/reply.go" />
         <option value="$PROJECT_DIR$/postgres/user.go" />
-        <option value="$PROJECT_DIR$/server/question_test.go" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/server/question_test.go" />
       </list>
     </option>
   </component>
@@ -102,6 +107,7 @@
     <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -112,37 +118,37 @@
           <expand>
             <path>
               <item name="GOASK" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GOASK" type="462c0819:PsiDirectoryNode" />
+              <item name="goask" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="GOASK" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GOASK" type="462c0819:PsiDirectoryNode" />
+              <item name="goask" type="462c0819:PsiDirectoryNode" />
               <item name="cmd" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="GOASK" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GOASK" type="462c0819:PsiDirectoryNode" />
+              <item name="goask" type="462c0819:PsiDirectoryNode" />
               <item name="cmd" type="462c0819:PsiDirectoryNode" />
               <item name="goask-server" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="GOASK" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GOASK" type="462c0819:PsiDirectoryNode" />
+              <item name="goask" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="GOASK" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GOASK" type="462c0819:PsiDirectoryNode" />
+              <item name="goask" type="462c0819:PsiDirectoryNode" />
               <item name="postgres" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="GOASK" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GOASK" type="462c0819:PsiDirectoryNode" />
+              <item name="goask" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="GOASK" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GOASK" type="462c0819:PsiDirectoryNode" />
+              <item name="goask" type="462c0819:PsiDirectoryNode" />
               <item name="validation" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -621,13 +627,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/question_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="724">
-          <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -635,6 +634,16 @@
             <caret line="1" column="108" selection-start-line="1" selection-start-column="108" selection-end-line="1" selection-end-column="108" />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/question_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+          <folding>
+            <element signature="e#16#154#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

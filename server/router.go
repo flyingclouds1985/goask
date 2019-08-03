@@ -18,25 +18,25 @@ func NewRouter(mode string) *gin.Engine {
 
 // Routes is list of routes.
 func (s *Server) Routes() {
-	authHandler := AuthAPI {
-		jwtRealm: s.Config.GetString("router.realm"),
+	authHandler := AuthAPI{
+		jwtRealm:     s.Config.GetString("router.realm"),
 		jwtSecretKey: s.Config.GetString("router.secretKey"),
 	}
 
-	questionHandler := QuestionAPI {
-		store: s.Store,
+	questionHandler := QuestionAPI{
+		store:  s.Store,
 		domain: s.Config.GetString("server.domain"),
 	}
 
-	commentHandler := CommentAPI {
+	commentHandler := CommentAPI{
 		store: s.Store,
 	}
 
-	replyHandler := ReplyAPI {
+	replyHandler := ReplyAPI{
 		store: s.Store,
 	}
 
-	userHandler := UserAPI {
+	userHandler := UserAPI{
 		store: s.Store,
 	}
 

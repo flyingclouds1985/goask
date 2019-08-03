@@ -18,6 +18,7 @@ type Reply struct {
 	CreatedAt  time.Time `json:"created_at" sql:"type:timestamptz,default:now()"`
 	UpdatedAt  time.Time `json:"updated_at" sql:"type:timestamptz,default:now()"`
 }
+
 //
 //func (r *Reply) BeforeInsert(ctx context.Context) (context.Context, error) {
 //	r.CreatedAt = UnixTime()

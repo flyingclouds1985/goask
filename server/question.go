@@ -1,19 +1,19 @@
 package server
 
 import (
-	"net/http"
-	"strconv"
-	"net/url"
 	"github.com/Alireza-Ta/goask/model"
 	"github.com/Alireza-Ta/goask/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/gosimple/slug"
+	"net/http"
+	"net/url"
+	"strconv"
 )
 
 //QuestionStore manages encapsulated database access.
 type QuestionStore interface {
 	QuestionWithRelations(id int) (*model.Question, error)
-	CreateQuestion(q *model.Question) error 
+	CreateQuestion(q *model.Question) error
 	CreateTag(tags []*model.Tag, qid int)
 	UpdateQuestion(q *model.Question) error
 	FindQuestion(id int) (*model.Question, error)
@@ -23,7 +23,7 @@ type QuestionStore interface {
 
 //QuestionAPI provides handlers for managing questions.
 type QuestionAPI struct {
-	store QuestionStore
+	store  QuestionStore
 	domain string
 }
 
