@@ -3,16 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8169eaac-8791-46a0-ab06-8f5936d6db7d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/comment.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/comment.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/question.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/question.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/reply.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/reply.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/tag.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/tag.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/postgres/question.go" beforeDir="false" afterPath="$PROJECT_DIR$/postgres/question.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/postgres/reply.go" beforeDir="false" afterPath="$PROJECT_DIR$/postgres/reply.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/postgres/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/postgres/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/main_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/main_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/question_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/question_test.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,20 +18,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/user.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="71" column="38" lean-forward="true" selection-start-line="71" selection-start-column="38" selection-end-line="71" selection-end-column="38" />
+            <state relative-caret-position="1742">
+              <caret line="71" column="38" selection-start-line="71" selection-start-column="38" selection-end-line="71" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/postgres/user.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="780">
+              <caret line="33" column="1" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/postgres/user.go">
+        <entry file="file://$PROJECT_DIR$/server/question_test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="597">
-              <caret line="33" column="1" lean-forward="true" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
-              <folding>
-                <element signature="e#18#65#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="724">
+              <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
             </state>
           </provider>
         </entry>
@@ -78,7 +74,6 @@
         <option value="$PROJECT_DIR$/server/user_test.go" />
         <option value="$PROJECT_DIR$/postgres/comment.go" />
         <option value="$PROJECT_DIR$/go.mod" />
-        <option value="$PROJECT_DIR$/server/question_test.go" />
         <option value="$PROJECT_DIR$/model/user.go" />
         <option value="$PROJECT_DIR$/model/tag.go" />
         <option value="$PROJECT_DIR$/model/reply.go" />
@@ -88,10 +83,11 @@
         <option value="$PROJECT_DIR$/postgres/question.go" />
         <option value="$PROJECT_DIR$/postgres/reply.go" />
         <option value="$PROJECT_DIR$/postgres/user.go" />
+        <option value="$PROJECT_DIR$/server/question_test.go" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
@@ -100,7 +96,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -143,6 +138,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -236,7 +232,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49725777" visible="true" weight="0.20314735" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49725777" visible="true" weight="0.20600858" />
       <window_info id="Structure" order="1" sideWeight="0.50274223" side_tool="true" weight="0.19456366" />
       <window_info id="Favorites" order="2" sideWeight="0.50274223" side_tool="true" weight="0.19456366" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -522,13 +518,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/question_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="121" column="31" selection-start-line="121" selection-start-column="30" selection-end-line="121" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/go/src/github.com/Alireza-Ta/goask/postgres/question.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="874">
@@ -609,18 +598,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/user.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="71" column="38" lean-forward="true" selection-start-line="71" selection-start-column="38" selection-end-line="71" selection-end-column="38" />
+        <state relative-caret-position="1742">
+          <caret line="71" column="38" selection-start-line="71" selection-start-column="38" selection-end-line="71" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/postgres/user.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="597">
-          <caret line="33" column="1" lean-forward="true" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
-          <folding>
-            <element signature="e#18#65#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="780">
+          <caret line="33" column="1" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/question_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="724">
+          <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
         </state>
       </provider>
     </entry>
