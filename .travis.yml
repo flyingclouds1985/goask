@@ -22,7 +22,7 @@ addons:
 
 env:
   global:
-  - PGPORT=5432
+  - GO111MODULE=on
 
 script:
   - ./.travis.gofmt.sh
