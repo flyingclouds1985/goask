@@ -19,6 +19,10 @@ before_script:
 addons:
   - postgresql: "9.6"
 
+env:
+  global:
+  - PGPORT=5432
+
 script:
   - ./.travis.gofmt.sh
   - go test -v -race $(go list ./... | grep -v vendor)
