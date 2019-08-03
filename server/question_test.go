@@ -3,7 +3,6 @@ package server
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/Alireza-Ta/goask/model"
 	"testing"
 	"time"
