@@ -15,6 +15,7 @@ services:
 before_script:
   - psql -c 'create database GoaskTest;' -U postgres
   - psql -c "ALTER USER postgres WITH PASSWORD 'secret;'" -U postgres
+  - psql -c '\l' -U postgres
 
 addons:
   - postgresql: "9.6"
