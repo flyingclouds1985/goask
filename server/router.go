@@ -77,7 +77,7 @@ func (s *Server) Routes() {
 		auth.Use(authHandler.Auth().MiddlewareFunc())
 		{
 			auth.GET("refresh_token", authHandler.Auth().RefreshHandler)
-			auth.GET("hello", func(c *gin.Context) {
+			auth.GET("/hello", func(c *gin.Context) {
 				c.JSON(200, gin.H{
 					"data": "asd",
 					"c":    c.Keys,

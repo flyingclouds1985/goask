@@ -12,7 +12,7 @@ func checkNil(item interface{}, message string) {
 		err = e.Error()
 	}
 	if item != nil {
-		fmt.Printf("Error: %s, Message %s", err, message)
+		fmt.Printf("Error: %s, Message: %s", err, message)
 	}
 }
 

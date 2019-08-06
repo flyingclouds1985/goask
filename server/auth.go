@@ -5,8 +5,7 @@ import (
 	"time"
 
 	"github.com/Alireza-Ta/goask/model"
-
-	jwt "github.com/appleboy/gin-jwt"
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +22,7 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 		Key:        []byte(a.jwtSecretKey),
 		Timeout:    time.Hour,
 		MaxRefresh: time.Hour,
-
+		IdentityKey: "username",
 		SigningAlgorithm: "HS256",
 
 		Authenticator: authenticator,
@@ -31,6 +30,23 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 		Authorizator: authorizator,
 
 		Unauthorized: unauthorized,
+
+		IdentityHandler: func(c *gin.Context) interface{} {
+			// claims := jwt.ExtractClaims(c)
+			// return &model.User{
+			// 	Username: claims["id"].(string),
+			// }
+			claims := jwt.ExtractClaims(c)
+			return claims[jwt.IdentityKey]
+		},
+
+		LoginResponse: func(c *gin.Context, code int, token string, expire time.Time){
+			c.JSON(http.StatusOK, gin.H{
+				"code":   http.StatusOK,
+				"token":  token,
+				"expire": expire.Format(time.RFC3339),
+			})
+		},
 
 		RefreshResponse: func(c *gin.Context, code int, token string, expire time.Time) {
 			c.JSON(http.StatusOK, gin.H{

@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8169eaac-8791-46a0-ab06-8f5936d6db7d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.realize.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.realize.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/goask-server/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/goask-server/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/auth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/question.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/question.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/router.go" afterDir="false" />
-    </list>
+    <list default="true" id="8169eaac-8791-46a0-ab06-8f5936d6db7d" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +12,29 @@
     <favorites_list name="GOASK" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cmd/goask-server/main.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="536">
+              <caret line="30" column="41" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="41" />
+              <folding>
+                <element signature="e#14#198#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/configuration.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="364">
+              <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -62,15 +74,15 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/server/question_test.go" />
         <option value="$PROJECT_DIR$/postgres/store.go" />
-        <option value="$PROJECT_DIR$/configuration.json" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/server/response.go" />
-        <option value="$PROJECT_DIR$/cmd/goask-server/main.go" />
         <option value="$USER_HOME$/go/src/github.com/Alireza-Ta/goask/server/auth.go" />
         <option value="$PROJECT_DIR$/server/question.go" />
         <option value="$PROJECT_DIR$/server/router.go" />
         <option value="$PROJECT_DIR$/.realize.yaml" />
         <option value="$PROJECT_DIR$/server/auth.go" />
+        <option value="$PROJECT_DIR$/cmd/goask-server/main.go" />
+        <option value="$PROJECT_DIR$/configuration.json" />
       </list>
     </option>
   </component>
@@ -524,13 +536,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/configuration.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pkg/config/config_test.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
@@ -646,20 +651,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cmd/goask-server/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#14#204#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.realize.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="520">
           <caret line="20" column="10" selection-start-line="20" selection-start-column="10" selection-end-line="20" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cmd/goask-server/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="536">
+          <caret line="30" column="41" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="41" />
+          <folding>
+            <element signature="e#14#198#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configuration.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
         </state>
       </provider>
     </entry>

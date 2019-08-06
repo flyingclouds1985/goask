@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"testing"
-
 	"github.com/Alireza-Ta/goask/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -15,10 +14,12 @@ func TestPostLogin(t *testing.T) {
 		Password: "admin",
 	}
 	body, err := json.Marshal(user)
+
 	checkNil(err, "error in json marshal.")
 	res := testMakeRequest("POST", "/login", bytes.NewBuffer(body), nil)
 
 	var b map[string]interface{}
+
 	err = json.Unmarshal(res.Body.Bytes(), &b)
 	checkNil(err, "json unmarshal.")
 
