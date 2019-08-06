@@ -64,7 +64,9 @@ func (s *Server) Routes() {
 		}
 		// for testing purposes
 		public.GET("/test", func(c *gin.Context) {
-
+			c.JSON(200, gin.H{
+				"message": "pong",
+			})
 		})
 	}
 

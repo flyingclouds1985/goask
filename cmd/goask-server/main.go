@@ -8,11 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"os"
 )
 
 func main() {
-	root, err := os.Getwd()
+	//root, err := os.Getwd()
+	root := "/Users/admin/Desktop/GoProjects/src/github.com/Alireza-Ta/goask"
 	c, err := config.Load(root + "/configuration.json")
 	if err != nil {
 		panic(err)
@@ -28,5 +28,8 @@ func main() {
 	s := server.NewServer(store, gin.DebugMode, c)
 
 	fmt.Printf("App is running on %d\n", c.GetInt("server.port"))
-	http.ListenAndServe(string(c.GetInt("server.port")), s.Router)
+	err = http.ListenAndServe(c.GetString("server.domain"), s.Router)
+	if err != nil {
+		panic(err)
+	}
 }

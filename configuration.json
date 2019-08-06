@@ -9,7 +9,7 @@
 		"secretKey": "GMWJGSAPGATLMODYLUMG"
 	},
 	"server": {
-		"domain": "http://localhost:9090",
+		"domain": "localhost:9090",
 		"port": 9090
 	}
 }

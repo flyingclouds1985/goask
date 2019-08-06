@@ -11,8 +11,6 @@ schema:
 - name: goask
   path: cmd/goask-server/
   commands:
-    install:
-      status: true
     run:
       status: true
     fmt:
@@ -20,6 +18,11 @@ schema:
       args:
         - -s
         - -w
+    build:
+      status: true
+      method: go build
+      args:
+        - -race -mod=vendor
   args:
     - -mod=vendor
   watcher:

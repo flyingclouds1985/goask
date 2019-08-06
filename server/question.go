@@ -35,7 +35,6 @@ func (qapi *QuestionAPI) GetQuestion(c *gin.Context) {
 		JSONNotFound("Error question not found. ", err, c)
 		return
 	}
-
 	// rewrite url if the question title does not provide or isn't in correct format.
 	title := c.Param("question")
 	titleSlug := slug.Make(q.Title)

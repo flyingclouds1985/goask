@@ -6,7 +6,7 @@ import (
 
 	"github.com/Alireza-Ta/goask/model"
 
-	"github.com/appleboy/gin-jwt/v2"
+	jwt "github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"
 )
 
