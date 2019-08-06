@@ -9,13 +9,10 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 )
 
 func main() {
-	currentDir, err := os.Getwd()
-	root := filepath.Dir(filepath.Dir(currentDir))
-
+	root, err := os.Getwd()
 	c, err := config.Load(root + "/configuration.json")
 	if err != nil {
 		panic(err)
@@ -28,8 +25,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	server := server.NewServer(store, gin.DebugMode, c)
+	s := server.NewServer(store, gin.DebugMode, c)
 
-	fmt.Printf("App is running on %s\n", server.Config.GetString("server.port"))
-	http.ListenAndServe(server.Config.GetString("server.port"), server.Router)
+	fmt.Printf("App is running on %d\n", c.GetInt("server.port"))
+	http.ListenAndServe(string(c.GetInt("server.port")), s.Router)
 }
