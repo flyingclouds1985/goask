@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"github.com/Alireza-Ta/goask/model"
 	"github.com/stretchr/testify/assert"
+	"strings"
 	"testing"
 	"time"
-	"strings"
 )
 
 var questionTestCases = map[string]model.Question{
@@ -95,7 +95,7 @@ func TestGetQuestion(t *testing.T) {
 	location := redirectRes.Header().Get("Location")
 
 	s := strings.Split(location, "/")
-	slug := s[len(s) - 1] 
+	slug := s[len(s)-1]
 
 	newRes := testMakeRequest("GET", "/questions/1/"+slug, nil, nil)
 
