@@ -18,11 +18,11 @@ type AuthAPI struct {
 // Auth is the Authentication middleware.
 func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 	return &jwt.GinJWTMiddleware{
-		Realm:      a.jwtRealm,
-		Key:        []byte(a.jwtSecretKey),
-		Timeout:    time.Hour,
-		MaxRefresh: time.Hour,
-		IdentityKey: "username",
+		Realm:            a.jwtRealm,
+		Key:              []byte(a.jwtSecretKey),
+		Timeout:          time.Hour,
+		MaxRefresh:       time.Hour,
+		IdentityKey:      "username",
 		SigningAlgorithm: "HS256",
 
 		Authenticator: authenticator,
@@ -40,7 +40,7 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 			return claims[jwt.IdentityKey]
 		},
 
-		LoginResponse: func(c *gin.Context, code int, token string, expire time.Time){
+		LoginResponse: func(c *gin.Context, code int, token string, expire time.Time) {
 			c.JSON(http.StatusOK, gin.H{
 				"code":   http.StatusOK,
 				"token":  token,

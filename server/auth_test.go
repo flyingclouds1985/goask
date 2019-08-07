@@ -3,9 +3,9 @@ package server
 import (
 	"bytes"
 	"encoding/json"
-	"testing"
 	"github.com/Alireza-Ta/goask/model"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestPostLogin(t *testing.T) {

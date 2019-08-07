@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/Alireza-Ta/goask/model"
+	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
-	"github.com/stretchr/testify/assert"
+	"strings"
 )
 
 var questionTestCases = map[string]model.Question{
@@ -87,12 +88,16 @@ func TestGetQuestion(t *testing.T) {
 	defer TeardownSubTest()
 
 	body, err := json.Marshal(questionTestCases["complete"])
+
 	checkNil(err, " question: error in json marshal.")
 	oldRes := testMakeRequest("POST", "/questions/", bytes.NewBuffer(body), nil)
 	redirectRes := testMakeRequest("GET", "/questions/1", nil, nil)
 	location := redirectRes.Header().Get("Location")
 
-	newRes := testMakeRequest("GET", location, nil, nil)
+	s := strings.Split(location, "/")
+	slug := s[len(s) - 1] 
+
+	newRes := testMakeRequest("GET", "/questions/1/"+slug, nil, nil)
 
 	assert.Equal(t, oldRes.Body.String(), newRes.Body.String(), "got question")
 }
