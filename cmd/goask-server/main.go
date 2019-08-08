@@ -8,12 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"path"
+	"runtime"
+)
+
+var(
+	_, currentFilePath, _, _ = runtime.Caller(0)
+	rootPath = path.Dir(path.Dir(path.Dir(currentFilePath)))
 )
 
 func main() {
-	//root, err := os.Getwd()
-	root := "/Users/admin/Desktop/GoProjects/src/github.com/Alireza-Ta/goask"
-	c, err := config.Load(root + "/configuration.json")
+	c, err := config.Load(rootPath + "/configuration.json")
 	if err != nil {
 		panic(err)
 	}
