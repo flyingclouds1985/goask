@@ -1,6 +1,6 @@
 {
 	"database": {
-		"dbname": "GOASK",
+		"dbname": "goask",
 		"password": "secret",
 		"username": "postgres"
 	},

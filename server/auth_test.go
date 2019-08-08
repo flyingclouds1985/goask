@@ -9,14 +9,30 @@ import (
 )
 
 func TestPostLogin(t *testing.T) {
+	SetupSubTest()
+	defer TeardownSubTest()
+
 	user := &model.User{
 		Username: "admin",
-		Password: "admin",
+		Password: "12345678",
 	}
+
+	// create user
 	body, err := json.Marshal(user)
+	checkNil(err, "user: err in json parsing.")
+
+	res := testMakeRequest("POST", "/users/", bytes.NewBuffer([]byte(body)), nil)
+
+	var u model.User
+	err = json.Unmarshal(res.Body.Bytes(), &u)
+	checkNil(err, " user: err in json unmarshal.")
+	assert.Equal(t, u.Username, user.Username, "got username.")
+	// end create user
+
+	body, err = json.Marshal(user)
 
 	checkNil(err, "error in json marshal.")
-	res := testMakeRequest("POST", "/login", bytes.NewBuffer(body), nil)
+	res = testMakeRequest("POST", "/login", bytes.NewBuffer(body), nil)
 
 	var b map[string]interface{}
 

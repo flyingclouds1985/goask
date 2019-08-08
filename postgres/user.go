@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"github.com/Alireza-Ta/goask/model"
+	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
@@ -24,6 +25,21 @@ func (s *Store) FindUserByName(username string) (*model.User, error) {
 	err := s.DB.Model(u).Where("username = ?", username).Select()
 
 	return u, err
+}
+
+
+func (s *Store) FindUserByLoginCredentials(username, password string) (*model.User, error) {
+	u := new(model.User)
+	err := s.DB.Model(u).Where("username = ?", username).Select()
+	if err != nil {
+		return nil ,err
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+
+	if err != nil {
+		return nil ,err
+	}
+	return u.Copy(), nil
 }
 
 // UpdateUserExcludePassword updates user but not password.

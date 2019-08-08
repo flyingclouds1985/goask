@@ -9,15 +9,16 @@ import (
 var (
 	errUsernameRegex    = errors.New("Invalid username.It must start with alphabet")
 	errPasswordRequired = errors.New("Password field required")
+	errPasswordMisMatch = errors.New("Password and ConfirmPassword mismatch.")
 	regexUsername       = regexp.MustCompile("^[a-zA-Z][a-zA-Z0-9-_.]+$")
 )
 
 // User model
 type User struct {
 	Id              int       `json: "id"`
-	Username        string    `json:"username" binding:"required,min=5,max=32"`
-	Email           string    `json:"email" binding:"required,email"`
-	Password        string    `json:"password" binding:"omitempty,min=8,max=64,eqfield=ConfirmPassword"`
+	Username        string    `json:"username" sql:",unique" binding:"required,min=5,max=32"`
+	Email           string    `json:"email" sql:",unique" binding:"omitempty,email"`
+	Password        string    `json:"password" binding:"omitempty,min=8,max=64"`
 	ConfirmPassword string    `json:"confirmPassword" sql:"-"`
 	Bio             string    `json:"bio"`
 	CreatedAt       time.Time `json:"created_at" sql:"type:timestamptz,default:now()"`
@@ -76,6 +77,8 @@ func (u *User) Validate() error {
 		return errUsernameRegex
 	case u.Password == "":
 		return errPasswordRequired
+	case u.Password != u.ConfirmPassword:
+		return errPasswordMisMatch
 	default:
 		return nil
 	}

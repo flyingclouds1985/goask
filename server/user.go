@@ -14,6 +14,7 @@ type UserStore interface {
 	FindUser(id int) (*model.User, error)
 	FindUserByName(username string) (*model.User, error)
 	UpdateUserExcludePassword(user *model.User) (int, error)
+	FindUserByLoginCredentials(username, password string) (*model.User, error)
 }
 
 //UserAPI provides handlers for managing users.

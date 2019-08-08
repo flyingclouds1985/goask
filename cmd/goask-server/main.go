@@ -12,9 +12,9 @@ import (
 	"runtime"
 )
 
-var(
+var (
 	_, currentFilePath, _, _ = runtime.Caller(0)
-	rootPath = path.Dir(path.Dir(path.Dir(currentFilePath)))
+	rootPath                 = path.Dir(path.Dir(path.Dir(currentFilePath)))
 )
 
 func main() {

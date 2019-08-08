@@ -39,7 +39,7 @@ func initPostgresConfig(config []Config) Config {
 	defaultConfig := Config{
 		Username: "postgres",
 		Password: "secret",
-		DBname:   "GOASK",
+		DBname:   "goask",
 	}
 	switch len(config) {
 	case 0:

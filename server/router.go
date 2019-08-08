@@ -1,6 +1,7 @@
 package server
 
 import (
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -21,6 +22,7 @@ func (s *Server) Routes() {
 	authHandler := AuthAPI{
 		jwtRealm:     s.Config.GetString("router.realm"),
 		jwtSecretKey: s.Config.GetString("router.secretKey"),
+		store: s.Store,
 	}
 
 	questionHandler := QuestionAPI{
@@ -64,8 +66,12 @@ func (s *Server) Routes() {
 		}
 		// for testing purposes
 		public.GET("/test", func(c *gin.Context) {
+			u, err := s.Store.FindUserByLoginCredentials(c.Query("username"), c.Query("password"))
+			if err != nil {
+				panic(err)
+			}
 			c.JSON(200, gin.H{
-				"message": "pong",
+				"data": u,
 			})
 		})
 	}
@@ -78,9 +84,12 @@ func (s *Server) Routes() {
 		{
 			auth.GET("refresh_token", authHandler.Auth().RefreshHandler)
 			auth.GET("/hello", func(c *gin.Context) {
+				claims := jwt.ExtractClaims(c)
+				user, _ := c.Get("id")
 				c.JSON(200, gin.H{
-					"data": "asd",
-					"c":    c.Keys,
+					"userID":   claims,
+					"userName": user,
+					"text":     "Hello World.",
 				})
 			})
 		}

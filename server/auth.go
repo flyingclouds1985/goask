@@ -1,6 +1,7 @@
 package server
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -13,11 +14,12 @@ import (
 type AuthAPI struct {
 	jwtRealm     string
 	jwtSecretKey string
+	store UserStore
 }
 
 // Auth is the Authentication middleware.
 func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
-	return &jwt.GinJWTMiddleware{
+	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:            a.jwtRealm,
 		Key:              []byte(a.jwtSecretKey),
 		Timeout:          time.Hour,
@@ -25,11 +27,20 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 		IdentityKey:      "username",
 		SigningAlgorithm: "HS256",
 
-		Authenticator: authenticator,
+		Authenticator: a.authenticator,
 
-		Authorizator: authorizator,
+		Authorizator: a.authorizator,
 
-		Unauthorized: unauthorized,
+		Unauthorized: a.unauthorized,
+
+		PayloadFunc: func(data interface{}) jwt.MapClaims {
+			if u, ok := data.(*model.User); ok {
+				return jwt.MapClaims{
+					"user": u,
+				}
+			}
+			return jwt.MapClaims{}
+		},
 
 		IdentityHandler: func(c *gin.Context) interface{} {
 			// claims := jwt.ExtractClaims(c)
@@ -64,20 +75,32 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 		TimeFunc: time.Now,
 
 		SendAuthorization: true,
-	}
-}
+	})
 
-func authenticator(c *gin.Context) (interface{}, error) {
-	var data model.User
-	c.ShouldBindJSON(&data)
-	if data.Username == "admin" && data.Password == "admin" {
-		return "admin", nil
+	if err != nil {
+		log.Fatal("JWT Error: ", err)
 	}
 
-	return "admin", jwt.ErrFailedAuthentication
+	return authMiddleware
 }
 
-func authorizator(data interface{}, c *gin.Context) bool {
+func (a *AuthAPI) authenticator(c *gin.Context) (interface{}, error) {
+	var loginValues model.User
+
+	if err := c.ShouldBindJSON(&loginValues); err != nil {
+		return err, jwt.ErrMissingLoginValues
+	}
+	username := loginValues.Username
+	password := loginValues.Password
+	user, err := a.store.FindUserByLoginCredentials(username, password)
+	if err !=nil {
+		return nil, jwt.ErrFailedAuthentication
+	}
+
+	return user, nil
+}
+
+func (a *AuthAPI) authorizator(data interface{}, c *gin.Context) bool {
 	// if v, ok := data.(string); ok && v == "admin" {
 	// 	return true
 	// }
@@ -86,10 +109,9 @@ func authorizator(data interface{}, c *gin.Context) bool {
 	return true
 }
 
-func unauthorized(c *gin.Context, code int, message string) {
+func (a *AuthAPI) unauthorized(c *gin.Context, code int, message string) {
 	c.JSON(code, gin.H{
 		"code":    code,
 		"message": message,
-		"context": c.Keys,
 	})
 }
