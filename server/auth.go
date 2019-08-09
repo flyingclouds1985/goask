@@ -52,9 +52,9 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 			claims := jwt.ExtractClaims(c)
 			user := claims["user"].(map[string]interface{})
 			return &model.User{
-				Id:int(user["id"].(float64)),
+				Id:       int(user["id"].(float64)),
 				Username: user["username"].(string),
-				Email: user["email"].(string),
+				Email:    user["email"].(string),
 			}
 		},
 
@@ -121,6 +121,6 @@ func (a *AuthAPI) unauthorized(c *gin.Context, code int, message string) {
 	c.JSON(code, gin.H{
 		"code":    code,
 		"message": message,
-		"err": jwt.ErrExpiredToken.Error(),
+		"err":     jwt.ErrExpiredToken.Error(),
 	})
 }
