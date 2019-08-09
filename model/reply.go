@@ -7,7 +7,7 @@ import (
 type Replies []Reply
 
 type Reply struct {
-	Id         int       `json: "id"`
+	Id         int       `json:"id"`
 	Body       string    `json:"body" sql:"type:text" binding:"required,min=10"`
 	AuthorID   int       `json:"author_id"`
 	Author     *User     `json:"author"`

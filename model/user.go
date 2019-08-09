@@ -15,7 +15,7 @@ var (
 
 // User model
 type User struct {
-	Id              int       `json: "id"`
+	Id              int       `json:"id"`
 	Username        string    `json:"username" sql:",unique" binding:"required,min=5,max=32"`
 	Email           string    `json:"email" sql:",unique" binding:"omitempty,email"`
 	Password        string    `json:"password" binding:"omitempty,min=8,max=64"`

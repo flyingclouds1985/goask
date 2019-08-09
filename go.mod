@@ -15,6 +15,7 @@ require (
 	github.com/labstack/gommon v0.2.9 // indirect
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.5.0 // indirect
+	github.com/oxequa/realize v2.0.2+incompatible // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be // indirect
 	github.com/stretchr/testify v1.3.0

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -29,7 +30,7 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 		Key:              []byte(a.jwtSecretKey),
 		Timeout:          time.Hour,
 		MaxRefresh:       time.Hour,
-		IdentityKey:      "username",
+		IdentityKey:      "id",
 		SigningAlgorithm: "HS256",
 
 		Authenticator: a.authenticator,
@@ -48,12 +49,13 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 		},
 
 		IdentityHandler: func(c *gin.Context) interface{} {
-			// claims := jwt.ExtractClaims(c)
-			// return &model.User{
-			// 	Username: claims["id"].(string),
-			// }
 			claims := jwt.ExtractClaims(c)
-			return claims[jwt.IdentityKey]
+			user := claims["user"].(map[string]interface{})
+			return &model.User{
+				Id:int(user["id"].(float64)),
+				Username: user["username"].(string),
+				Email: user["email"].(string),
+			}
 		},
 
 		LoginResponse: func(c *gin.Context, code int, token string, expire time.Time) {
@@ -105,11 +107,12 @@ func (a *AuthAPI) authenticator(c *gin.Context) (interface{}, error) {
 	return user, nil
 }
 
+// data is the returned value of IdentityHandler.
 func (a *AuthAPI) authorizator(data interface{}, c *gin.Context) bool {
 	// if v, ok := data.(string); ok && v == "admin" {
 	// 	return true
 	// }
-
+	fmt.Println("data: g", data)
 	// return false
 	return true
 }
@@ -118,5 +121,6 @@ func (a *AuthAPI) unauthorized(c *gin.Context, code int, message string) {
 	c.JSON(code, gin.H{
 		"code":    code,
 		"message": message,
+		"err": jwt.ErrExpiredToken.Error(),
 	})
 }

@@ -1,39 +1,23 @@
 settings:
   legacy:
     force: false
-    interval: 1s
-server:
-  status: true
-  open: true
-  port: 9090
-  host: localhost
+    interval: 0s
 schema:
 - name: goask
-  path: cmd/goask-server/
+  path: ./cmd/goask-server
   commands:
     run:
       status: true
-    fmt:
-      status: true
       args:
-        - -s
-        - -w
-    build:
-      status: true
-      method: go build
-      args:
-        - -race -mod=vendor
-  args:
-    - -mod=vendor
+      - -mod=vendor
   watcher:
-    paths:
-    - ../../
     extensions:
     - go
-    - html
-    - tmpl
-    ignored_paths:
-    - ../../.git
-    - ../../.realize
-    - ../../vendor
-    - ../../web
+    paths:
+    - ../../
+    ignore:
+      paths:
+      - ../../.git
+      - ../../.realize
+      - ../../vendor
+      - ../../web

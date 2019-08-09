@@ -7,7 +7,7 @@ import (
 type Comments []Comment
 
 type Comment struct {
-	Id            int       `json: "id"`
+	Id            int       `json:"id"`
 	Body          string    `json:"body" sql:"type:text" binding:"required,min=2"`
 	AuthorID      int       `json:"author_id"`
 	Author        *User     `json:"author"`
