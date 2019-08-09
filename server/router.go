@@ -22,7 +22,7 @@ func (s *Server) Routes() {
 	authHandler := AuthAPI{
 		jwtRealm:     s.Config.GetString("router.realm"),
 		jwtSecretKey: s.Config.GetString("router.secretKey"),
-		store: s.Store,
+		store:        s.Store,
 	}
 
 	questionHandler := QuestionAPI{

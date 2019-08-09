@@ -10,11 +10,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// AuthStore manages encapsulated database access.
+type AuthStore interface {
+	FindUserByLoginCredentials(username, password string) (*model.User, error)
+}
+
 //AuthAPI manages authentication stuffs.
 type AuthAPI struct {
 	jwtRealm     string
 	jwtSecretKey string
-	store UserStore
+	store        UserStore
 }
 
 // Auth is the Authentication middleware.
@@ -93,7 +98,7 @@ func (a *AuthAPI) authenticator(c *gin.Context) (interface{}, error) {
 	username := loginValues.Username
 	password := loginValues.Password
 	user, err := a.store.FindUserByLoginCredentials(username, password)
-	if err !=nil {
+	if err != nil {
 		return nil, jwt.ErrFailedAuthentication
 	}
 

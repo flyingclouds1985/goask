@@ -13,8 +13,9 @@ func TestPostLogin(t *testing.T) {
 	defer TeardownSubTest()
 
 	user := &model.User{
-		Username: "admin",
-		Password: "12345678",
+		Username:        "admin",
+		Password:        "12345678",
+		ConfirmPassword: "12345678",
 	}
 
 	// create user
