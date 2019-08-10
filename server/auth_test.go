@@ -14,6 +14,7 @@ func TestPostLogin(t *testing.T) {
 
 	user := &model.User{
 		Username:        "admin",
+		Email:           "admin@example.com",
 		Password:        "12345678",
 		ConfirmPassword: "12345678",
 	}

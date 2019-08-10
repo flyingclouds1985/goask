@@ -2,13 +2,13 @@ package server
 
 import (
 	"fmt"
-	"log"
-	"net/http"
-	"time"
-
 	"github.com/Alireza-Ta/goask/model"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"gopkg.in/go-playground/validator.v8"
+	"log"
+	"net/http"
+	"time"
 )
 
 // AuthStore manages encapsulated database access.
@@ -94,9 +94,18 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 func (a *AuthAPI) authenticator(c *gin.Context) (interface{}, error) {
 	var loginValues model.User
 
-	if err := c.ShouldBindJSON(&loginValues); err != nil {
+	err := c.ShouldBindJSON(&loginValues)
+
+	// ignore eqfield on Password field
+	if ve, ok := err.(validator.ValidationErrors); ok == true {
+		if len(ve) == 1 && ve["User.Password"].Tag == "eqfield" {
+			err = nil
+		}
+	}
+	if err != nil {
 		return err, jwt.ErrMissingLoginValues
 	}
+
 	username := loginValues.Username
 	password := loginValues.Password
 	user, err := a.store.FindUserByLoginCredentials(username, password)
@@ -121,6 +130,6 @@ func (a *AuthAPI) unauthorized(c *gin.Context, code int, message string) {
 	c.JSON(code, gin.H{
 		"code":    code,
 		"message": message,
-		"err":     jwt.ErrExpiredToken.Error(),
+		"err":     c.Err(),
 	})
 }
