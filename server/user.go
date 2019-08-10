@@ -38,8 +38,14 @@ func (uapi *UserAPI) GetUser(c *gin.Context) {
 func (uapi *UserAPI) PostUser(c *gin.Context) {
 	in := new(model.User)
 	err := c.ShouldBindJSON(in)
+	validationErr := validator.ValidationErrors{}
 
-	validationErr := err.(validator.ValidationErrors)
+	if ve, ok := err.(validator.ValidationErrors); ok != true {
+		for k, v := range ve {
+			validationErr[k] = v
+		}
+	}
+
 	requireFields := map[string]string{
 		"Username":        in.Username,
 		"Email":           in.Email,
@@ -66,10 +72,11 @@ func (uapi *UserAPI) PostUser(c *gin.Context) {
 		return
 	}
 
-	if err := in.Validate(); err != nil {
-		JSONBadRequest("Error inserting user. ", err, c)
-		return
-	}
+	// TODO : check it and delete
+	// if err := in.Validate(); err != nil {
+	// 	JSONBadRequest("Error inserting user. ", err, c)
+	// 	return
+	// }
 
 	u := new(model.User)
 	u.Username = in.Username
