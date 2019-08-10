@@ -49,7 +49,7 @@ func (rapi *ReplyAPI) PostReply(c *gin.Context) {
 	// r.AuthorID = claims["id"]
 
 	if err := rapi.store.CreateReply(r); err != nil {
-		JSONInternalServer("Error inserting reply. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 
@@ -70,7 +70,7 @@ func (rapi *ReplyAPI) PatchReply(c *gin.Context) {
 	// }
 
 	if err := rapi.store.UpdateReply(in); err != nil {
-		JSONInternalServer("Error updating reply. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 

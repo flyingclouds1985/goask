@@ -37,11 +37,11 @@ func JSONNotFound(customErr string, err error, c *gin.Context) {
 }
 
 // JSONInternalServer responds not found error in json format.
-func JSONInternalServer(customErr string, err error, c *gin.Context) {
+func JSONInternalServer(err error, c *gin.Context) {
 	c.JSON(http.StatusInternalServerError, gin.H{
 		"errors": map[string]interface{}{
-			"status":  500,
-			"message": customErr + " Actual Error: " + err.Error(),
+			"status": 500,
+			"error":  err.Error(),
 		},
 	})
 }

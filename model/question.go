@@ -21,19 +21,3 @@ type Question struct {
 	CreatedAt time.Time `json:"created_at" sql:"type:timestamptz,default:now()"`
 	UpdatedAt time.Time `json:"updated_at" sql:"type:timestamptz,default:now()"`
 }
-
-//
-//func (q *Question) BeforeUpdate(ctx context.Context) (context.Context, error) {
-//	q.UpdatedAt = UnixTime()
-//	if q.CreatedAt.IsZero() {
-//		data := new(Question)
-//		data.Id = q.Id
-//		var db orm.DB
-//		err := db.Model(data).Column("created_at").WherePK().Select()
-//		if err != nil {
-//			log.Fatal("Error in finding question created_at column.", err.Error())
-//		}
-//		q.CreatedAt = data.CreatedAt
-//	}
-//	return ctx, nil
-//}

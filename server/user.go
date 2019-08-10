@@ -5,6 +5,7 @@ import (
 	"github.com/Alireza-Ta/goask/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"gopkg.in/go-playground/validator.v8"
 	"net/http"
 )
 
@@ -36,10 +37,35 @@ func (uapi *UserAPI) GetUser(c *gin.Context) {
 // PostUser create new user.
 func (uapi *UserAPI) PostUser(c *gin.Context) {
 	in := new(model.User)
-	if err := c.ShouldBindJSON(in); err != nil {
-		JSONValidation(validation.Messages(err), c)
+	err := c.ShouldBindJSON(in)
+
+	validationErr := err.(validator.ValidationErrors)
+	requireFields := map[string]string{
+		"Username":        in.Username,
+		"Email":           in.Email,
+		"Password":        in.Password,
+		"ConfirmPassword": in.ConfirmPassword,
+	}
+
+	for k, v := range requireFields {
+		if v == "" {
+			validationErr[k] = &validator.FieldError{
+				FieldNamespace: k,
+				Field:          k,
+				Name:           k,
+				NameNamespace:  k,
+				Tag:            "required",
+				ActualTag:      "required",
+				Kind:           24,
+			}
+		}
+	}
+
+	if len(validationErr) != 0 {
+		JSONValidation(validation.Messages(validationErr), c)
 		return
 	}
+
 	if err := in.Validate(); err != nil {
 		JSONBadRequest("Error inserting user. ", err, c)
 		return
@@ -49,7 +75,7 @@ func (uapi *UserAPI) PostUser(c *gin.Context) {
 	u.Username = in.Username
 	pass, err := HashPassword(in.Password)
 	if err != nil {
-		JSONInternalServer("Error inserting user. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 	u.Password = pass
@@ -57,7 +83,7 @@ func (uapi *UserAPI) PostUser(c *gin.Context) {
 	u.Bio = in.Bio
 
 	if err = uapi.store.CreateUser(u); err != nil {
-		JSONInternalServer("Error inserting user. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 
@@ -74,7 +100,7 @@ func (uapi *UserAPI) PatchUser(c *gin.Context) {
 
 	u, err := uapi.store.FindUser(in.Id)
 	if err != nil {
-		JSONInternalServer("Error finding user. ", err, c)
+		JSONInternalServer(err, c)
 	}
 
 	u.Username = in.Username
@@ -90,13 +116,13 @@ func (uapi *UserAPI) PatchUser(c *gin.Context) {
 	//}
 	rowsAffected, err := uapi.store.UpdateUserExcludePassword(u)
 	if err != nil {
-		JSONInternalServer("Error updating user. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 
 	if rowsAffected < 0 {
 		NoRowsAffected := errors.New("No Rows Affected")
-		JSONInternalServer("Error there's no such user. ", NoRowsAffected, c)
+		JSONInternalServer(NoRowsAffected, c)
 	}
 
 	c.JSON(http.StatusOK, u.Copy())

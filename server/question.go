@@ -62,7 +62,7 @@ func (qapi *QuestionAPI) PostQuestion(c *gin.Context) {
 	q.Tags = in.Tags
 	// q.AuthorID = claims["id"]
 	if err := qapi.store.CreateQuestion(q); err != nil {
-		JSONInternalServer("Error inserting question. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 	qapi.store.CreateTag(in.Tags, q.Id)
@@ -84,7 +84,7 @@ func (qapi *QuestionAPI) PatchQuestion(c *gin.Context) {
 	// }
 
 	if err := qapi.store.UpdateQuestion(in); err != nil {
-		JSONInternalServer("Error updating question. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 
@@ -108,7 +108,7 @@ func (qapi *QuestionAPI) PatchVoteQuestion(c *gin.Context) {
 
 	err = qapi.store.UpdateVote(q)
 	if err != nil {
-		JSONInternalServer("Error in question voting. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 

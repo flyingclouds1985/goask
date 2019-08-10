@@ -2,13 +2,35 @@ package postgres
 
 import (
 	"github.com/Alireza-Ta/goask/model"
+	"github.com/go-pg/pg"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
+type DBError struct {
+	message string
+}
+
+func (e DBError) Error() string {
+	return e.message
+}
+
 // CreateUser insert new user.
 func (s *Store) CreateUser(user *model.User) error {
-	return s.DB.Insert(user)
+	err := s.DB.Insert(user)
+	pgErr, ok := err.(pg.Error)
+	// check for duplicate values.
+	if ok && pgErr.IntegrityViolation() {
+		column := pgErr.Field('n')
+		switch column {
+		case "users_username_key":
+			return DBError{"This username exists. Please choose another one!"}
+		case "users_email_key":
+			return DBError{"This email exists. Please choose another one!"}
+		}
+	}
+
+	return err
 }
 
 // FindUser finds user based on id.

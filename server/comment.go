@@ -51,7 +51,7 @@ func (capi *CommentAPI) PostQuestionComment(c *gin.Context) {
 	comment.TrackableType = "Question"
 
 	if err := capi.store.CommentCreate(comment); err != nil {
-		JSONInternalServer("Error inserting question comment. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 
@@ -65,7 +65,7 @@ func (capi *CommentAPI) GetReplyCommentList(c *gin.Context) {
 	list, err := capi.store.ReplyCommentList(query)
 
 	if err != nil {
-		JSONInternalServer("Error finding reply comments list. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 
@@ -89,7 +89,7 @@ func (capi *CommentAPI) PostReplyComment(c *gin.Context) {
 	comment.TrackableType = "Reply"
 
 	if err := capi.store.CommentCreate(comment); err != nil {
-		JSONInternalServer("Error inserting reply comment. ", err, c)
+		JSONInternalServer(err, c)
 		return
 	}
 

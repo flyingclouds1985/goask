@@ -6,7 +6,7 @@ class Register extends Component {
     state = {
         hasError: false,
         errorMessages: {},
-    }
+    };
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -28,6 +28,8 @@ class Register extends Component {
         .then(res => {
             if (res.status === 200) {
                 this.success();
+            } else {
+                return res.json()
             }
             return res.json()
         })
@@ -35,20 +37,28 @@ class Register extends Component {
             if (data.errors !== undefined) {
                 this.errors(data)
             }            
+        }).catch(err => {
+            console.log("err: ", err)
         })
-    }
+    };
 
     success = () => {
         this.setState({hasError: false});
-        swal('Let\'s go', 'You have been signed up successfully!', 'success')
+        swal('Let\'s go', 'You have been signed up successfully!', 'success');
         setTimeout(() => {
                 window.location = '/login';
         }, 2000)
-    }
+    };
 
     errors = (data) => {
-        this.setState({hasError: true, errorMessages: data.errors.message})        
-    }
+        if(data.errors.status === 500) {
+            this.setState({hasError: true, errorMessages: data.errors.error})
+        }
+        if(data.errors.status === 400) {
+            this.setState({hasError: true, errorMessages: data.errors.message})
+        }
+
+    };
 
     render () {
         return (
@@ -56,7 +66,7 @@ class Register extends Component {
                 <div className="content-wrapper">
                     {
                         this.state.hasError
-                        ? <div> 
+                        ? <div>
                             {Object.keys(this.state.errorMessages).map(field => {
                                     return (
                                             <div key={field} className="alert alert-danger" role="alert">
