@@ -15,10 +15,10 @@ var (
 // User model
 type User struct {
 	Id              int       `json:"id"`
-	Username        string    `json:"username" sql:",unique" binding:"min=5,max=32"`
-	Email           string    `json:"email" sql:",unique" binding:"omitempty,email"`
-	Password        string    `json:"password" binding:"omitempty,min=8,max=64,eqfield=ConfirmPassword"`
-	ConfirmPassword string    `json:"confirmPassword" sql:"-" binding:"omitempty"`
+	Username        string    `json:"username" sql:",unique" binding:"required,min=5,max=32"`
+	Email           string    `json:"email" sql:",unique" binding:"required,omitempty,email"`
+	Password        string    `json:"password" binding:"required,omitempty,min=8,max=64,eqfield=ConfirmPassword"`
+	ConfirmPassword string    `json:"confirmPassword" sql:"-" binding:"required,omitempty"`
 	Bio             string    `json:"bio"`
 	CreatedAt       time.Time `json:"created_at" sql:"type:timestamptz,default:now()"`
 	UpdatedAt       time.Time `json:"updated_at" sql:"type:timestamptz,default:now()"`

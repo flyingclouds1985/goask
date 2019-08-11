@@ -4,6 +4,7 @@ import (
 	"github.com/Alireza-Ta/goask/model"
 	"github.com/Alireza-Ta/goask/validation"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/pkg/errors"
 	"gopkg.in/go-playground/validator.v8"
 	"net/http"
@@ -38,39 +39,43 @@ func (uapi *UserAPI) GetUser(c *gin.Context) {
 func (uapi *UserAPI) PostUser(c *gin.Context) {
 	in := new(model.User)
 	err := c.ShouldBindJSON(in)
-	validationErr := validator.ValidationErrors{}
-
-	if ve, ok := err.(validator.ValidationErrors); ok != true {
-		for k, v := range ve {
-			validationErr[k] = v
-		}
-	}
-
-	requireFields := map[string]string{
-		"Username":        in.Username,
-		"Email":           in.Email,
-		"Password":        in.Password,
-		"ConfirmPassword": in.ConfirmPassword,
-	}
-
-	for k, v := range requireFields {
-		if v == "" {
-			validationErr[k] = &validator.FieldError{
-				FieldNamespace: k,
-				Field:          k,
-				Name:           k,
-				NameNamespace:  k,
-				Tag:            "required",
-				ActualTag:      "required",
-				Kind:           24,
-			}
-		}
-	}
-
-	if len(validationErr) != 0 {
-		JSONValidation(validation.Messages(validationErr), c)
+	if err != nil {
+		JSONValidation(validation.Messages(err), c)
 		return
 	}
+	//validationErr := validator.ValidationErrors{}
+	//
+	//if ve, ok := err.(validator.ValidationErrors); ok != true {
+	//	for k, v := range ve {
+	//		validationErr[k] = v
+	//	}
+	//}
+
+	//requireFields := map[string]string{
+	//	"Username":        in.Username,
+	//	"Email":           in.Email,
+	//	"Password":        in.Password,
+	//	"ConfirmPassword": in.ConfirmPassword,
+	//}
+
+	//for k, v := range requireFields {
+	//	if v == "" {
+	//		validationErr[k] = &validator.FieldError{
+	//			FieldNamespace: k,
+	//			Field:          k,
+	//			Name:           k,
+	//			NameNamespace:  k,
+	//			Tag:            "required",
+	//			ActualTag:      "required",
+	//			Kind:           24,
+	//		}
+	//	}
+	//}
+	//
+	//if len(validationErr) != 0 {
+	//	JSONValidation(validation.Messages(validationErr), c)
+	//	return
+	//}
 
 	// TODO : check it and delete
 	// if err := in.Validate(); err != nil {
@@ -100,7 +105,14 @@ func (uapi *UserAPI) PostUser(c *gin.Context) {
 // PatchUser updates user.
 func (uapi *UserAPI) PatchUser(c *gin.Context) {
 	in := new(model.User)
-	if err := c.ShouldBindJSON(in); err != nil {
+	err := c.ShouldBindJSON(in)
+
+	// Ignoring all required fields, because its a patch request.
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		err = v.StructExcept(in, "Username", "Email", "Password", "ConfirmPassword")
+	}
+
+	if err != nil {
 		JSONValidation(validation.Messages(err), c)
 		return
 	}

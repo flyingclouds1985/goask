@@ -5,6 +5,7 @@ import (
 	"github.com/Alireza-Ta/goask/model"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"gopkg.in/go-playground/validator.v8"
 	"log"
 	"net/http"
@@ -96,21 +97,27 @@ func (a *AuthAPI) authenticator(c *gin.Context) (interface{}, error) {
 
 	err := c.ShouldBindJSON(&loginValues)
 
-	// ignore eqfield on Password field
-	if ve, ok := err.(validator.ValidationErrors); ok == true {
-		if len(ve) == 1 && ve["User.Password"].Tag == "eqfield" {
-			err = nil
+	// Ignore required on ConfirmPassword and Email fields.
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		err = v.StructExcept(loginValues, "ConfirmPassword", "Email")
+		//Ignore eqfield on Password field.
+		if ve, ok := err.(validator.ValidationErrors); ok {
+			if ve["User.Password"].Tag == "eqfield" {
+				delete(ve, "User.Password")
+				err = ve
+			}
 		}
 	}
-	if err != nil {
-		return err, jwt.ErrMissingLoginValues
+
+	if err != nil && len(err.(validator.ValidationErrors)) != 0 {
+		return nil, err
 	}
 
 	username := loginValues.Username
 	password := loginValues.Password
 	user, err := a.store.FindUserByLoginCredentials(username, password)
 	if err != nil {
-		return nil, jwt.ErrFailedAuthentication
+		return nil, err
 	}
 
 	return user, nil

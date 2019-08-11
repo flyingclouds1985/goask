@@ -3,6 +3,7 @@ package postgres
 import (
 	"github.com/Alireza-Ta/goask/model"
 	"github.com/go-pg/pg"
+	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
@@ -49,16 +50,20 @@ func (s *Store) FindUserByName(username string) (*model.User, error) {
 	return u, err
 }
 
+// FindUserByLoginCredentials requires username and password fields to check authenticity in database.
 func (s *Store) FindUserByLoginCredentials(username, password string) (*model.User, error) {
-	u := new(model.User)
+	var (
+		loginFailedErr = errors.New("Username or password is not correct!")
+		u              = new(model.User)
+	)
 	err := s.DB.Model(u).Where("username = ?", username).Select()
 	if err != nil {
-		return nil, err
+		return nil, loginFailedErr
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 
 	if err != nil {
-		return nil, err
+		return nil, loginFailedErr
 	}
 	return u.Copy(), nil
 }
