@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/Alireza-Ta/goask/model"
+	"github.com/Alireza-Ta/goask/validation"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -11,6 +12,8 @@ import (
 	"net/http"
 	"time"
 )
+
+var validationErr map[string]string
 
 // AuthStore manages encapsulated database access.
 type AuthStore interface {
@@ -22,6 +25,7 @@ type AuthAPI struct {
 	jwtRealm     string
 	jwtSecretKey string
 	store        UserStore
+	errors map[string]interface{}
 }
 
 // Auth is the Authentication middleware.
@@ -39,6 +43,14 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 		Authorizator: a.authorizator,
 
 		Unauthorized: a.unauthorized,
+
+		HTTPStatusMessageFunc: func(e error, c *gin.Context) string {
+			if ve, ok := e.(validator.ValidationErrors); ok {
+				validationErr = validation.Messages(ve)
+			}
+
+			return e.Error()
+		},
 
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if u, ok := data.(*model.User); ok {
@@ -103,6 +115,7 @@ func (a *AuthAPI) authenticator(c *gin.Context) (interface{}, error) {
 		//Ignore eqfield on Password field.
 		if ve, ok := err.(validator.ValidationErrors); ok {
 			if ve["User.Password"].Tag == "eqfield" {
+				fmt.Println("ccc",ve)
 				delete(ve, "User.Password")
 				err = ve
 			}
@@ -134,9 +147,12 @@ func (a *AuthAPI) authorizator(data interface{}, c *gin.Context) bool {
 }
 
 func (a *AuthAPI) unauthorized(c *gin.Context, code int, message string) {
-	c.JSON(code, gin.H{
-		"code":    code,
-		"message": message,
-		"err":     c.Err(),
-	})
+	if validationErr != nil {
+		JSONValidation(validationErr, c)
+	} else {
+		c.JSON(code, gin.H{
+			"code":    code,
+			"message": message,
+		})
+	}
 }

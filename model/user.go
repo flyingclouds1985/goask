@@ -1,16 +1,13 @@
 package model
 
 import (
-	"errors"
-	"regexp"
 	"time"
 )
 
-var (
-	errUsernameRegex    = errors.New("Invalid username.It must start with alphabet")
-	errPasswordMisMatch = errors.New("Password and confirm password mismatch.")
-	regexUsername       = regexp.MustCompile("^[a-zA-Z][a-zA-Z0-9-_.]+$")
-)
+//var (
+//	errUsernameRegex    = errors.New("Invalid username.It must start with alphabet")
+//	regexUsername       = regexp.MustCompile("^[a-zA-Z][a-zA-Z0-9-_.]+$")
+//)
 
 // User model
 type User struct {
@@ -46,14 +43,3 @@ func (u *User) ExcludeTimes() *User {
 	}
 }
 
-// Validate validates the credentials.
-func (u *User) Validate() error {
-	switch {
-	case !regexUsername.MatchString(u.Username):
-		return errUsernameRegex
-	case u.Password != u.ConfirmPassword:
-		return errPasswordMisMatch
-	default:
-		return nil
-	}
-}

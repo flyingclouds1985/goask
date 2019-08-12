@@ -36,9 +36,7 @@ class Register extends Component {
         .then(data => {
             if (data.errors !== undefined) {
                 this.errors(data)
-            }            
-        }).catch(err => {
-            console.log("err: ", err)
+            }
         })
     };
 
@@ -51,13 +49,7 @@ class Register extends Component {
     };
 
     errors = (data) => {
-        if(data.errors.status === 500) {
-            this.setState({hasError: true, errorMessages: data.errors.error})
-        }
-        if(data.errors.status === 400) {
-            this.setState({hasError: true, errorMessages: data.errors.message})
-        }
-
+        this.setState({hasError: true, errorMessages: data.errors.message})
     };
 
     render () {

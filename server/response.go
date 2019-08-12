@@ -41,7 +41,17 @@ func JSONInternalServer(err error, c *gin.Context) {
 	c.JSON(http.StatusInternalServerError, gin.H{
 		"errors": map[string]interface{}{
 			"status": 500,
-			"error":  err.Error(),
+			"message":  map[string]interface{}{"error": err.Error()},
+		},
+	})
+}
+
+// JSONUnauthorizedRequest responds unauthorized error in json format.
+func JSONUnauthorizedRequest(message map[string]interface{}, c *gin.Context) {
+	c.JSON(http.StatusUnauthorized, gin.H{
+		"errors": map[string]interface{}{
+			"status": 401,
+			"message":  message,
 		},
 	})
 }

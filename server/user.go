@@ -43,45 +43,6 @@ func (uapi *UserAPI) PostUser(c *gin.Context) {
 		JSONValidation(validation.Messages(err), c)
 		return
 	}
-	//validationErr := validator.ValidationErrors{}
-	//
-	//if ve, ok := err.(validator.ValidationErrors); ok != true {
-	//	for k, v := range ve {
-	//		validationErr[k] = v
-	//	}
-	//}
-
-	//requireFields := map[string]string{
-	//	"Username":        in.Username,
-	//	"Email":           in.Email,
-	//	"Password":        in.Password,
-	//	"ConfirmPassword": in.ConfirmPassword,
-	//}
-
-	//for k, v := range requireFields {
-	//	if v == "" {
-	//		validationErr[k] = &validator.FieldError{
-	//			FieldNamespace: k,
-	//			Field:          k,
-	//			Name:           k,
-	//			NameNamespace:  k,
-	//			Tag:            "required",
-	//			ActualTag:      "required",
-	//			Kind:           24,
-	//		}
-	//	}
-	//}
-	//
-	//if len(validationErr) != 0 {
-	//	JSONValidation(validation.Messages(validationErr), c)
-	//	return
-	//}
-
-	// TODO : check it and delete
-	// if err := in.Validate(); err != nil {
-	// 	JSONBadRequest("Error inserting user. ", err, c)
-	// 	return
-	// }
 
 	u := new(model.User)
 	u.Username = in.Username
