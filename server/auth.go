@@ -25,7 +25,7 @@ type AuthAPI struct {
 	jwtRealm     string
 	jwtSecretKey string
 	store        UserStore
-	errors map[string]interface{}
+	errors       map[string]interface{}
 }
 
 // Auth is the Authentication middleware.
@@ -115,7 +115,7 @@ func (a *AuthAPI) authenticator(c *gin.Context) (interface{}, error) {
 		//Ignore eqfield on Password field.
 		if ve, ok := err.(validator.ValidationErrors); ok {
 			if ve["User.Password"].Tag == "eqfield" {
-				fmt.Println("ccc",ve)
+				fmt.Println("ccc", ve)
 				delete(ve, "User.Password")
 				err = ve
 			}

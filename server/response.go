@@ -40,8 +40,8 @@ func JSONNotFound(customErr string, err error, c *gin.Context) {
 func JSONInternalServer(err error, c *gin.Context) {
 	c.JSON(http.StatusInternalServerError, gin.H{
 		"errors": map[string]interface{}{
-			"status": 500,
-			"message":  map[string]interface{}{"error": err.Error()},
+			"status":  500,
+			"message": map[string]interface{}{"error": err.Error()},
 		},
 	})
 }
@@ -50,8 +50,8 @@ func JSONInternalServer(err error, c *gin.Context) {
 func JSONUnauthorizedRequest(message map[string]interface{}, c *gin.Context) {
 	c.JSON(http.StatusUnauthorized, gin.H{
 		"errors": map[string]interface{}{
-			"status": 401,
-			"message":  message,
+			"status":  401,
+			"message": message,
 		},
 	})
 }

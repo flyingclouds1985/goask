@@ -42,4 +42,3 @@ func (u *User) ExcludeTimes() *User {
 		Bio:      u.Bio,
 	}
 }
-
