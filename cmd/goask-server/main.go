@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/Alireza-Ta/goask/pkg/config"
-	"github.com/Alireza-Ta/goask/postgres"
-	"github.com/Alireza-Ta/goask/server"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"path"
 	"runtime"
+
+	"github.com/Alireza-Ta/goask/pkg/config"
+	"github.com/Alireza-Ta/goask/postgres"
+	"github.com/Alireza-Ta/goask/server"
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -33,7 +34,10 @@ func main() {
 	s := server.NewServer(store, gin.DebugMode, c)
 
 	fmt.Printf("App is running on %d\n", c.GetInt("server.port"))
-	err = http.ListenAndServe(c.GetString("server.domain"), s.Router)
+
+	cert := rootPath + "/cert.pem"
+	key := rootPath + "/key.pem"
+	err = http.ListenAndServeTLS(c.GetString("server.domain"), cert, key, s.Router)
 	if err != nil {
 		panic(err)
 	}

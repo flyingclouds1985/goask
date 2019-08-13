@@ -13,7 +13,6 @@ func NewRouter(mode string) *gin.Engine {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.Use(cors.Default())
-	r.RouterGroup.Use()
 
 	return r
 }
