@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8169eaac-8791-46a0-ab06-8f5936d6db7d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/auth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/goask-front/src/components/front/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/goask-front/src/components/front/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/goask-front/src/components/front/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/goask-front/src/components/front/Register.js" afterDir="false" />
-    </list>
+    <list default="true" id="8169eaac-8791-46a0-ab06-8f5936d6db7d" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

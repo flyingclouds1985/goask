@@ -78,10 +78,11 @@ func (s *Server) Routes() {
 	}
 
 	private := s.Router.Group("/")
-	private.Use(authHandler.Auth().MiddlewareFunc())
+	// private.Use(authHandler.Auth().MiddlewareFunc())
+	private.Use()
 	{
 		auth := private.Group("auth")
-		//auth.Use(authHandler.Auth().MiddlewareFunc())
+		auth.Use(authHandler.Auth().MiddlewareFunc())
 		{
 			auth.GET("refresh_token", authHandler.Auth().RefreshHandler)
 			auth.GET("/hello", func(c *gin.Context) {

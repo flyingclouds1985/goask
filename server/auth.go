@@ -45,6 +45,7 @@ func (a *AuthAPI) Auth() *jwt.GinJWTMiddleware {
 		Unauthorized: a.unauthorized,
 
 		HTTPStatusMessageFunc: func(e error, c *gin.Context) string {
+			fmt.Println("eee", e)
 			if ve, ok := e.(validator.ValidationErrors); ok {
 				validationErr = validation.Messages(ve)
 			}
@@ -108,14 +109,12 @@ func (a *AuthAPI) authenticator(c *gin.Context) (interface{}, error) {
 	var loginValues model.User
 
 	err := c.ShouldBindJSON(&loginValues)
-
 	// Ignore required on ConfirmPassword and Email fields.
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		err = v.StructExcept(loginValues, "ConfirmPassword", "Email")
 		//Ignore eqfield on Password field.
 		if ve, ok := err.(validator.ValidationErrors); ok {
 			if ve["User.Password"].Tag == "eqfield" {
-				fmt.Println("ccc", ve)
 				delete(ve, "User.Password")
 				err = ve
 			}
